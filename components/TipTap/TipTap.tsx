@@ -1,5 +1,7 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import clsx from "clsx";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useHotkeys } from "react-hotkeys-hook";
 import StarterKit from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Heading } from "@tiptap/extension-heading";
@@ -22,9 +24,10 @@ import {
   BiUnderline,
 } from "react-icons/bi";
 import { GrBlockQuote } from "react-icons/gr";
-import clsx from "clsx";
+import FloatingMenu from "../FloatingMenu";
 
 const Tiptap: FC = () => {
+  const [openFloatingMenu, setOpenFloatingMenu] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -59,15 +62,28 @@ const Tiptap: FC = () => {
       }),
       Underline,
     ],
+    autofocus: "end",
     content:
       '<h1>Hello World!</h1><p><strong>Hello world</strong></p><p><em>Hello world</em></p><p><u>Hello world</u></p><p><s>Hello world</s></p><ul ><li><p>Hello world</p></li></ul><ol ><li><p>Hello world</p></li></ol><ul data-type="taskList"><li data-checked="false"><label contenteditable="false"><input type="checkbox"><span></span></label><div><p>Hello world</p></div></li></ul><p><mark>Hello world</mark></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type<strong> specimen book. It has survived </strong>not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p><blockquote><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type<strong> specimen book. It has survived </strong>not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p></blockquote>',
-    autofocus: true,
     editorProps: {
       attributes: {
         class: "p-4 focus:outline-none active:outline-none",
       },
     },
   });
+
+  // HOTKEYS
+  useHotkeys(
+    "command+/, ctrl+/",
+    () => {
+      setOpenFloatingMenu(!openFloatingMenu);
+    },
+    {
+      enableOnContentEditable: true,
+      enableOnTags: ["INPUT", "TEXTAREA", "SELECT"],
+    },
+    [openFloatingMenu]
+  );
 
   return (
     <>
@@ -266,7 +282,8 @@ const Tiptap: FC = () => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto mt-16 mb-32 lg:mb-24" />
+      <EditorContent editor={editor} className="w-full h-auto mt-16 mb-20" />
+      <FloatingMenu open={openFloatingMenu} setOpen={setOpenFloatingMenu} />
     </>
   );
 };

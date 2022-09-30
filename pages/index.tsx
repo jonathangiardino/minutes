@@ -5,7 +5,7 @@ import TipTap from "@/components/TipTap";
 
 const Home: NextPage = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>
         <title>minutes</title>
         <link rel="icon" href="/favicon.ico" />

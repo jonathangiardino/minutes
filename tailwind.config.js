@@ -5,17 +5,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: "#3f67e0",
+      },
+    },
   },
-  plugins: [require("daisyui")],
-  daisyui: {
-    styled: false,
-    themes: false,
-    base: true,
-    utils: true,
-    logs: true,
-    rtl: false,
-    prefix: "",
-    darkTheme: "dark",
-  },
+  plugins: [],
 };

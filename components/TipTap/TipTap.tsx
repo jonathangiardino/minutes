@@ -8,6 +8,7 @@ import { OrderedList } from "@tiptap/extension-ordered-list";
 import { TaskList } from "@tiptap/extension-task-list";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { Highlight } from "@tiptap/extension-highlight";
+import { Underline } from "@tiptap/extension-underline";
 import { Mention } from "@tiptap/extension-mention";
 import {
   BiStrikethrough,
@@ -18,7 +19,9 @@ import {
   BiListOl,
   BiTask,
   BiHighlight,
+  BiUnderline,
 } from "react-icons/bi";
+import { GrBlockQuote } from "react-icons/gr";
 import clsx from "clsx";
 
 const Tiptap: FC = () => {
@@ -54,9 +57,10 @@ const Tiptap: FC = () => {
           class: "px-[3px] py-[1px] rounded-sm !bg-[#ffc078]",
         },
       }),
+      Underline,
     ],
     content:
-      '<h1>Hello World!</h1><p><strong>Hello world</strong></p><p><em>Hello world</em></p><p><s>Hello world</s></p><ul ><li><p>Hello world</p></li></ul><ol ><li><p>Hello world</p></li></ol><ul data-type="taskList"><li data-checked="false"><label contenteditable="false"><input type="checkbox"><span></span></label><div><p>Hello world</p></div></li></ul><p><mark>Hello world</mark></p>',
+      '<h1>Hello World!</h1><p><strong>Hello world</strong></p><p><em>Hello world</em></p><p><u>Hello world</u></p><p><s>Hello world</s></p><ul ><li><p>Hello world</p></li></ul><ol ><li><p>Hello world</p></li></ol><ul data-type="taskList"><li data-checked="false"><label contenteditable="false"><input type="checkbox"><span></span></label><div><p>Hello world</p></div></li></ul><p><mark>Hello world</mark></p><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type<strong> specimen book. It has survived </strong>not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p><blockquote><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type<strong> specimen book. It has survived </strong>not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p></blockquote>',
     autofocus: true,
     editorProps: {
       attributes: {
@@ -71,7 +75,7 @@ const Tiptap: FC = () => {
         <BubbleMenu
           editor={editor}
           tippyOptions={{ delay: 300, duration: 300 }}
-          className="py-[2px] px-1 pb-0 shadow-lg bg-gray-50 rounded-md"
+          className="pt-[5px] px-1 pb-0 shadow-xl bg-gray-50 rounded-md"
         >
           <button
             title="Heading"
@@ -132,6 +136,25 @@ const Tiptap: FC = () => {
             <BiItalic />
           </button>
           <button
+            title="Underline"
+            onClick={() =>
+              editor
+                .chain()
+                .focus()
+                .toggleUnderline()
+                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                .toggleUnderline()
+                .insertContent("")
+                .run()
+            }
+            className={clsx(
+              editor.isActive("underline") ? "text-brand font-bold" : "",
+              "mx-1"
+            )}
+          >
+            <BiUnderline />
+          </button>
+          <button
             title="Strike-through"
             onClick={() =>
               editor
@@ -187,6 +210,24 @@ const Tiptap: FC = () => {
             <BiListOl />
           </button>
           <button
+            title="Blockquote"
+            onClick={() =>
+              editor
+                .chain()
+                .focus()
+                .toggleBlockquote()
+                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                .insertContent("")
+                .run()
+            }
+            className={clsx(
+              editor.isActive("orderedList") ? "text-brand font-bold" : "",
+              "mx-1"
+            )}
+          >
+            <GrBlockQuote />
+          </button>
+          <button
             title="To do"
             onClick={() =>
               editor
@@ -225,7 +266,7 @@ const Tiptap: FC = () => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto" />
+      <EditorContent editor={editor} className="w-full h-auto mt-16" />
     </>
   );
 };

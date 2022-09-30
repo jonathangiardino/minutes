@@ -17,8 +17,8 @@ const Dropdown: FC = () => {
       >
         <Menu.Items className="absolute right-0 z-10 w-56 mt-10 origin-top-right dark:bg-inherit rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-4 py-3">
-            <p className="text-sm">Signed in as</p>
-            <p className="truncate text-sm font-medium">
+            <p className="text-[16px]">Signed in as</p>
+            <p className="truncate text-[16px] font-medium">
               hello@jonathangiardino.com
             </p>
           </div>
@@ -29,7 +29,7 @@ const Dropdown: FC = () => {
                   href="#"
                   className={clsx(
                     active ? "bg-gray-100 text-gray-900" : "",
-                    "block px-4 py-2 text-sm rounded-md mx-1"
+                    "block px-4 py-1 text-[16px] rounded-md mx-1"
                   )}
                 >
                   Account settings
@@ -42,7 +42,7 @@ const Dropdown: FC = () => {
                   href="#"
                   className={clsx(
                     active ? "bg-gray-100 text-gray-900" : "",
-                    "block px-4 py-2 text-sm rounded-md mx-1"
+                    "block px-4 py-1 text-[16px] rounded-md mx-1"
                   )}
                 >
                   Support
@@ -55,7 +55,7 @@ const Dropdown: FC = () => {
                   href="#"
                   className={clsx(
                     active ? "bg-gray-100 text-gray-900" : "",
-                    "block px-4 py-2 text-sm rounded-md mx-1"
+                    "block px-4 py-1 text-[16px] rounded-md mx-1"
                   )}
                 >
                   Feedback
@@ -71,7 +71,7 @@ const Dropdown: FC = () => {
                     type="submit"
                     className={clsx(
                       active ? "bg-gray-100 text-gray-900" : "",
-                      "block w-full px-4 py-2 text-left text-sm rounded-md"
+                      "block w-full px-4 py-1 text-left text-[16px] rounded-md"
                     )}
                   >
                     Sign out

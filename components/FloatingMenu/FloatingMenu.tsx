@@ -98,7 +98,7 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="dark:bg-[#28282c] dark:text-white shadow-lg fixed bottom-20 w-[280px] transform overflow-hidden rounded-xl transition-all">
+              <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed bottom-20 w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
                   onChange={(item) => {
                     setSelectedBlock(item);
@@ -108,7 +108,7 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
                 >
                   <div className="relative">
                     <Combobox.Input
-                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 dark:text-white placeholder-gray-400 focus:ring-0 focus:outline-none text-sm"
+                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] placeholder-gray-600 focus:ring-0 focus:outline-none text-sm"
                       placeholder="Search blocks..."
                       onChange={(event) => setQuery(event.target.value)}
                     />
@@ -124,7 +124,7 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
                         className={({ active }) =>
                           clsx(
                             "flex cursor-default select-none rounded-lg p-2",
-                            active && "dark:bg-[#44444b]"
+                            active && "bg-gray-300"
                           )
                         }
                       >
@@ -136,18 +136,22 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
                             )}
                           >
                             <item.icon
-                              className="h-6 w-6 dark:text-white"
+                              className="h-6 w-6 text-gray-100"
                               aria-hidden="true"
                             />
                           </div>
                           <div className="ml-4 flex-auto">
                             <p
-                              className={clsx("text-sm font-medium dark:text-white")}
+                              className={clsx(
+                                "text-sm font-medium text-[#28282c]"
+                              )}
                             >
                               {item.name}
                             </p>
                             <p
-                              className={clsx("text-sm dark:text-white opacity-75")}
+                              className={clsx(
+                                "text-sm text-[#28282c] opacity-75"
+                              )}
                             >
                               {item.description}
                             </p>
@@ -158,7 +162,7 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
                   </Combobox.Options>
                   {query !== "" && filteredItems.length === 0 && (
                     <div className="py-4 px-6 text-center text-sm flkex flex-col items-center justify-center">
-                      <p className=" text-gray-400 pb-10">No blocks found</p>
+                      <p className=" text-gray-600 pb-10">No blocks found</p>
                     </div>
                   )}
                 </Combobox>
@@ -168,11 +172,11 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
         </Dialog>
       </Transition.Root>
       <button
-        className="dark:bg-[#28282c] dark:text-white shadow-lg px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 active:outline-none focus:outline-none"
+        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 active:outline-none focus:outline-none"
         onClick={() => setOpen(true)}
       >
         <div>Add blocks</div>{" "}
-        <div className="dark:bg-[#44444b] dark:text-white opacity-50 text-xs rounded-md py-1 px-2">
+        <div className="bg-gray-300 text-[#28282c] text-xs rounded-md py-1 px-2">
           ⌘/
         </div>
       </button>

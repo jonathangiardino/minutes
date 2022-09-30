@@ -7,13 +7,21 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.2",
-    "@heroicons/react": "^2.0.11",
+    "@tiptap/extension-bullet-list": "^2.0.0-beta.199",
+    "@tiptap/extension-heading": "^2.0.0-beta.199",
+    "@tiptap/extension-highlight": "^2.0.0-beta.199",
+    "@tiptap/extension-mention": "^2.0.0-beta.199",
+    "@tiptap/extension-ordered-list": "^2.0.0-beta.199",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.199",
+    "@tiptap/extension-task-item": "^2.0.0-beta.199",
+    "@tiptap/extension-task-list": "^2.0.0-beta.199",
     "@tiptap/react": "^2.0.0-beta.199",
     "@tiptap/starter-kit": "^2.0.0-beta.199",
     "clsx": "^1.2.1",
     "next": "latest",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-icons": "^4.4.0"
   },
   "devDependencies": {
     "@types/node": "17.0.35",

@@ -12,7 +12,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex w-full flex-1 flex-col items-center justify-center bg-slate-100">
+      <main className="flex w-full max-w-[867px] flex-1 flex-col items-center justify-start">
         <TipTap />
       </main>
     </div>

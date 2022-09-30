@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Header from "@/components/Header";
 import TipTap from "@/components/TipTap";
+import FloatingMenu from "@/components/FloatingMenu";
 
 const Home: NextPage = () => {
   return (
@@ -12,9 +13,11 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex w-full max-w-[867px] flex-1 flex-col items-center justify-start">
+      <main className="flex w-full max-w-[768px] flex-1 flex-col items-center justify-start">
         <TipTap />
       </main>
+
+      <FloatingMenu />
     </div>
   );
 };

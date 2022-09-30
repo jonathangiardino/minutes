@@ -54,7 +54,7 @@ const Tiptap: FC = () => {
       }),
       Highlight.configure({
         HTMLAttributes: {
-          class: "px-[3px] py-[1px] rounded-sm !bg-[#ffc078]",
+          class: "px-[6px] py-[2px] rounded-md !bg-[#ffc078]",
         },
       }),
       Underline,
@@ -64,7 +64,7 @@ const Tiptap: FC = () => {
     autofocus: true,
     editorProps: {
       attributes: {
-        class: "p-4 m-4 focus:outline-none active:outline-none",
+        class: "p-4 focus:outline-none active:outline-none",
       },
     },
   });
@@ -75,7 +75,7 @@ const Tiptap: FC = () => {
         <BubbleMenu
           editor={editor}
           tippyOptions={{ delay: 300, duration: 300 }}
-          className="pt-[5px] px-1 pb-0 shadow-xl bg-gray-50 rounded-md"
+          className="pt-[5px] px-1 pb-0 shadow-xl bg-[#28282c] text-white rounded-md"
         >
           <button
             title="Heading"
@@ -266,7 +266,7 @@ const Tiptap: FC = () => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto mt-16" />
+      <EditorContent editor={editor} className="w-full h-auto mt-16 mb-32 lg:mb-24" />
     </>
   );
 };

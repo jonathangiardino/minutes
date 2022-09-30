@@ -3,9 +3,9 @@ import Dropdown from "./Dropdown";
 
 const Header: FC = () => {
   return (
-    <nav className="w-full py-4 px-4 flex justify-between items-center fixed">
+    <nav className="w-full py-3 px-4 flex justify-between items-center fixed z-50 backdrop-blur-sm">
       <div className="flex gap-1 items-center">
-        <span className="font-semibold text-2xl tracking-tighter opacity-30">
+        <span className="font-bold text-3xl tracking-tighter opacity-30 hover:opacity-40 transition cursor-pointer duration-300 ease-out">
           {new Date().toDateString()}
         </span>
       </div>

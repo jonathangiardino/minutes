@@ -10,12 +10,12 @@ const Home: NextPage = () => {
   }, []);
 
   function startScrolling() {
-    let bottomScroll = setInterval(function () {
+    let bottomScroll = setInterval(() => {
       window.scrollBy(0, 2);
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         clearInterval(bottomScroll);
       }
-    }, 6);
+    }, 1);
     return bottomScroll;
   }
 
@@ -27,7 +27,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex w-full max-w-[768px] flex-1 flex-col-reverse mb-20">
+      <main className="flex w-full max-w-[768px] flex-1 flex-col-reverse">
         <TipTap />
       </main>
     </div>

@@ -133,7 +133,7 @@ const FloatingMenu = ({
                   </div>
                   <Combobox.Options
                     static
-                    className="max-h-96 scroll-py-3 overflow-y-auto p-3"
+                    className="max-h-96 md:max-h-64 scroll-py-3 overflow-y-auto p-3"
                   >
                     {filteredItems.map((item) => (
                       <Combobox.Option

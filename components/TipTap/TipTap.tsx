@@ -59,7 +59,6 @@ const Tiptap: FC = () => {
     ],
   });
 
-  const [currentContent, setCurrentContent] = useState(initialContent);
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false);
 
   const editor = useEditor({
@@ -100,7 +99,7 @@ const Tiptap: FC = () => {
       }),
     ],
     autofocus: "end",
-    content: currentContent,
+    content: initialContent,
     editorProps: {
       attributes: {
         class: "p-4 focus:outline-none active:outline-none",
@@ -118,6 +117,9 @@ const Tiptap: FC = () => {
             json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
           },
         ]);
+        editor?.commands?.setContent(
+          JSON.parse(JSON.stringify(updatedEditor.getJSON()))
+        );
         return;
       }
 
@@ -129,6 +131,9 @@ const Tiptap: FC = () => {
             json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
           },
         ]);
+        editor?.commands?.setContent(
+          JSON.parse(JSON.stringify(updatedEditor.getJSON()))
+        );
 
         return;
       }
@@ -142,6 +147,7 @@ const Tiptap: FC = () => {
           (note) => note.date !== todaysNote?.date
         );
         setMinutes([...updatedMinutes, todaysNote]);
+        editor?.commands?.setContent(todaysNote.json);
       }
     },
   });
@@ -231,8 +237,12 @@ const Tiptap: FC = () => {
     const todaysNote = minutes?.find(
       ({ date }) => date === new Date().toDateString()
     );
-    
-    editor && todaysNote && editor?.commands?.setContent(todaysNote.json);
+
+    const updateContent = () => {
+      editor && todaysNote && editor?.commands?.setContent(todaysNote.json);
+    };
+
+    updateContent();
   }, [editor]);
 
   return (

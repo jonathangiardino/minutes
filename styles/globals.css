@@ -121,7 +121,7 @@ ul[data-type="taskList"] > li > label {
   padding-left: 8px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 ul[data-type="taskList"] > li > label > input {

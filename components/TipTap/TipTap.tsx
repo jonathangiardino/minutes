@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, useState } from "react";
+import { Dispatch, FC, ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -135,7 +135,7 @@ const Tiptap: FC = () => {
         editor?.commands.enter();
         editor?.commands.toggleHeading({ level: 1 });
         editor?.commands.focus();
-        editor?.commands.scrollIntoView()
+        editor?.commands.scrollIntoView();
         break;
 
       case "Bullet List":
@@ -177,6 +177,10 @@ const Tiptap: FC = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    editor && editor?.commands.scrollIntoView();
+  }, []);
 
   return (
     <>

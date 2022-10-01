@@ -25,6 +25,7 @@ import {
 } from "react-icons/bi";
 import { GrBlockQuote } from "react-icons/gr";
 import FloatingMenu from "../FloatingMenu";
+import useDetectKeyboardOpen from "use-detect-keyboard-open";
 
 const Tiptap: FC = () => {
   const [openFloatingMenu, setOpenFloatingMenu] = useState(false);
@@ -71,6 +72,9 @@ const Tiptap: FC = () => {
       },
     },
   });
+
+  // DETECT KEYBOARD ON MOBILE
+  const isKeyboardOpen = useDetectKeyboardOpen();
 
   // HOTKEYS
   useHotkeys(
@@ -283,7 +287,7 @@ const Tiptap: FC = () => {
         </BubbleMenu>
       )}
       <EditorContent editor={editor} className="w-full h-auto mt-16" />
-      <FloatingMenu open={openFloatingMenu} setOpen={setOpenFloatingMenu} />
+      {!isKeyboardOpen && <FloatingMenu open={openFloatingMenu} setOpen={setOpenFloatingMenu} />}
     </>
   );
 };

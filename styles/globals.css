@@ -129,7 +129,7 @@ ul[data-type="taskList"] > li > label > input {
 }
 
 ul[data-type="taskList"] > li[data-checked="true"] {
-  @apply opacity-50 line-through;
+  @apply opacity-75 line-through;
 }
 
 ul[data-type="taskList"] > li > div {

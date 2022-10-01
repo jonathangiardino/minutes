@@ -80,7 +80,7 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
         });
 
   return (
-    <div className="fixed bottom-4 left-4 max-w-[280px]">
+    <div className="fixed bottom-4 left-4 max-w-[320px]">
       <Transition.Root
         show={open}
         as={Fragment}
@@ -98,7 +98,7 @@ const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed bottom-20 w-[280px] transform overflow-hidden rounded-xl transition-all">
+              <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed bottom-20 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
                   onChange={(item) => {
                     setSelectedBlock(item);

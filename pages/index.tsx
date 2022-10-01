@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
   function startScrolling() {
     let bottomScroll = setInterval(() => {
-      window.scrollBy(0, 2);
+      window.scrollBy(0, 150);
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         clearInterval(bottomScroll);
       }

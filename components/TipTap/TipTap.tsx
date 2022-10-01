@@ -1,5 +1,6 @@
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
+import useLocalStorageState from "use-local-storage-state";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";
 import StarterKit from "@tiptap/starter-kit";
@@ -12,7 +13,7 @@ import { TaskItem } from "@tiptap/extension-task-item";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Underline } from "@tiptap/extension-underline";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
-import { Mention } from "@tiptap/extension-mention";
+// import { Mention } from "@tiptap/extension-mention";
 import { lowlight } from "lowlight/lib/core";
 import {
   BiStrikethrough,
@@ -32,6 +33,7 @@ import css from "highlight.js/lib/languages/css";
 import js from "highlight.js/lib/languages/javascript";
 import ts from "highlight.js/lib/languages/typescript";
 import html from "highlight.js/lib/languages/xml";
+import { initialContent } from "./initialContent";
 
 lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("css", css);
@@ -48,6 +50,16 @@ export interface FormattingBlock {
 }
 
 const Tiptap: FC = () => {
+  const [minutes, setMinutes] = useLocalStorageState("minutes", {
+    defaultValue: [
+      {
+        date: new Date().toDateString(),
+        json: initialContent,
+      },
+    ],
+  });
+
+  const [currentContent, setCurrentContent] = useState(initialContent);
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false);
 
   const editor = useEditor({
@@ -88,12 +100,49 @@ const Tiptap: FC = () => {
       }),
     ],
     autofocus: "end",
-    content:
-      '<p class=""><strong>Todos</strong></p><ul data-type="taskList"><li><label><input type="checkbox"><span></span></label><div><p>Bigger floating formatter</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Save to database</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Go-to-date functionality</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Auth</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Dark mode</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Export as HTML/Markdown on select</p></div></li></ul><p><strong>Roadmap</strong></p><ul data-type="taskList"><li><label><input type="checkbox"><span></span></label><div><p>Tabs/pages for the day</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Adjust and change fonts</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>CMD K full-text search</p></div></li><li ><label ><input type="checkbox"><span></span></label><div><p>Tomorrow section with tag</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Add tags for easily search things from the past</p></div></li><li><label><input type="checkbox"><span></span></label><div><p>Mobile app</p></div></li></ul>',
+    content: currentContent,
     editorProps: {
       attributes: {
         class: "p-4 focus:outline-none active:outline-none",
       },
+    },
+    onUpdate: ({ editor: updatedEditor }) => {
+      let todaysNote = minutes?.find(
+        (note) => note.date === new Date().toDateString()
+      );
+
+      if (!minutes) {
+        setMinutes([
+          {
+            date: new Date().toDateString(),
+            json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
+          },
+        ]);
+        return;
+      }
+
+      if (minutes.length && !todaysNote) {
+        setMinutes([
+          ...minutes,
+          {
+            date: new Date().toDateString(),
+            json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
+          },
+        ]);
+
+        return;
+      }
+
+      if (todaysNote) {
+        todaysNote = {
+          ...todaysNote,
+          json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
+        };
+        const updatedMinutes = minutes.filter(
+          (note) => note.date !== todaysNote?.date
+        );
+        setMinutes([...updatedMinutes, todaysNote]);
+      }
     },
   });
 
@@ -177,6 +226,14 @@ const Tiptap: FC = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    const todaysNote = minutes?.find(
+      ({ date }) => date === new Date().toDateString()
+    );
+    
+    editor && todaysNote && editor?.commands?.setContent(todaysNote.json);
+  }, [editor]);
 
   return (
     <>

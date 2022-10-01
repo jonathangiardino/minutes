@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { Dispatch, FC, ReactNode, useState } from "react";
 import clsx from "clsx";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -27,8 +27,21 @@ import { GrBlockQuote } from "react-icons/gr";
 import FloatingMenu from "../FloatingMenu";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
 
+export interface FormattingBlock {
+  id: number;
+  name: string;
+  description: string;
+  url: string;
+  color: string;
+  icon: ReactNode | string;
+}
+
 const Tiptap: FC = () => {
-  const [openFloatingMenu, setOpenFloatingMenu] = useState(false);
+  const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false);
+  const [selectedBlock, setSelectedBlock] = useState<FormattingBlock | null>(
+    null
+  );
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -287,7 +300,14 @@ const Tiptap: FC = () => {
         </BubbleMenu>
       )}
       <EditorContent editor={editor} className="w-full h-auto mt-6 md:mt-16" />
-      {!isKeyboardOpen && <FloatingMenu open={openFloatingMenu} setOpen={setOpenFloatingMenu} />}
+      {!isKeyboardOpen && (
+        <FloatingMenu
+          open={openFloatingMenu}
+          setOpen={setOpenFloatingMenu}
+          selectedBlock={selectedBlock}
+          setSelectedBlock={setSelectedBlock}
+        />
+      )}
     </>
   );
 };

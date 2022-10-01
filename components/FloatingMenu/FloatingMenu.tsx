@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { Combobox, Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -12,11 +12,21 @@ import {
   BiListOl,
   BiTask,
   BiCode,
+  BiParagraph,
 } from "react-icons/bi";
 import { GrBlockQuote } from "react-icons/gr";
+import { FormattingBlock } from "../TipTap/TipTap";
 
 // TEMP
 const items = [
+  {
+    id: 0,
+    name: "Paragraph",
+    description: "New paragraph",
+    url: "#",
+    color: "bg-brand",
+    icon: BiParagraph,
+  },
   {
     id: 1,
     name: "Header",
@@ -68,9 +78,18 @@ const items = [
   // More items...
 ];
 
-const FloatingMenu = ({ open, setOpen }: { open: boolean; setOpen: any }) => {
+const FloatingMenu = ({
+  open,
+  setOpen,
+  selectedBlock,
+  setSelectedBlock,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  selectedBlock: FormattingBlock | null;
+  setSelectedBlock: Dispatch<SetStateAction<FormattingBlock | null>>;
+}) => {
   const [query, setQuery] = useState("");
-  const [selectedBlock, setSelectedBlock] = useState(items[0]);
 
   const filteredItems =
     query === ""

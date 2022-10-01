@@ -1,9 +1,24 @@
+import { useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Header from "@/components/Header";
 import TipTap from "@/components/TipTap";
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    window && startScrolling();
+  }, []);
+
+  function startScrolling() {
+    let bottomScroll = setInterval(function () {
+      window.scrollBy(0, 2);
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        clearInterval(bottomScroll);
+      }
+    }, 6);
+    return bottomScroll;
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>
@@ -12,7 +27,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex w-full max-w-[768px] flex-1 flex-col items-center justify-start">
+      <main className="flex w-full max-w-[768px] flex-1 flex-col-reverse mb-20">
         <TipTap />
       </main>
     </div>

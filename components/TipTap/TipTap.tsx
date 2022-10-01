@@ -282,7 +282,7 @@ const Tiptap: FC = () => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto mt-16 mb-20" />
+      <EditorContent editor={editor} className="w-full h-auto mt-16" />
       <FloatingMenu open={openFloatingMenu} setOpen={setOpenFloatingMenu} />
     </>
   );

@@ -178,10 +178,6 @@ const Tiptap: FC = () => {
     }
   };
 
-  useEffect(() => {
-    editor && editor?.commands.scrollIntoView();
-  }, []);
-
   return (
     <>
       {editor && (

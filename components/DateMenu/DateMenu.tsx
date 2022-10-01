@@ -10,14 +10,15 @@ const DateMenu = ({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [minutes, setMinutes] = useLocalStorageState("minutes");
+  const [minutes, setMinutes] = useLocalStorageState("minutes", {
+    defaultValue: [],
+  });
   const [query, setQuery] = useState("");
 
   const filteredItems =
-    Array.isArray(minutes) && query === ""
+    minutes && query === ""
       ? [...minutes]
-      : Array.isArray(minutes) &&
-        minutes.filter((item: any) => {
+      : minutes.filter((item: any) => {
           return item.date.toLowerCase().includes(query.toLowerCase());
         });
 

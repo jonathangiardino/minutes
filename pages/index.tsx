@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         clearInterval(bottomScroll);
       }
-    }, 1);
+    }, 2);
     return bottomScroll;
   }
 

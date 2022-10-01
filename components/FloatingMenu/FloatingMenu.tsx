@@ -29,7 +29,7 @@ const items = [
   },
   {
     id: 1,
-    name: "Header",
+    name: "Heading",
     description: "Section heading",
     url: "#",
     color: "bg-brand",
@@ -81,13 +81,15 @@ const items = [
 const FloatingMenu = ({
   open,
   setOpen,
-  selectedBlock,
-  setSelectedBlock,
+  // selectedBlock,
+  // setSelectedBlock,
+  InsertNode,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  selectedBlock: FormattingBlock | null;
-  setSelectedBlock: Dispatch<SetStateAction<FormattingBlock | null>>;
+  // selectedBlock: FormattingBlock | null;
+  // setSelectedBlock: Dispatch<SetStateAction<FormattingBlock | null>>;
+  InsertNode: (block: FormattingBlock) => void;
 }) => {
   const [query, setQuery] = useState("");
 
@@ -119,11 +121,10 @@ const FloatingMenu = ({
             >
               <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed bottom-20 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
-                  onChange={(item) => {
-                    setSelectedBlock(item);
+                  onChange={(item: FormattingBlock) => {
                     setOpen(false);
+                    InsertNode(item);
                   }}
-                  defaultValue={selectedBlock}
                 >
                   <div className="relative">
                     <Combobox.Input

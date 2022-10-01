@@ -11,7 +11,9 @@ import { TaskList } from "@tiptap/extension-task-list";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Underline } from "@tiptap/extension-underline";
+import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { Mention } from "@tiptap/extension-mention";
+import { lowlight } from "lowlight/lib/core";
 import {
   BiStrikethrough,
   BiBold,
@@ -26,6 +28,15 @@ import {
 import { GrBlockQuote } from "react-icons/gr";
 import FloatingMenu from "../FloatingMenu";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
+import css from "highlight.js/lib/languages/css";
+import js from "highlight.js/lib/languages/javascript";
+import ts from "highlight.js/lib/languages/typescript";
+import html from "highlight.js/lib/languages/xml";
+
+lowlight.registerLanguage("html", html);
+lowlight.registerLanguage("css", css);
+lowlight.registerLanguage("js", js);
+lowlight.registerLanguage("ts", ts);
 
 export interface FormattingBlock {
   id: number;
@@ -38,9 +49,6 @@ export interface FormattingBlock {
 
 const Tiptap: FC = () => {
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false);
-  const [selectedBlock, setSelectedBlock] = useState<FormattingBlock | null>(
-    null
-  );
 
   const editor = useEditor({
     extensions: [
@@ -75,6 +83,9 @@ const Tiptap: FC = () => {
         },
       }),
       Underline,
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
     ],
     autofocus: "end",
     content:
@@ -101,6 +112,57 @@ const Tiptap: FC = () => {
     },
     [openFloatingMenu]
   );
+
+  const InsertNode = (block: FormattingBlock) => {
+    editor?.commands.enter();
+    switch (block.name) {
+      case "Paragraph":
+        editor?.commands.enter();
+        editor?.commands.insertContent({
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "",
+            },
+          ],
+        });
+        break;
+
+      case "Heading":
+        editor?.commands.enter();
+        editor?.commands.toggleHeading({ level: 1 });
+        break;
+
+      case "Bullet List":
+        editor?.commands.enter();
+        editor?.commands.toggleBulletList();
+        break;
+
+      case "Numbered List":
+        editor?.commands.enter();
+        editor?.commands.toggleOrderedList();
+        break;
+
+      case "Blockquote":
+        editor?.commands.enter();
+        editor?.commands.toggleBlockquote();
+        break;
+
+      case "Task":
+        editor?.commands.enter();
+        editor?.commands.toggleTaskList();
+        break;
+
+      case "Code Block":
+        editor?.commands.enter();
+        editor?.commands.setCodeBlock();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <>
@@ -304,8 +366,7 @@ const Tiptap: FC = () => {
         <FloatingMenu
           open={openFloatingMenu}
           setOpen={setOpenFloatingMenu}
-          selectedBlock={selectedBlock}
-          setSelectedBlock={setSelectedBlock}
+          InsertNode={InsertNode}
         />
       )}
     </>

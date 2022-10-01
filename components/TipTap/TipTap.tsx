@@ -442,7 +442,7 @@ const Tiptap: FC = () => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto mt-6 md:mt-16" />
+      <EditorContent editor={editor} className="w-full h-auto mt-2 md:mt-16" />
       {!isKeyboardOpen && (
         <FloatingMenu
           open={openFloatingMenu}

@@ -5,20 +5,6 @@ import Header from "@/components/Header";
 import TipTap from "@/components/TipTap";
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    window && startScrolling();
-  }, []);
-
-  function startScrolling() {
-    let bottomScroll = setInterval(() => {
-      window.scrollBy(0, 150);
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        clearInterval(bottomScroll);
-      }
-    }, 0.01);
-    return bottomScroll;
-  }
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>

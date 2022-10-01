@@ -8,6 +8,7 @@ body {
   font-size: 18px;
   -webkit-app-region: drag;
   color: #28282b;
+  caret-color: #3f67e0;
 }
 
 *::selection {

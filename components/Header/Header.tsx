@@ -21,7 +21,7 @@ const Header: FC = () => {
   return (
     <nav className="w-full py-3 px-4 flex justify-between items-center md:fixed z-50">
       <DateMenu open={open} setOpen={setOpen} />
-      <div className="flex gap-12 items-center" onClick={() => setOpen(!open)}>
+      <div className="flex gap-4 items-center" onClick={() => setOpen(!open)}>
         <span className="font-bold text-xl tracking-tighter text-gray-400 hover:text-gray-600 transition cursor-pointer duration-300 ease-out">
           {new Date().toDateString()}
         </span>

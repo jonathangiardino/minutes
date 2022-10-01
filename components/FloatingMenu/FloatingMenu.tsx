@@ -87,8 +87,6 @@ const FloatingMenu = ({
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  // selectedBlock: FormattingBlock | null;
-  // setSelectedBlock: Dispatch<SetStateAction<FormattingBlock | null>>;
   InsertNode: (block: FormattingBlock) => void;
 }) => {
   const [query, setQuery] = useState("");
@@ -128,7 +126,7 @@ const FloatingMenu = ({
                 >
                   <div className="relative">
                     <Combobox.Input
-                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] placeholder-gray-600 focus:ring-0 focus:outline-none text-sm"
+                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] placeholder-gray-600 focus:ring-0 focus:outline-none text-base"
                       placeholder="Search blocks..."
                       onChange={(event) => setQuery(event.target.value)}
                     />
@@ -163,7 +161,7 @@ const FloatingMenu = ({
                           <div className="ml-4 flex-auto">
                             <p
                               className={clsx(
-                                "text-sm font-medium text-[#28282c]"
+                                "text-base font-medium text-[#28282c]"
                               )}
                             >
                               {item.name}
@@ -192,7 +190,7 @@ const FloatingMenu = ({
         </Dialog>
       </Transition.Root>
       <button
-        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 active:outline-none focus:outline-none"
+        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 active:outline-none focus:outline-none text-base "
         onClick={() => setOpen(true)}
       >
         <div>Add blocks</div>{" "}

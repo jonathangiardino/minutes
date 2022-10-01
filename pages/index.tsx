@@ -27,7 +27,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <main className="flex w-full max-w-[768px] flex-1 flex-col-reverse mb-20">
+      <main className="flex w-full max-w-[768px] flex-1 mb-20">
         <TipTap />
       </main>
     </div>

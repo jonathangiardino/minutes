@@ -81,8 +81,6 @@ const items = [
 const FloatingMenu = ({
   open,
   setOpen,
-  // selectedBlock,
-  // setSelectedBlock,
   InsertNode,
 }: {
   open: boolean;
@@ -190,11 +188,11 @@ const FloatingMenu = ({
         </Dialog>
       </Transition.Root>
       <button
-        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 active:outline-none focus:outline-none text-base "
+        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 active:outline-none focus:outline-none text-base"
         onClick={() => setOpen(true)}
       >
         <div>Add blocks</div>{" "}
-        <div className="bg-gray-300 text-[#28282c] text-xs rounded-md py-1 px-2">
+        <div className="bg-gray-100 text-gray-500 text-xs rounded-md py-1 px-2 font-bold">
           ⌘/
         </div>
       </button>

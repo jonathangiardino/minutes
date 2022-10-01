@@ -127,36 +127,43 @@ const Tiptap: FC = () => {
             },
           ],
         });
+        editor?.commands.focus();
         break;
 
       case "Heading":
         editor?.commands.enter();
         editor?.commands.toggleHeading({ level: 1 });
+        editor?.commands.focus();
         break;
 
       case "Bullet List":
         editor?.commands.enter();
         editor?.commands.toggleBulletList();
+        editor?.commands.focus();
         break;
 
       case "Numbered List":
         editor?.commands.enter();
         editor?.commands.toggleOrderedList();
+        editor?.commands.focus();
         break;
 
       case "Blockquote":
         editor?.commands.enter();
         editor?.commands.toggleBlockquote();
+        editor?.commands.focus();
         break;
 
       case "Task":
         editor?.commands.enter();
         editor?.commands.toggleTaskList();
+        editor?.commands.focus();
         break;
 
       case "Code Block":
         editor?.commands.enter();
         editor?.commands.setCodeBlock();
+        editor?.commands.focus();
         break;
 
       default:

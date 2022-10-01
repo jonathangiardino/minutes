@@ -204,7 +204,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiHeading />
+            <BiHeading size={18} />
           </button>
           <button
             title="Bold"
@@ -223,7 +223,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiBold />
+            <BiBold size={18} />
           </button>
           <button
             title="Italic"
@@ -242,7 +242,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiItalic />
+            <BiItalic size={18} />
           </button>
           <button
             title="Underline"
@@ -261,7 +261,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiUnderline />
+            <BiUnderline size={18} />
           </button>
           <button
             title="Strike-through"
@@ -280,7 +280,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiStrikethrough />
+            <BiStrikethrough size={18} />
           </button>
           <button
             title="Bullet list"
@@ -298,7 +298,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiListUl />
+            <BiListUl size={18} />
           </button>
           <button
             title="Ordered List"
@@ -316,7 +316,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiListOl />
+            <BiListOl size={18} />
           </button>
           <button
             title="Blockquote"
@@ -334,7 +334,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <GrBlockQuote />
+            <GrBlockQuote size={18} />
           </button>
           <button
             title="To do"
@@ -352,7 +352,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiTask />
+            <BiTask size={18} />
           </button>
           <button
             title="Highlight"
@@ -371,7 +371,7 @@ const Tiptap: FC = () => {
               "mx-1"
             )}
           >
-            <BiHighlight />
+            <BiHighlight size={18} />
           </button>
         </BubbleMenu>
       )}

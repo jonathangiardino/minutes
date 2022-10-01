@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import clsx from "clsx";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";

@@ -6,11 +6,15 @@ import useLocalStorageState from "use-local-storage-state";
 const DateMenu = ({
   open,
   setOpen,
+  selectedDate,
+  setSelectedDate,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  selectedDate: string;
+  setSelectedDate: Dispatch<SetStateAction<string>>;
 }) => {
-  const [minutes, setMinutes] = useLocalStorageState("minutes", {
+  const [minutes] = useLocalStorageState("minutes-data", {
     defaultValue: [],
   });
   const [query, setQuery] = useState("");
@@ -23,7 +27,7 @@ const DateMenu = ({
         });
 
   return (
-    <div className="fixed bottom-4 left-4 max-w-[320px]">
+    <div className="fixed top-4 left-4 max-w-[320px]">
       <Transition.Root
         show={open}
         as={Fragment}
@@ -43,8 +47,9 @@ const DateMenu = ({
             >
               <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed top-3 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
-                  onChange={(date: string) => {
+                  onChange={(date: any) => {
                     setOpen(false);
+                    setSelectedDate(date.date);
                   }}
                 >
                   <div className="relative">
@@ -74,7 +79,8 @@ const DateMenu = ({
                             <div className="ml-4 flex-auto">
                               <p
                                 className={clsx(
-                                  "text-base font-medium text-[#28282c]"
+                                  "text-base font-medium text-[#28282c]",
+                                  item.date === selectedDate && "font-bold"
                                 )}
                               >
                                 {item.date}

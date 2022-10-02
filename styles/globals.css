@@ -101,7 +101,8 @@ button {
 
 ul[data-type="taskList"] {
   list-style: none;
-  padding: 0;
+  padding: 4px;
+  @apply bg-slate-50 rounded-md;
 }
 
 ul[data-type="taskList"] > p {

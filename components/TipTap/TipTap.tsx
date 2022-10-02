@@ -49,14 +49,9 @@ export interface FormattingBlock {
   icon: ReactNode | string;
 }
 
-const Tiptap: FC = () => {
-  const [minutes, setMinutes] = useLocalStorageState("minutes", {
-    defaultValue: [
-      {
-        date: new Date().toDateString(),
-        json: initialContent,
-      },
-    ],
+const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
+  const [data, setData] = useLocalStorageState<any[]>("minutes-data", {
+    defaultValue: [],
   });
 
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false);
@@ -98,58 +93,46 @@ const Tiptap: FC = () => {
         lowlight,
       }),
     ],
-    autofocus: "end",
-    content: initialContent,
+    content: null,
+    autofocus: true,
     editorProps: {
+      scrollMargin: {
+        bottom: 100,
+        top: 0,
+        left: 0,
+        right: 0
+      },
       attributes: {
         class: "p-4 focus:outline-none active:outline-none",
       },
     },
-    onUpdate: ({ editor: updatedEditor }) => {
-      let todaysNote = minutes?.find(
-        (note) => note.date === new Date().toDateString()
-      );
+  });
 
-      if (!minutes) {
-        setMinutes([
-          {
-            date: new Date().toDateString(),
-            json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-          },
-        ]);
-        editor?.commands?.setContent(
-          JSON.parse(JSON.stringify(updatedEditor.getJSON()))
-        );
-        return;
-      }
+  editor?.on("update", ({ editor: updatedEditor }) => {
+    const dataInView = data?.find((note) => note.date === selectedDate);
+    let dataClone = [...data];
+    let dataInViewIndex = data?.findIndex((note) => note.date === selectedDate);
 
-      if (minutes.length && !todaysNote) {
-        setMinutes([
-          ...minutes,
-          {
-            date: new Date().toDateString(),
-            json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-          },
-        ]);
-        editor?.commands?.setContent(
-          JSON.parse(JSON.stringify(updatedEditor.getJSON()))
-        );
-
-        return;
-      }
-
-      if (todaysNote) {
-        todaysNote = {
-          ...todaysNote,
+    if (data.length && !dataInView) {
+      console.log("1");
+      setData([
+        ...data,
+        {
+          date: selectedDate,
           json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-        };
-        const updatedMinutes = minutes.filter(
-          (note) => note.date !== todaysNote?.date
-        );
-        setMinutes([...updatedMinutes, todaysNote]);
-        editor?.commands?.setContent(todaysNote.json);
-      }
-    },
+        },
+      ]);
+      return;
+    }
+
+    if (dataInView) {
+      console.log("2");
+      dataClone[dataInViewIndex] = {
+        ...dataInView,
+        json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
+      };
+      setData([...dataClone]);
+    }
   });
 
   // DETECT KEYBOARD ON MOBILE
@@ -169,60 +152,47 @@ const Tiptap: FC = () => {
   );
 
   const InsertNode = (block: FormattingBlock) => {
-    editor?.commands.enter();
     switch (block.name) {
       case "Paragraph":
-        editor?.commands.enter();
         editor?.commands.insertContent({
           type: "paragraph",
-          content: [
-            {
-              type: "text",
-              text: "",
-            },
-          ],
+          content: [],
         });
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
 
       case "Heading":
-        editor?.commands.enter();
         editor?.commands.toggleHeading({ level: 1 });
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
 
       case "Bullet List":
-        editor?.commands.enter();
         editor?.commands.toggleBulletList();
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
 
       case "Numbered List":
-        editor?.commands.enter();
         editor?.commands.toggleOrderedList();
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
 
       case "Blockquote":
-        editor?.commands.enter();
         editor?.commands.toggleBlockquote();
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
 
       case "Task":
-        editor?.commands.enter();
         editor?.commands.toggleTaskList();
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
 
       case "Code Block":
-        editor?.commands.enter();
         editor?.commands.setCodeBlock();
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
@@ -234,16 +204,33 @@ const Tiptap: FC = () => {
   };
 
   useEffect(() => {
-    const todaysNote = minutes?.find(
-      ({ date }) => date === new Date().toDateString()
-    );
+    const dataInView = data?.find(({ date }) => date === selectedDate);
 
-    const updateContent = () => {
-      editor && todaysNote && editor?.commands?.setContent(todaysNote.json);
+    const setInitialContent = () => {
+      editor?.commands?.setContent(initialContent);
+      editor?.commands.scrollIntoView();
+      setData([
+        {
+          date: selectedDate,
+          json: initialContent,
+        },
+      ]);
+      return;
     };
 
-    updateContent();
-  }, [editor]);
+    const updateContent = () => {
+      editor?.commands?.setContent(dataInView?.json);
+      editor?.commands.scrollIntoView();
+    };
+
+    if ((!data || !data.length) && editor && !dataInView) {
+      setInitialContent();
+    }
+
+    if (editor && dataInView) {
+      updateContent();
+    }
+  }, [editor, selectedDate]);
 
   return (
     <>
@@ -442,7 +429,7 @@ const Tiptap: FC = () => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto mt-2 md:mt-16" />
+      <EditorContent editor={editor} className="w-full h-auto mt-2 lg:mt-16" />
       {!isKeyboardOpen && (
         <FloatingMenu
           open={openFloatingMenu}

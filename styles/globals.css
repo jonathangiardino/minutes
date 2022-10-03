@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body,
 html {
   font-family: "Helvetica Neue", system-ui, -apple-system, BlinkMacSystemFont,
@@ -10,8 +15,7 @@ html {
   font-size: 18px;
   -webkit-app-region: drag;
   caret-color: #3f67e0;
-  margin: 0;
-  padding: 0;
+  height: -webkit-fill-available;
   @apply text-[#28282b] dark:text-[#f8fafc] bg-[#f8fafc] dark:bg-[#28282b];
 }
 

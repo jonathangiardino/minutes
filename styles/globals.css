@@ -53,6 +53,14 @@ button {
   line-height: 1.1;
 }
 
+.ProseMirror h1 {
+  @apply text-4xl font-bold
+}
+
+.ProseMirror h2 {
+  @apply text-2xl font-bold
+}
+
 .ProseMirror code {
   background-color: rgba(#616161, 0.1);
   color: #616161;

@@ -15,6 +15,7 @@ import {
   BiParagraph,
 } from "react-icons/bi";
 import { GrBlockQuote } from "react-icons/gr";
+import { MdHorizontalRule } from "react-icons/md";
 import { FormattingBlock } from "../TipTap/TipTap";
 
 // TEMP
@@ -29,11 +30,20 @@ const items = [
   },
   {
     id: 1,
-    name: "Heading",
+    name: "Heading 1",
     description: "Section heading",
     url: "#",
     color: "bg-brand",
     icon: BiHeading,
+  },
+  {
+    id: 1,
+    name: "Heading 2",
+    description: "Small heading",
+    url: "#",
+    color: "bg-brand",
+    icon: null,
+    iconText: "H2",
   },
   {
     id: 2,
@@ -74,6 +84,14 @@ const items = [
     url: "#",
     color: "bg-brand",
     icon: BiCode,
+  },
+  {
+    id: 7,
+    name: "Horizontal Rule",
+    description: "Add Divider",
+    url: "#",
+    color: "bg-brand",
+    icon: MdHorizontalRule,
   },
   // More items...
 ];
@@ -151,10 +169,16 @@ const FloatingMenu = ({
                               item.color
                             )}
                           >
-                            <item.icon
-                              className="h-6 w-6 text-gray-100"
-                              aria-hidden="true"
-                            />
+                            {item.icon ? (
+                              <item.icon
+                                className="h-6 w-6 text-gray-100"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <div className="text-lg font-bold text-gray-100">
+                                {item.iconText}
+                              </div>
+                            )}
                           </div>
                           <div className="ml-4 flex-auto">
                             <p

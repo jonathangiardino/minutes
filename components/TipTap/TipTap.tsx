@@ -1,7 +1,11 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
 import useLocalStorageState from "use-local-storage-state";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import {
+  useEditor,
+  EditorContent,
+  BubbleMenu
+} from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";
 import StarterKit from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extension-placeholder";
@@ -69,9 +73,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         placeholder: "What's on your mind?",
       }),
       Heading.configure({
-        HTMLAttributes: {
-          class: "text-4xl font-bold",
-        },
+        levels: [1, 2],
       }),
       BulletList.configure({
         HTMLAttributes: {
@@ -159,8 +161,14 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         editor?.commands.scrollIntoView();
         break;
 
-      case "Heading":
+      case "Heading 1":
         editor?.commands.toggleHeading({ level: 1 });
+        editor?.commands.focus();
+        editor?.commands.scrollIntoView();
+        break;
+
+      case "Heading 2":
+        editor?.commands.toggleHeading({ level: 2 });
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
@@ -191,6 +199,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
 
       case "Code Block":
         editor?.commands.setCodeBlock();
+        editor?.commands.focus();
+        editor?.commands.scrollIntoView();
+        break;
+
+      case "Horizontal Rule":
+        editor?.commands.setHorizontalRule();
         editor?.commands.focus();
         editor?.commands.scrollIntoView();
         break;
@@ -234,7 +248,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       setInitialContent();
     }
 
-    if (data.length && editor && selectedDate === new Date().toDateString() && !dataInView) {
+    if (
+      data.length &&
+      editor &&
+      selectedDate === new Date().toDateString() &&
+      !dataInView
+    ) {
       createTodaysView();
     }
 

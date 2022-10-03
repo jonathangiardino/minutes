@@ -109,7 +109,7 @@ button {
 ul[data-type="taskList"] {
   list-style: none;
   padding: 4px;
-  @apply bg-slate-50 dark:bg-[#333338] rounded-md;
+  @apply bg-slate-50 dark:bg-[#242427] rounded-md;
 }
 
 ul[data-type="taskList"] > p {

@@ -283,7 +283,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         <BubbleMenu
           editor={editor}
           tippyOptions={{ delay: 300, duration: 300 }}
-          className="pt-[8px] lg:pt-[5px] px-2 lg:px-1 pb-1 lg:pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-md"
+          className="pt-[8px] lg:pt-[5px] px-2 lg:px-1 pb-[1px] lg:pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-lg"
         >
           <button
             title="Heading"

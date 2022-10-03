@@ -22,8 +22,10 @@ export default function Document() {
         href="/favicon-16x16.png"
       />
       <link rel="manifest" href="/site.webmanifest" />
-      <meta name="msapplication-TileColor" content="currentColor" />
-      <meta name="theme-color" content="currentColor" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      />
       <meta name="color-scheme" content="dark light"></meta>
       <body>
         <Main />

@@ -93,14 +93,14 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         lowlight,
       }),
     ],
-    content: null,
+    content: "",
     autofocus: true,
     editorProps: {
       scrollMargin: {
         bottom: 100,
         top: 0,
         left: 0,
-        right: 0
+        right: 0,
       },
       attributes: {
         class: "p-4 focus:outline-none active:outline-none",
@@ -114,19 +114,16 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
     let dataInViewIndex = data?.findIndex((note) => note.date === selectedDate);
 
     if (data.length && !dataInView) {
-      console.log("1");
       setData([
-        ...data,
         {
           date: selectedDate,
           json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
         },
+        ...data,
       ]);
-      return;
     }
 
     if (dataInView) {
-      console.log("2");
       dataClone[dataInViewIndex] = {
         ...dataInView,
         json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
@@ -218,6 +215,16 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       return;
     };
 
+    const createTodaysView = () => {
+      setData([
+        {
+          date: selectedDate,
+          json: "",
+        },
+        ...data,
+      ]);
+    };
+
     const updateContent = () => {
       editor?.commands?.setContent(dataInView?.json);
       editor?.commands.scrollIntoView();
@@ -225,6 +232,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
 
     if ((!data || !data.length) && editor && !dataInView) {
       setInitialContent();
+    }
+
+    if (data.length && editor && selectedDate === new Date().toDateString() && !dataInView) {
+      createTodaysView();
     }
 
     if (editor && dataInView) {

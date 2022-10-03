@@ -74,12 +74,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       }),
       BulletList.configure({
         HTMLAttributes: {
-          class: "text-inherit list-disc list-outside",
+          class: "text-inherit list-disc",
         },
       }),
       OrderedList.configure({
         HTMLAttributes: {
-          class: "text-inherit list-decimal list-outside",
+          class: "text-inherit list-decimal",
         },
       }),
       Highlight.configure({

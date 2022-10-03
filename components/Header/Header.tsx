@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { MdOutlineDarkMode } from "react-icons/md";
+import { HiOutlineCalendar } from "react-icons/hi";
 import DateMenu from "../DateMenu";
+import Icon from "../shared/Icon";
 import Dropdown from "./Dropdown";
 
 const Header: FC<{ selectedDate: string; setSelectedDate: any }> = ({
@@ -31,15 +32,31 @@ const Header: FC<{ selectedDate: string; setSelectedDate: any }> = ({
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
+      <div className="flex gap-3 items-center">
+        <Icon type="logo" className="w-7" />
+        <button
+          aria-label="Date button"
+          className="hidden md:flex gap-4 items-center focus:outline-brand"
+          onClick={() => setOpen(!open)}
+        >
+          <span className="font-bold text-xl tracking-tighter text-gray-400 hover:text-gray-600 dark:text-[#7d8082] dark:hover:text-[#a3a7aa] transition cursor-pointer duration-300 ease-out">
+            {selectedDate}
+          </span>
+          <div className="hidden md:flex bg-gray-100 dark:bg-[#7d8082] text-gray-500 dark:text-[#f8fafc] text-xs rounded-md py-1 px-2 font-bold">
+            ⌘G
+          </div>
+        </button>
+      </div>
       <button
         aria-label="Date button"
-        className="flex gap-4 items-center focus:outline-brand"
+        className="flex md:hidden gap-4 items-center focus:outline-brand bg-gray-200 dark:bg-[#333338] md:bg-transparent px-3 py-1 rounded-lg md:py-o md:px-0"
         onClick={() => setOpen(!open)}
       >
         <span className="font-bold text-xl tracking-tighter text-gray-400 hover:text-gray-600 dark:text-[#7d8082] dark:hover:text-[#a3a7aa] transition cursor-pointer duration-300 ease-out">
           {selectedDate}
         </span>
-        <div className="bg-gray-100 dark:bg-[#7d8082] text-gray-500 dark:text-[#f8fafc] text-xs rounded-md py-1 px-2 font-bold">
+        <HiOutlineCalendar className="text-gray-400 hover:text-gray-600 dark:text-[#7d8082] dark:hover:text-[#a3a7aa]" />
+        <div className="hidden md:flex bg-gray-100 dark:bg-[#7d8082] text-gray-500 dark:text-[#f8fafc] text-xs rounded-md py-1 px-2 font-bold">
           ⌘G
         </div>
       </button>

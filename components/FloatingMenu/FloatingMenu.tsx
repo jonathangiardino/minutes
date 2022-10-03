@@ -220,7 +220,7 @@ dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] shadow-sm px-7 py-3 rounded-xl font-
         onClick={() => setOpen(true)}
       >
         <div>Add blocks</div>{" "}
-        <div className="bg-gray-100 text-gray-500 dark:bg-[#7d8082] dark:text-[#f8fafc] text-xs rounded-md py-1 px-2 font-bold">
+        <div className=" hidden md:flex bg-gray-100 text-gray-500 dark:bg-[#7d8082] dark:text-[#f8fafc] text-xs rounded-md py-1 px-2 font-bold">
           ⌘/
         </div>
       </button>

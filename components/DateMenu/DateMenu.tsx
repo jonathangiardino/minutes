@@ -83,7 +83,7 @@ const DateMenu = ({
                             <div className="ml-4 flex gap-2 items-center flex-auto">
                               <p
                                 className={clsx(
-                                  "text-base font-medium text-[#28282c] dark:text-[#f8fafc]",
+                                  "text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]",
                                   item.date === selectedDate
                                     ? "font-bold opacity-100"
                                     : "opacity-75"

@@ -28,6 +28,16 @@ const Home: NextPage = () => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta
+          name="theme-color"
+          content="#f8fafc"
+          media="(prefers-color-scheme: light)"
+        />
+        <meta
+          name="theme-color"
+          content="#28282b"
+          media="(prefers-color-scheme: dark)"
+        />
       </Head>
 
       <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />

@@ -7,8 +7,8 @@ body {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 18px;
   -webkit-app-region: drag;
-  color: #28282b;
   caret-color: #3f67e0;
+  @apply text-[#28282b] dark:text-[#f8fafc] bg-[#f8fafc] dark:bg-[#28282b];
 }
 
 *::selection {
@@ -87,15 +87,14 @@ button {
 
 .ProseMirror blockquote {
   padding-left: 1rem;
-  border-left: 4px solid rgba(40, 40, 43, 0.1);
   margin-top: 2rem ;
   margin-bottom: 2rem ;
+  @apply border-l-[3px] border-l-gray-300 dark:border-l-[#7d7d7d];
 }
 
 .ProseMirror hr {
-  border: none;
-  border-top: 2px solid rgba(40, 40, 43, 0.2);
   margin: 2rem 0;
+  @apply border-t-[3px] border-t-gray-300 dark:border-t-[#7d7d7d];
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
@@ -110,7 +109,7 @@ button {
 ul[data-type="taskList"] {
   list-style: none;
   padding: 4px;
-  @apply bg-slate-50 rounded-md;
+  @apply bg-slate-50 dark:bg-[#333338] rounded-md;
 }
 
 ul[data-type="taskList"] > p {
@@ -134,7 +133,7 @@ ul[data-type="taskList"] > li > label {
 }
 
 ul[data-type="taskList"] > li > label > input {
-  @apply w-6 h-6 !text-[#3f67e0] bg-gray-100 rounded-lg border-gray-300 focus:ring-transparent accent-[#5275df];
+  @apply w-6 h-6 !text-[#3f67e0] bg-gray-100 dark:bg-[#333338] rounded-lg border-gray-300 dark:border-[#45454d] accent-[#5275df];
 }
 
 ul[data-type="taskList"] > li[data-checked="true"] {
@@ -146,7 +145,7 @@ ul[data-type="taskList"] > li > div {
 }
 
 ul[data-placeholder] {
-  color: #28282b;
+  color: #585858;
 }
 
 /* Categories FIXME */

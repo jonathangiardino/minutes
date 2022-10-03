@@ -24,7 +24,10 @@ const DateMenu = ({
     minutes && query === ""
       ? [...minutes]
       : minutes.filter((item: any) => {
-          return item.date.toLowerCase().includes(query.toLowerCase());
+          const words = item.date.split(" ");
+          return words.some((word: string) =>
+            word.toLowerCase().startsWith(query.toLowerCase())
+          );
         });
 
   return (
@@ -46,7 +49,7 @@ const DateMenu = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed top-3 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
+              <Dialog.Panel className="bg-gray-200 dark:bg-[#333338] text-[#28282c] dark:text-[#f8fafc] shadow-sm fixed top-3 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
                   onChange={(date: any) => {
                     setOpen(false);
@@ -55,7 +58,7 @@ const DateMenu = ({
                 >
                   <div className="relative">
                     <Combobox.Input
-                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] placeholder-gray-600 focus:ring-0 focus:outline-none text-base"
+                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] dark:text-[#f8fafc] placeholder-gray-600 dark:placeholder-gray-400 focus:ring-0 focus:outline-none text-base"
                       placeholder="Go to date..."
                       onChange={(event) => setQuery(event.target.value)}
                     />
@@ -72,7 +75,7 @@ const DateMenu = ({
                           className={({ active }) =>
                             clsx(
                               "flex cursor-default select-none rounded-lg p-2",
-                              active && "bg-gray-300"
+                              active && "bg-gray-300 dark:bg-[#45454d]"
                             )
                           }
                         >
@@ -80,7 +83,7 @@ const DateMenu = ({
                             <div className="ml-4 flex gap-2 items-center flex-auto">
                               <p
                                 className={clsx(
-                                  "text-base font-medium text-[#28282c]",
+                                  "text-base font-medium text-[#28282c] dark:text-[#f8fafc]",
                                   item.date === selectedDate
                                     ? "font-bold opacity-100"
                                     : "opacity-75"
@@ -100,7 +103,7 @@ const DateMenu = ({
                   </Combobox.Options>
                   {query !== "" && filteredItems.length === 0 && (
                     <div className="pt-1 px-6 text-center text-sm flex flex-col items-center justify-center">
-                      <p className=" text-gray-600 pb-6">
+                      <p className=" text-gray-600 dark:text-[#f8fafc] pb-6">
                         No previous dates found
                       </p>
                     </div>

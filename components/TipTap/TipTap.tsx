@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import React, { FC, ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
 import useLocalStorageState from "use-local-storage-state";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
@@ -62,7 +62,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       StarterKit,
       TaskList.configure({
         HTMLAttributes: {
-          class: "rounded border border-gray-100",
+          class: "rounded border border-gray-100 dark:border-none",
         },
       }),
       TaskItem,
@@ -84,7 +84,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       }),
       Highlight.configure({
         HTMLAttributes: {
-          class: "px-[6px] py-[2px] rounded-md !bg-[#ffc078]",
+          class:
+            "px-[6px] py-[2px] rounded-md bg-[#ffc078] dark:bg-[#db8c32] dark:text-[#f8fafc]",
         },
       }),
       Underline,
@@ -238,7 +239,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
 
     const updateContent = () => {
       editor?.commands?.setContent(dataInView?.json);
-      editor?.commands.scrollIntoView();
+      editor?.commands?.scrollIntoView();
     };
 
     if ((!data || !data.length) && editor && !dataInView) {
@@ -258,6 +259,23 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       updateContent();
     }
   }, [editor, selectedDate]);
+
+  useEffect(() => {
+    const focusEditor = (e: any) => {
+      e.stopPropagation();
+
+      if (e.target.id === "outer-editor") {
+        editor?.commands.selectTextblockEnd();
+        editor?.commands.focus();
+      }
+    };
+
+    document.addEventListener("click", (e) => focusEditor(e));
+
+    return () => {
+      document.removeEventListener("click", (e) => focusEditor(e));
+    };
+  }, [editor]);
 
   return (
     <>
@@ -306,7 +324,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             )}
           >
             <BiHeading className="text-2xl lg:text-[18px]" />
-            <RiNumber2 className="text-md lg:text-sm font-semibold -ml-[6px]"/>
+            <RiNumber2 className="text-md lg:text-sm font-semibold -ml-[6px]" />
           </button>
           <button
             title="Bold"
@@ -477,7 +495,11 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
           </button>
         </BubbleMenu>
       )}
-      <EditorContent editor={editor} className="w-full h-auto mt-2 lg:mt-16" />
+      <EditorContent
+        editor={editor}
+        className="w-full h-auto mt-2 lg:mt-16"
+        id="outer-editor"
+      />
       {!isKeyboardOpen && (
         <FloatingMenu
           open={openFloatingMenu}

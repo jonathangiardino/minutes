@@ -15,7 +15,7 @@ const Dropdown: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-50 w-64 mt-12 origin-top-right bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none divide-y">
+        <Menu.Items className="absolute right-0 z-50 w-64 mt-12 origin-top-right bg-gray-200 dark:bg-[#333338] dark:text-[#f8fafc] rounded-lg shadow-sm ring-1 ring-black ring-opacity-5 focus:outline-brand">
           <div className="px-4 py-3">
             <p className="text-base ">Signed in as</p>
             <p className="truncate text-base  font-semibold">
@@ -28,8 +28,10 @@ const Dropdown: FC = () => {
                 <a
                   href="#"
                   className={clsx(
-                    active ? "bg-gray-100 text-gray-900" : "",
-                    "block px-4 py-2 text-base  rounded-md mx-1"
+                    active
+                      ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
+                      : "",
+                    "block px-4 py-2 text-base rounded-md mx-1"
                   )}
                 >
                   Account settings
@@ -41,7 +43,9 @@ const Dropdown: FC = () => {
                 <a
                   href="#"
                   className={clsx(
-                    active ? "bg-gray-100 text-gray-900" : "",
+                    active
+                      ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
+                      : "",
                     "block px-4 py-2 text-base  rounded-md mx-1"
                   )}
                 >
@@ -54,7 +58,9 @@ const Dropdown: FC = () => {
                 <a
                   href="#"
                   className={clsx(
-                    active ? "bg-gray-100 text-gray-900" : "",
+                    active
+                      ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
+                      : "",
                     "block px-4 py-2 text-base  rounded-md mx-1"
                   )}
                 >
@@ -70,8 +76,10 @@ const Dropdown: FC = () => {
                   <button
                     type="submit"
                     className={clsx(
-                      active ? "bg-gray-100 text-gray-900" : "",
-                      "block w-full px-4 py-2 text-left text-base  rounded-md"
+                      active
+                        ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
+                        : "",
+                      "block w-full px-4 py-2 text-left text-base rounded-md font-bold"
                     )}
                   >
                     Sign out

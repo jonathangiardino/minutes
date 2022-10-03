@@ -37,7 +37,7 @@ const items = [
     icon: BiHeading,
   },
   {
-    id: 1,
+    id: 2,
     name: "Heading 2",
     description: "Small heading",
     url: "#",
@@ -46,7 +46,7 @@ const items = [
     iconText: "H2",
   },
   {
-    id: 2,
+    id: 3,
     name: "Bullet List",
     description: "Add a Bullet List",
     url: "#",
@@ -54,7 +54,7 @@ const items = [
     icon: BiListUl,
   },
   {
-    id: 3,
+    id: 4,
     name: "Numbered List",
     description: "Add a Numbered List",
     url: "#",
@@ -62,7 +62,7 @@ const items = [
     icon: BiListOl,
   },
   {
-    id: 4,
+    id: 5,
     name: "Blockquote",
     description: "Add a Blockquote",
     url: "#",
@@ -70,7 +70,7 @@ const items = [
     icon: GrBlockQuote,
   },
   {
-    id: 5,
+    id: 6,
     name: "Task",
     description: "Add a Todo list",
     url: "#",
@@ -78,7 +78,7 @@ const items = [
     icon: BiTask,
   },
   {
-    id: 6,
+    id: 7,
     name: "Code Block",
     description: "Add a Code Block",
     url: "#",
@@ -86,7 +86,7 @@ const items = [
     icon: BiCode,
   },
   {
-    id: 7,
+    id: 8,
     name: "Horizontal Rule",
     description: "Add Divider",
     url: "#",
@@ -111,7 +111,10 @@ const FloatingMenu = ({
     query === ""
       ? [...items]
       : items.filter((item) => {
-          return item.name.toLowerCase().includes(query.toLowerCase());
+          const words = item.name.split(" ");
+          return words.some((word: string) =>
+            word.toLowerCase().startsWith(query.toLowerCase())
+          );
         });
 
   return (
@@ -133,7 +136,7 @@ const FloatingMenu = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="bg-gray-200 text-[#28282c] shadow-sm fixed bottom-20 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
+              <Dialog.Panel className="bg-gray-200 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] shadow-sm fixed bottom-20 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
                   onChange={(item: FormattingBlock) => {
                     setOpen(false);
@@ -142,7 +145,7 @@ const FloatingMenu = ({
                 >
                   <div className="relative">
                     <Combobox.Input
-                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] placeholder-gray-600 focus:ring-0 focus:outline-none text-base"
+                      className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] placeholder-gray-600 focus:ring-0 focus:outline-none text-base dark:text-[#f8fafc] dark:placeholder-gray-400"
                       placeholder="Search blocks..."
                       onChange={(event) => setQuery(event.target.value)}
                     />
@@ -158,7 +161,7 @@ const FloatingMenu = ({
                         className={({ active }) =>
                           clsx(
                             "flex cursor-default select-none rounded-lg p-2",
-                            active && "bg-gray-300"
+                            active && "bg-gray-300 dark:bg-[#45454d]"
                           )
                         }
                       >
@@ -183,14 +186,14 @@ const FloatingMenu = ({
                           <div className="ml-4 flex-auto">
                             <p
                               className={clsx(
-                                "text-base font-medium text-[#28282c]"
+                                "text-base font-medium text-[#28282c] dark:text-[#f8fafc]"
                               )}
                             >
                               {item.name}
                             </p>
                             <p
                               className={clsx(
-                                "text-sm text-[#28282c] opacity-75"
+                                "text-sm text-[#28282c] dark:text-[#f8fafc] opacity-75"
                               )}
                             >
                               {item.description}
@@ -212,11 +215,12 @@ const FloatingMenu = ({
         </Dialog>
       </Transition.Root>
       <button
-        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 focus:outline-brand text-base"
+        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338]
+dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 focus:outline-brand text-base"
         onClick={() => setOpen(true)}
       >
         <div>Add blocks</div>{" "}
-        <div className="bg-gray-100 text-gray-500 text-xs rounded-md py-1 px-2 font-bold">
+        <div className="bg-gray-100 text-gray-500 dark:bg-[#7d8082] dark:text-[#f8fafc] text-xs rounded-md py-1 px-2 font-bold">
           ⌘/
         </div>
       </button>

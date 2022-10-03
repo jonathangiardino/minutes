@@ -236,10 +236,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       ]);
     };
 
-    // const updateContent = () => {
-    //   editor?.commands?.setContent(dataInView?.json);
-    //   editor?.commands.scrollIntoView();
-    // };
+    const updateContent = () => {
+      editor?.commands?.setContent(dataInView?.json);
+      editor?.commands.scrollIntoView();
+    };
 
     if ((!data || !data.length) && editor && !dataInView) {
       setInitialContent();
@@ -254,9 +254,9 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       createTodaysView();
     }
 
-    // if (editor && dataInView) {
-    //   updateContent();
-    // }
+    if (editor && dataInView) {
+      updateContent();
+    }
   }, [editor, selectedDate]);
 
   return (

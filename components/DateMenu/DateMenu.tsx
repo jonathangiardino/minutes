@@ -1,6 +1,7 @@
 import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
 import { Combobox, Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
+import { VscEye } from "react-icons/vsc";
 import useLocalStorageState from "use-local-storage-state";
 
 const DateMenu = ({
@@ -76,15 +77,22 @@ const DateMenu = ({
                           }
                         >
                           <>
-                            <div className="ml-4 flex-auto">
+                            <div className="ml-4 flex gap-2 items-center flex-auto">
                               <p
                                 className={clsx(
                                   "text-base font-medium text-[#28282c]",
-                                  item.date === selectedDate && "font-bold"
+                                  item.date === selectedDate
+                                    ? "font-bold opacity-100"
+                                    : "opacity-75"
                                 )}
                               >
-                                {item.date}
+                                {item.date === new Date().toDateString()
+                                  ? "Today"
+                                  : item.date}
                               </p>
+                              {item.date === selectedDate && (
+                                <VscEye className="stroke-[1px]" />
+                              )}
                             </div>
                           </>
                         </Combobox.Option>

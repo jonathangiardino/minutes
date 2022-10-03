@@ -29,14 +29,18 @@ const Header: FC<{ selectedDate: string; setSelectedDate: any }> = ({
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      <div className="flex gap-4 items-center" onClick={() => setOpen(!open)}>
+      <button
+        aria-label="Date button"
+        className="flex gap-4 items-center focus:outline-brand"
+        onClick={() => setOpen(!open)}
+      >
         <span className="font-bold text-xl tracking-tighter text-gray-400 hover:text-gray-600 transition cursor-pointer duration-300 ease-out">
           {selectedDate}
         </span>
         <div className="bg-gray-100 text-gray-500 text-xs rounded-md py-1 px-2 font-bold">
           ⌘G
         </div>
-      </div>
+      </button>
       <Dropdown />
     </nav>
   );

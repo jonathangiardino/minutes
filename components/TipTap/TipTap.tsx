@@ -1,11 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
 import useLocalStorageState from "use-local-storage-state";
-import {
-  useEditor,
-  EditorContent,
-  BubbleMenu
-} from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";
 import StarterKit from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extension-placeholder";
@@ -30,6 +26,7 @@ import {
   BiHighlight,
   BiUnderline,
 } from "react-icons/bi";
+import { RiNumber2 } from "react-icons/ri";
 import { GrBlockQuote } from "react-icons/gr";
 import FloatingMenu from "../FloatingMenu";
 import useDetectKeyboardOpen from "use-detect-keyboard-open";
@@ -239,10 +236,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       ]);
     };
 
-    const updateContent = () => {
-      editor?.commands?.setContent(dataInView?.json);
-      editor?.commands.scrollIntoView();
-    };
+    // const updateContent = () => {
+    //   editor?.commands?.setContent(dataInView?.json);
+    //   editor?.commands.scrollIntoView();
+    // };
 
     if ((!data || !data.length) && editor && !dataInView) {
       setInitialContent();
@@ -257,9 +254,9 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       createTodaysView();
     }
 
-    if (editor && dataInView) {
-      updateContent();
-    }
+    // if (editor && dataInView) {
+    //   updateContent();
+    // }
   }, [editor, selectedDate]);
 
   return (
@@ -268,7 +265,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         <BubbleMenu
           editor={editor}
           tippyOptions={{ delay: 300, duration: 300 }}
-          className="pt-[5px] px-1 pb-0 shadow-xl bg-[#28282c] text-white rounded-md"
+          className="pt-[8px] lg:pt-[5px] px-2 lg:px-1 pb-1 lg:pb-0 shadow-xl bg-[#28282c] text-white rounded-md"
         >
           <button
             title="Heading"
@@ -285,10 +282,31 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
               editor.isActive("heading", { level: 1 })
                 ? "text-brand font-bold"
                 : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiHeading size={18} />
+            <BiHeading className="text-2xl lg:text-[18px]" />
+          </button>
+          <button
+            title="Heading 2"
+            onClick={() =>
+              editor
+                .chain()
+                .focus()
+                .toggleHeading({ level: 2 })
+                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                .insertContent("")
+                .run()
+            }
+            className={clsx(
+              editor.isActive("heading", { level: 2 })
+                ? "text-brand font-bold"
+                : "",
+              "mx-2 lg:mx-1 inline-flex items-center"
+            )}
+          >
+            <BiHeading className="text-2xl lg:text-[18px]" />
+            <RiNumber2 className="text-md lg:text-sm font-semibold -ml-[6px]"/>
           </button>
           <button
             title="Bold"
@@ -304,10 +322,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("bold") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiBold size={18} />
+            <BiBold className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Italic"
@@ -323,10 +341,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("italic") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiItalic size={18} />
+            <BiItalic className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Underline"
@@ -342,10 +360,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("underline") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiUnderline size={18} />
+            <BiUnderline className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Strike-through"
@@ -361,10 +379,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("strike") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiStrikethrough size={18} />
+            <BiStrikethrough className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Bullet list"
@@ -379,10 +397,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("bulletList") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiListUl size={18} />
+            <BiListUl className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Ordered List"
@@ -397,10 +415,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("orderedList") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiListOl size={18} />
+            <BiListOl className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Blockquote"
@@ -415,10 +433,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("orderedList") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <GrBlockQuote size={18} />
+            <GrBlockQuote className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="To do"
@@ -433,10 +451,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("taskList") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiTask size={18} />
+            <BiTask className="text-2xl lg:text-[18px]" />
           </button>
           <button
             title="Highlight"
@@ -452,10 +470,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             }
             className={clsx(
               editor.isActive("highlight") ? "text-brand font-bold" : "",
-              "mx-1"
+              "mx-2 lg:mx-1"
             )}
           >
-            <BiHighlight size={18} />
+            <BiHighlight className="text-2xl lg:text-[18px]" />
           </button>
         </BubbleMenu>
       )}

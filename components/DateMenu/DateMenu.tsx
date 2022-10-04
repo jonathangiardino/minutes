@@ -61,6 +61,10 @@ const DateMenu = ({
                       className="h-12 w-full border-0 bg-transparent pl-6 pr-4 text-[#28282c] dark:text-[#f8fafc] placeholder-gray-600 dark:placeholder-gray-400 focus:ring-0 focus:outline-none text-base"
                       placeholder="Go to date..."
                       onChange={(event) => setQuery(event.target.value)}
+                      onFocus={() =>
+                        window?.innerWidth < 768 && window?.scrollTo(0, 100)
+                      }
+                      autoFocus
                     />
                   </div>
                   <Combobox.Options

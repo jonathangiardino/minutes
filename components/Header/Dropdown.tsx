@@ -5,7 +5,7 @@ import { Menu, Transition } from "@headlessui/react";
 const Dropdown: FC = () => {
   return (
     <Menu as="div" className="relative flex">
-      <Menu.Button className="h-9 w-9 rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
+      <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"

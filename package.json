@@ -24,6 +24,7 @@
     "next": "latest",
     "react": "18.1.0",
     "react-dom": "18.1.0",
+    "react-fixed-bottom": "^1.0.10",
     "react-hotkeys-hook": "^3.4.7",
     "react-icons": "^4.4.0",
     "use-detect-keyboard-open": "^0.2.0",

@@ -10,6 +10,9 @@ import {
 import { useHotkeys } from "react-hotkeys-hook";
 // import useDetectKeyboardOpen from "use-detect-keyboard-open";
 import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Typography from "@tiptap/extension-typography";
+import CharacterCount from "@tiptap/extension-character-count";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TaskList } from "@tiptap/extension-task-list";
 import { TaskItem } from "@tiptap/extension-task-item";
@@ -28,9 +31,7 @@ import {
   BiTask,
   BiHighlight,
   BiUnderline,
-  BiParagraph,
   BiCode,
-  BiTargetLock,
 } from "react-icons/bi";
 import { RiNumber2 } from "react-icons/ri";
 import { GrBlockQuote } from "react-icons/gr";
@@ -99,6 +100,15 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         },
       }),
       Underline,
+      Link.configure({
+        HTMLAttributes: {
+          class: "text-brand",
+        },
+      }),
+      Typography,
+      CharacterCount.configure({
+        mode: "nodeSize",
+      }),
     ],
     content: "",
     autofocus: true,
@@ -250,6 +260,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       ]);
     };
 
+    // T-13 move to a handler instead of effect
     const updateContent = () => {
       editor?.commands.setContent(dataInView?.json);
       // editor?.commands.scrollIntoView();
@@ -297,6 +308,13 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
           tippyOptions={{ delay: 300, duration: 300 }}
           className="pt-[5px] px-1 pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-lg"
         >
+          <div className="mx-1 pointer-events-none text-[11px] bg-[#28282c] dark:bg-[#45454d] text-white fixed -bottom-4 right-0 rounded-sm px-[3px]">
+            {editor?.state?.selection?.to &&
+              editor?.state?.selection?.from &&
+              editor?.state?.selection?.to -
+                editor?.state?.selection?.from +
+                " chars"}
+          </div>
           <button
             title="Heading"
             onClick={() =>

@@ -41,7 +41,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-      <main className="flex w-full max-w-[768px] flex-1 mb-0 md:mb-12">
+      <main className="flex w-full max-w-[768px] flex-1 mb-24 lg:mb-12">
         <TipTap selectedDate={selectedDate} />
       </main>
     </div>

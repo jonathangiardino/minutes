@@ -8,7 +8,6 @@ import {
   FloatingMenu as MobileFloatingMenu,
 } from "@tiptap/react";
 import { useHotkeys } from "react-hotkeys-hook";
-// import useDetectKeyboardOpen from "use-detect-keyboard-open";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Typography from "@tiptap/extension-typography";

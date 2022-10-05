@@ -215,7 +215,7 @@ const FloatingMenu = ({
         </Dialog>
       </Transition.Root>
       <button
-        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:opacity-90 transition ease-out duration-300 focus:outline-brand text-base"
+        className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm px-7 py-3 rounded-xl font-bold flex gap-12 items-center cursor-pointer hover:bg-opacity-100 dark:hover:bg-opacity-100 transition ease-out duration-300 focus:outline-brand text-base"
         onClick={() => setOpen(true)}
       >
         <div>Add blocks</div>{" "}

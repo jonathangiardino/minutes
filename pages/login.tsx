@@ -4,7 +4,9 @@ import Head from "next/head";
 import { FaMagic } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { BsTwitter } from "react-icons/bs";
+import { IoMdClose } from "react-icons/io";
 import Icon from "@/components/shared/Icon";
+import Link from "next/link";
 
 const Login = () => {
   return (
@@ -46,6 +48,11 @@ const Login = () => {
           <h2 className="text-md font-semibold tracking-tight text-gray-400 dark:text-[#7d8082]">
             Sign in to your account
           </h2>
+        </div>
+        <div className="absolute right-3 top-4">
+          <Link href="/">
+            <IoMdClose size={28} />
+          </Link>
         </div>
         <div className="flex-1 max-w-sm px-6">
           <div className="flex min-h-full flex-col justify-center">

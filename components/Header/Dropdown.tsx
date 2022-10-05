@@ -1,10 +1,11 @@
 import React, { FC, Fragment } from "react";
+import Link from "next/link";
 import clsx from "clsx";
 import { Menu, Transition } from "@headlessui/react";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 
 const Dropdown: FC = () => {
-  const logged = true;
+  const logged = false;
   return (
     <Menu as="div" className="relative flex">
       <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
@@ -27,7 +28,7 @@ const Dropdown: FC = () => {
                 </p>
               </div>
               <div className="py-2">
-                {/* <Menu.Item>
+                <Menu.Item>
                   {({ active }) => (
                     <a
                       href="#"
@@ -41,7 +42,7 @@ const Dropdown: FC = () => {
                       Account settings
                     </a>
                   )}
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
                     <a
@@ -83,7 +84,7 @@ const Dropdown: FC = () => {
                           active
                             ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
                             : "",
-                          "flex items-center gap-2 w-full px-4 py-2 text-left text-base rounded-md font-bold"
+                          "block w-full px-4 py-2 text-left text-base rounded-md font-bold"
                         )}
                       >
                         <span>Sign out</span>
@@ -97,10 +98,11 @@ const Dropdown: FC = () => {
           ) : (
             <>
               <div className="py-1">
-                <Menu.Item>
+                <Menu.Item as="div">
                   {({ active }) => (
-                    <a
-                      href="#"
+                    <Link
+                      href="/login"
+                      passHref
                       className={clsx(
                         active
                           ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
@@ -108,9 +110,18 @@ const Dropdown: FC = () => {
                         "flex items-center gap-2 px-4 py-2 text-base rounded-md mx-1 font-bold"
                       )}
                     >
-                      <span>Sign in</span>
-                      <FiLogIn />
-                    </a>
+                      <a
+                        className={clsx(
+                          active
+                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
+                            : "",
+                          "flex items-center gap-2 px-4 py-2 text-base rounded-md mx-1 font-bold"
+                        )}
+                      >
+                        <span>Sign in</span>
+                        <FiLogIn />
+                      </a>
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>

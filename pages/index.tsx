@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>
-        <title>minutes</title>
+        <title>:minutes</title>
         <link
           rel="apple-touch-icon"
           sizes="180x180"

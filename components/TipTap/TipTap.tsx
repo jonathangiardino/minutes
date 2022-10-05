@@ -110,7 +110,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       }),
     ],
     content: "",
-    autofocus: true,
+    autofocus: false,
     editorProps: {
       attributes: {
         class: "p-4 focus:outline-none active:outline-none",

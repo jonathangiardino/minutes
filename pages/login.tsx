@@ -20,11 +20,6 @@ const Login = () => {
   const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
-  //TODO: add prod url
-  const redirectTo =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000/login"
-      : "https://minutes-six.vercel.app/login";
 
   const notifySubmit = () =>
     toast("Great job, email sent!", {
@@ -49,7 +44,7 @@ const Login = () => {
         color: "#f8fafc",
       },
 
-      icon: <BiError />
+      icon: <BiError />,
     });
 
   const signInWithEmail = async (e: any) => {
@@ -57,7 +52,11 @@ const Login = () => {
     let { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: redirectTo,
+        emailRedirectTo:
+        //TODO: add prod url
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/login"
+            : "https://minutes-six.vercel.app/login",
       },
     });
 
@@ -74,7 +73,11 @@ const Login = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: redirectTo,
+        redirectTo:
+        //TODO: add prod url
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:3000/login"
+            : "https://minutes-six.vercel.app/login",
       },
     });
 
@@ -255,8 +258,8 @@ const Login = () => {
                             &#9432; Why do I need to sign in?
                           </span> */}
                           <br />
-                          &#9432; Once signed in, your notes will be synced with all the
-                          devices you log into with the same account.
+                          &#9432; Once signed in, your notes will be synced with
+                          all the devices you log into with the same account.
                         </h2>
                       </div>
                     </div>

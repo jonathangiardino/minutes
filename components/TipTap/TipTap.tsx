@@ -257,6 +257,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         },
         ...data,
       ]);
+      editor?.commands.setContent("");
     };
 
     // T-13 move to a handler instead of effect

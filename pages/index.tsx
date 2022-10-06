@@ -5,7 +5,26 @@ import Header from "@/components/Header";
 import TipTap from "@/components/TipTap";
 
 const Home: NextPage = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toDateString()
+  );
+
+  useEffect(() => {
+    const updateToTodayView = () => {
+      const data = JSON.parse(localStorage.getItem("minutes-data") || "");
+      let updated = data.find(
+        ({ date }: { date: string }) => date === new Date().toDateString()
+      );
+
+      if (!updated) {
+        setSelectedDate(new Date().toDateString());
+      }
+    };
+
+    window.addEventListener("focus", updateToTodayView);
+    return () => window.removeEventListener("focus", updateToTodayView);
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>

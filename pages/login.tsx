@@ -26,8 +26,6 @@ const Login = () => {
       ? "http://localhost:3000/login"
       : "https://minutes-six.vercel.app/login";
 
-    console.log(process.env.NODE_ENV)
-
   const notifySubmit = () =>
     toast("Great job, email sent!", {
       // Styling

@@ -40,7 +40,7 @@ const Dropdown: FC = () => {
       <Menu as="div" className="relative flex">
         {user ? (
           <Menu.Button className="h-[39px] w-[39px] rounded-full cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300">
-            <Avvvatars value={user.email || "Unauthenticated"} style="shape" />
+            <Avvvatars value={user.email || 'Unauthenticated'} style="shape" />
           </Menu.Button>
         ) : (
           <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
@@ -64,19 +64,29 @@ const Dropdown: FC = () => {
                   </p>
                 </div>
                 <div className="py-1">
-                  <Menu.Item>
+                  <Menu.Item as="div">
                     {({ active }) => (
-                      <a
-                        href="#"
+                      <Link
+                        href="/account"
+                        passHref
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'block px-3 py-2 text-sm rounded-md mx-1',
+                          'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1',
                         )}
                       >
-                        Account settings
-                      </a>
+                        <a
+                          className={clsx(
+                            active
+                              ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                              : '',
+                            'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1',
+                          )}
+                        >
+                          <span>Account</span>
+                        </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>

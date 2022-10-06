@@ -91,8 +91,6 @@ const Login = () => {
     user && router.push("/");
   }, [user]);
 
-  console.log(user);
-
   return (
     <div className="absolute inset-0">
       <Head>
@@ -126,7 +124,7 @@ const Login = () => {
           media="(prefers-color-scheme: dark)"
         />
       </Head>
-      <Toaster />
+      <Toaster position="bottom-right" />
       <div className="w-screen max-w-full h-full flex justify-center items-center relative">
         <div className="absolute left-3 top-3 flex gap-4 items-center">
           <Icon type="logo" className="h-8 w-8" />

@@ -188,7 +188,7 @@ const Dropdown: FC = () => {
           </Menu.Items>
         </Transition>
       </Menu>
-      <Toaster />
+      <Toaster position="bottom-right" />
     </>
   );
 };

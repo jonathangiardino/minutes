@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { Provider } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabaseClient";
 import Head from "next/head";
+import toast, { Toaster } from "react-hot-toast";
 import { FaMagic } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { BsTwitter } from "react-icons/bs";
@@ -10,26 +12,85 @@ import { IoMdClose } from "react-icons/io";
 import { AiFillCheckCircle } from "react-icons/ai";
 import Icon from "@/components/shared/Icon";
 import { useUser } from "@/lib/contexts/authContext";
+import { FiZap } from "react-icons/fi";
+import { BiError } from "react-icons/bi";
 
 const Login = () => {
   const { user } = useUser();
   const router = useRouter();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
+  //TODO: add prod url
+  const redirectTo =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000/login"
+      : "https://minutes-six.vercel.app/login";
 
-  const loginWithEmail = async (e: any) => {
+    console.log(process.env.NODE_ENV)
+
+  const notifySubmit = () =>
+    toast("Great job, email sent!", {
+      // Styling
+      style: {
+        fontFamily: "Helvetica Neue",
+        fontSize: "14px",
+        backgroundColor: "#3f67e0",
+        color: "#f8fafc",
+      },
+
+      // Custom Icon
+      icon: <FiZap />,
+    });
+
+  const notifyError = () =>
+    toast.error("Oops, something went wrong", {
+      style: {
+        fontFamily: "Helvetica Neue",
+        fontSize: "14px",
+        backgroundColor: "#d15b6f",
+        color: "#f8fafc",
+      },
+
+      icon: <BiError />
+    });
+
+  const signInWithEmail = async (e: any) => {
     e.preventDefault();
     let { error } = await supabase.auth.signInWithOtp({
       email,
+      options: {
+        emailRedirectTo: redirectTo,
+      },
     });
 
-    if (error) console.log(error);
+    if (error) {
+      notifyError();
+      return;
+    }
+
     setIsSubmitted(true);
+    notifySubmit();
+  };
+
+  const signInWithProvider = async (provider: Provider) => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: redirectTo,
+      },
+    });
+
+    if (error) {
+      notifyError();
+      return;
+    }
   };
 
   useEffect(() => {
     user && router.push("/");
-  }, []);
+  }, [user]);
+
+  console.log(user);
 
   return (
     <div className="absolute inset-0">
@@ -64,10 +125,11 @@ const Login = () => {
           media="(prefers-color-scheme: dark)"
         />
       </Head>
+      <Toaster />
       <div className="w-screen max-w-full h-full flex justify-center items-center relative">
         <div className="absolute left-3 top-3 flex gap-4 items-center">
           <Icon type="logo" className="h-8 w-8" />
-          <h2 className="text-md font-semibold tracking-tight text-gray-400 dark:text-[#7d8082]">
+          <h2 className="text-md font-semibold tracking-tight text-[#28282b] dark:text-[#f8fafc]">
             Sign in to your account
           </h2>
         </div>
@@ -81,24 +143,19 @@ const Login = () => {
             <div className="mt-3 sm:mx-auto sm:w-full sm:max-w-md">
               <div className="py-2 sm:rounded-lg">
                 {isSubmitted ? (
-                  <div className="rounded-md bg-green-50 p-4">
+                  <div className="rounded-md bg-brand p-4">
                     <div className="flex">
                       <div className="flex-shrink-0">
                         <AiFillCheckCircle
-                          className="h-5 w-5 text-green-400"
+                          className="h-5 w-5 text-[#f8fafc]"
                           aria-hidden="true"
                         />
                       </div>
                       <div className="ml-3">
-                        <h3 className="text-sm font-medium text-green-800">
-                          Awesomely done.
+                        <h3 className="text-sm font-normal text-[#f8fafc]">
+                          Check your email, you'll get a{" "}
+                          <strong>magic link</strong> to sign in!
                         </h3>
-                        <div className="mt-2 text-sm text-green-700">
-                          <p>
-                            Check your email, you'll get a{" "}
-                            <strong>magic link</strong> to log in!
-                          </p>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -108,7 +165,7 @@ const Login = () => {
                   <>
                     <form
                       className="space-y-4"
-                      onSubmit={(e) => loginWithEmail(e)}
+                      onSubmit={(e) => signInWithEmail(e)}
                     >
                       <div>
                         <label
@@ -152,32 +209,30 @@ const Login = () => {
 
                       <div className="mt-6 grid grid-cols-3 gap-3">
                         <div>
-                          <a
-                            href="#"
+                          <button
+                            onClick={() => signInWithProvider("google")}
                             className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm inline-flex w-full justify-center rounded-md py-2 px-4 text-sm font-medium"
                           >
-                            <span className="sr-only">
-                              Sign in with Facebook
-                            </span>
+                            <span className="sr-only">Sign in with Google</span>
                             <FcGoogle className="h-5 w-5" />
-                          </a>
+                          </button>
                         </div>
 
                         <div>
-                          <a
-                            href="#"
+                          <button
+                            onClick={() => signInWithProvider("twitter")}
                             className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm inline-flex w-full justify-center rounded-md py-2 px-4 text-sm font-medium"
                           >
                             <span className="sr-only">
                               Sign in with Twitter
                             </span>
                             <BsTwitter color="#1DA1F2" className="h-5 w-5" />
-                          </a>
+                          </button>
                         </div>
 
                         <div>
-                          <a
-                            href="#"
+                          <button
+                            onClick={() => signInWithProvider("github")}
                             className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm inline-flex w-full justify-center rounded-md py-2 px-4 text-sm font-medium"
                           >
                             <span className="sr-only">Sign in with GitHub</span>
@@ -193,8 +248,18 @@ const Login = () => {
                                 clipRule="evenodd"
                               />
                             </svg>
-                          </a>
+                          </button>
                         </div>
+                      </div>
+                      <div className="absolute bottom-6 max-w-xs">
+                        <h2 className="text-sm font-normal tracking-tight text-[#28282c] dark:text-[#f8fafc]">
+                          {/* <span className="text-brand">
+                            &#9432; Why do I need to sign in?
+                          </span> */}
+                          <br />
+                          &#9432; Once signed in, your notes will be synced with all the
+                          devices you log into with the same account.
+                        </h2>
                       </div>
                     </div>
                   </>

@@ -33,7 +33,7 @@ const Header: FC<{ selectedDate: string; setSelectedDate: any }> = ({
         setSelectedDate={setSelectedDate}
       />
       <div className="flex gap-3 items-center">
-        <Icon type="logo" className="h-[39px] w-[39px] md:w-5 md:h-5" />
+        <Icon type="logo" className="h-[38px] w-[38px] md:w-5 md:h-5" />
         <button
           aria-label="Date button"
           className="hidden md:flex gap-4 items-center focus:outline-brand"

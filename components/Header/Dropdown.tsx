@@ -1,42 +1,50 @@
-import React, { FC, Fragment, useState } from "react";
-import Link from "next/link";
-import clsx from "clsx";
-import toast, { Toaster } from "react-hot-toast";
-import { Menu, Transition } from "@headlessui/react";
-import { FiLogIn, FiLogOut } from "react-icons/fi";
-import { useUser } from "@/lib/contexts/authContext";
-import { supabase } from "@/utils/supabaseClient";
+import React, { FC, Fragment, useState } from 'react'
+import Link from 'next/link'
+import clsx from 'clsx'
+import toast, { Toaster } from 'react-hot-toast'
+import Avvvatars from 'avvvatars-react'
+import { Menu, Transition } from '@headlessui/react'
+import { FiLogIn, FiLogOut } from 'react-icons/fi'
+import { useUser } from '@/lib/contexts/authContext'
+import { supabase } from '@/utils/supabaseClient'
 
 const Dropdown: FC = () => {
-  const { user } = useUser();
+  const { user } = useUser()
+  console.log(user)
 
   const notifyLogOut = () =>
-    toast("Successfully logged out.", {
+    toast('Successfully logged out.', {
       // Styling
       style: {
-        fontFamily: "Helvetica Neue",
-        fontSize: "14px",
-        backgroundColor: "#3f67e0",
-        color: "#f8fafc",
+        fontFamily: 'Helvetica Neue',
+        fontSize: '14px',
+        backgroundColor: '#3f67e0',
+        color: '#f8fafc',
       },
 
       // Custom Icon
-      icon: "👋",
+      icon: '👋',
 
       // Change colors of success/error/loading icon
-    });
+    })
 
   const signOut = async (e: any) => {
-    e.preventDefault();
-    const { error } = await supabase.auth.signOut();
+    e.preventDefault()
+    const { error } = await supabase.auth.signOut()
 
-    if (!error) notifyLogOut();
-  };
+    if (!error) notifyLogOut()
+  }
 
   return (
     <>
       <Menu as="div" className="relative flex">
-        <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
+        {user ? (
+          <Menu.Button className="h-[39px] w-[39px] rounded-full cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300">
+            <Avvvatars value={user.email || "Unauthenticated"} style="shape" />
+          </Menu.Button>
+        ) : (
+          <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
+        )}
         <Transition
           as={Fragment}
           enter="transition ease-out duration-100"
@@ -62,9 +70,9 @@ const Dropdown: FC = () => {
                         href="#"
                         className={clsx(
                           active
-                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                            : "",
-                          "block px-3 py-2 text-sm rounded-md mx-1"
+                            ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                            : '',
+                          'block px-3 py-2 text-sm rounded-md mx-1',
                         )}
                       >
                         Account settings
@@ -77,9 +85,9 @@ const Dropdown: FC = () => {
                         href="#"
                         className={clsx(
                           active
-                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                            : "",
-                          "block px-3 py-2 text-sm  rounded-md mx-1"
+                            ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                            : '',
+                          'block px-3 py-2 text-sm  rounded-md mx-1',
                         )}
                       >
                         Support
@@ -92,9 +100,9 @@ const Dropdown: FC = () => {
                         href="#"
                         className={clsx(
                           active
-                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                            : "",
-                          "block px-3 py-2 text-sm  rounded-md mx-1"
+                            ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                            : '',
+                          'block px-3 py-2 text-sm  rounded-md mx-1',
                         )}
                       >
                         Feedback
@@ -110,9 +118,9 @@ const Dropdown: FC = () => {
                           type="submit"
                           className={clsx(
                             active
-                              ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                              : "",
-                            "flex items-center gap-2  w-full px-3 py-2 text-left text-sm rounded-md font-bold"
+                              ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                              : '',
+                            'flex items-center gap-2  w-full px-3 py-2 text-left text-sm rounded-md font-bold',
                           )}
                         >
                           <span>Sign out</span>
@@ -133,17 +141,17 @@ const Dropdown: FC = () => {
                         passHref
                         className={clsx(
                           active
-                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                            : "",
-                          "flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold"
+                            ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                            : '',
+                          'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold',
                         )}
                       >
                         <a
                           className={clsx(
                             active
-                              ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                              : "",
-                            "flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold"
+                              ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                              : '',
+                            'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold',
                           )}
                         >
                           <span>Sign in</span>
@@ -158,9 +166,9 @@ const Dropdown: FC = () => {
                         href="#"
                         className={clsx(
                           active
-                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                            : "",
-                          "block px-3 py-2 text-sm  rounded-md mx-1"
+                            ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                            : '',
+                          'block px-3 py-2 text-sm  rounded-md mx-1',
                         )}
                       >
                         Support
@@ -173,9 +181,9 @@ const Dropdown: FC = () => {
                         href="#"
                         className={clsx(
                           active
-                            ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
-                            : "",
-                          "block px-3 py-2 text-sm  rounded-md mx-1"
+                            ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
+                            : '',
+                          'block px-3 py-2 text-sm  rounded-md mx-1',
                         )}
                       >
                         Feedback
@@ -190,7 +198,7 @@ const Dropdown: FC = () => {
       </Menu>
       <Toaster position="bottom-right" />
     </>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown

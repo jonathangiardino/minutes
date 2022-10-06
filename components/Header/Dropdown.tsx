@@ -3,9 +3,19 @@ import Link from "next/link";
 import clsx from "clsx";
 import { Menu, Transition } from "@headlessui/react";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
+import { useUser } from "@/lib/contexts/authContext";
+import { supabase } from "@/utils/supabaseClient";
 
 const Dropdown: FC = () => {
-  const logged = false;
+  const { user } = useUser();
+
+  const signOut = async (e: any) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signOut();
+
+    if (!error) console.log("SUccesfully logged out");
+  };
+
   return (
     <Menu as="div" className="relative flex">
       <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
@@ -19,12 +29,12 @@ const Dropdown: FC = () => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-50 w-64 mt-12 origin-top-right bg-gray-200 dark:bg-[#333338] dark:text-[#f8fafc] rounded-lg shadow-sm ring-1 ring-black ring-opacity-5 focus:outline-brand">
-          {logged ? (
+          {user ? (
             <>
               <div className="px-4 py-3">
                 <p className="text-base ">Signed in as</p>
                 <p className="truncate text-base  font-semibold">
-                  hello@jonathangiardino.com
+                  {user?.email}
                 </p>
               </div>
               <div className="py-2">
@@ -75,7 +85,7 @@ const Dropdown: FC = () => {
                 </Menu.Item>
               </div>
               <div className="py-2 px-1">
-                <form method="POST" action="#">
+                <form onSubmit={signOut}>
                   <Menu.Item>
                     {({ active }) => (
                       <button
@@ -84,7 +94,7 @@ const Dropdown: FC = () => {
                           active
                             ? "bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white"
                             : "",
-                          "block w-full px-4 py-2 text-left text-base rounded-md font-bold"
+                          "flex items-center gap-2  w-full px-4 py-2 text-left text-base rounded-md font-bold"
                         )}
                       >
                         <span>Sign out</span>

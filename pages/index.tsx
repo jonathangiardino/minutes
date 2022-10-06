@@ -3,11 +3,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Header from "@/components/Header";
 import TipTap from "@/components/TipTap";
+import { useUser } from "@/lib/contexts/authContext";
 
 const Home: NextPage = () => {
+  // const { user } = useUser();
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toDateString()
-  );
+  );  
 
   useEffect(() => {
     const updateToTodayView = () => {

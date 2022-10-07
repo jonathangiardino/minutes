@@ -19,6 +19,14 @@ const Home: NextPage = () => {
         return
       }
 
+      let updated = data.find(
+        ({ date }: { date: string }) => date === new Date().toDateString(),
+      )
+
+      if (!updated) {
+        setSelectedDate(new Date().toDateString())
+      }
+
       setSyncedData([
         ...data.sort((a, b) => {
           const firsDate: any = new Date(a.date)
@@ -41,14 +49,6 @@ const Home: NextPage = () => {
       }
 
       if (user) {
-        let updated = syncedData.find(
-          ({ date }: { date: string }) => date === new Date().toDateString(),
-        )
-
-        if (!updated) {
-          setSelectedDate(new Date().toDateString())
-        }
-
         syncLogsFromDb()
       }
     }

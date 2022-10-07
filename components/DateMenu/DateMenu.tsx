@@ -55,7 +55,7 @@ const DateMenu = ({
 
       setFilteredItems(initialItems)
     }
-  }, [user, syncedData])
+  }, [user, syncedData, query])
 
   return (
     <div className="fixed top-4 left-4 max-w-[320px]">

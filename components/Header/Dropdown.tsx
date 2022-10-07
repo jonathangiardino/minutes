@@ -14,6 +14,7 @@ const Dropdown: FC = () => {
 
   const notifyLogOut = () =>
     toast('Successfully logged out.', {
+      duration: 1500,
       // Styling
       style: {
         fontFamily: 'Helvetica Neue',

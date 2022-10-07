@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Provider } from '@supabase/supabase-js'
+import { PostgrestError, Provider } from '@supabase/supabase-js'
 import { supabase } from '@/utils/supabaseClient'
 import Head from 'next/head'
 import toast, { Toaster } from 'react-hot-toast'
@@ -14,6 +14,13 @@ import { NextLink } from '@/components/shared/NextLink'
 import { useUser } from '@/lib/contexts/authContext'
 import { FiZap } from 'react-icons/fi'
 import { BiError } from 'react-icons/bi'
+import {
+  createUser,
+  getUser,
+  saveBulkLogs,
+  saveLog,
+  User,
+} from '@/lib/supabase/handlers'
 
 const Login = () => {
   const { user } = useUser()
@@ -88,7 +95,50 @@ const Login = () => {
   }
 
   useEffect(() => {
-    user && router.push('/')
+    const getUserTable = async (uuid: string) => {
+      const { error, data } = await getUser(uuid)
+
+      if (error) return error
+      return data
+    }
+
+    const createNewUserTable = async (uuid: string) => {
+      const { error } = await createUser({ user_id: uuid })
+
+      if (error) return error
+
+      return { error: null }
+    }
+
+    if (user) {
+      getUserTable(user.id)
+        .then(async (response: User[] | PostgrestError) => {
+          let localData = JSON.parse(localStorage.getItem('minutes-data') || '')
+          if (localData) {
+            const payload = localData.map((log: any) => ({
+              date: log.date,
+              json: log.json,
+              user_id: user.id,
+              unique_id: `${new Date(log.date).valueOf()}-${user?.id}`,
+            }))
+
+            const { error } = await saveBulkLogs([...payload])
+
+            if (error) {
+              console.log(error)
+            }
+
+          }
+          if (response && Object.values(response).length) {
+            return
+          }
+
+          createNewUserTable(user.id).then((response) => {
+            return response
+          })
+        })
+        .finally(() => router.push('/'))
+    }
   }, [user])
 
   return (

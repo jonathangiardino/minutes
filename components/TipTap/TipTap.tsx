@@ -1,25 +1,25 @@
-import React, { FC, ReactNode, useEffect, useState } from "react";
-import clsx from "clsx";
-import useLocalStorageState from "use-local-storage-state";
+import React, { FC, ReactNode, useEffect, useState } from 'react'
+import clsx from 'clsx'
+import useLocalStorageState from 'use-local-storage-state'
 import {
   useEditor,
   EditorContent,
   BubbleMenu,
   FloatingMenu as MobileFloatingMenu,
-} from "@tiptap/react";
-import { useHotkeys } from "react-hotkeys-hook";
-import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
-import Typography from "@tiptap/extension-typography";
-import CharacterCount from "@tiptap/extension-character-count";
-import { Placeholder } from "@tiptap/extension-placeholder";
-import { TaskList } from "@tiptap/extension-task-list";
-import { TaskItem } from "@tiptap/extension-task-item";
-import { Highlight } from "@tiptap/extension-highlight";
-import { Underline } from "@tiptap/extension-underline";
-import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
+} from '@tiptap/react'
+import { useHotkeys } from 'react-hotkeys-hook'
+import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
+import Typography from '@tiptap/extension-typography'
+import CharacterCount from '@tiptap/extension-character-count'
+import { Placeholder } from '@tiptap/extension-placeholder'
+import { TaskList } from '@tiptap/extension-task-list'
+import { TaskItem } from '@tiptap/extension-task-item'
+import { Highlight } from '@tiptap/extension-highlight'
+import { Underline } from '@tiptap/extension-underline'
+import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
 // import { Mention } from "@tiptap/extension-mention";
-import { lowlight } from "lowlight/lib/core";
+import { lowlight } from 'lowlight/lib/core'
 import {
   BiStrikethrough,
   BiBold,
@@ -31,37 +31,44 @@ import {
   BiHighlight,
   BiUnderline,
   BiCode,
-} from "react-icons/bi";
-import { RiNumber2 } from "react-icons/ri";
-import { GrBlockQuote } from "react-icons/gr";
-import FloatingMenu from "../FloatingMenu";
-import css from "highlight.js/lib/languages/css";
-import js from "highlight.js/lib/languages/javascript";
-import ts from "highlight.js/lib/languages/typescript";
-import html from "highlight.js/lib/languages/xml";
-import { initialContent } from "./initialContent";
+  BiError,
+} from 'react-icons/bi'
+import { RiNumber2 } from 'react-icons/ri'
+import { GrBlockQuote } from 'react-icons/gr'
+import { GoSync } from 'react-icons/go'
+import FloatingMenu from '../FloatingMenu'
+import css from 'highlight.js/lib/languages/css'
+import js from 'highlight.js/lib/languages/javascript'
+import ts from 'highlight.js/lib/languages/typescript'
+import html from 'highlight.js/lib/languages/xml'
+import { initialContent } from './initialContent'
+import { saveLog } from '@/lib/supabase/handlers'
+import { useUser } from '@/lib/contexts/authContext'
+import toast, { Toaster } from 'react-hot-toast'
+import { useSyncState } from '@/lib/contexts/syncContext'
 
-lowlight.registerLanguage("html", html);
-lowlight.registerLanguage("css", css);
-lowlight.registerLanguage("js", js);
-lowlight.registerLanguage("ts", ts);
+lowlight.registerLanguage('html', html)
+lowlight.registerLanguage('css', css)
+lowlight.registerLanguage('js', js)
+lowlight.registerLanguage('ts', ts)
 
 export interface FormattingBlock {
-  id: number;
-  name: string;
-  description: string;
-  url: string;
-  color: string;
-  icon: ReactNode | string;
+  id: number
+  name: string
+  description: string
+  url: string
+  color: string
+  icon: ReactNode | string
 }
 
-const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
-  // const keyboardOpen = useDetectKeyboardOpen();
-  const [data, setData] = useLocalStorageState<any[]>("minutes-data", {
+const Tiptap: FC = () => {
+  const { user } = useUser()
+  const [status, setStatus] = useState<string>('IDLE')
+  const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false)
+  const { selectedDate } = useSyncState()
+  const [data, setData] = useLocalStorageState<any[]>('minutes-data', {
     defaultValue: [],
-  });
-
-  const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false);
+  })
 
   const editor = useEditor({
     extensions: [
@@ -74,18 +81,18 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         },
         bulletList: {
           HTMLAttributes: {
-            class: "text-inherit list-disc ",
+            class: 'text-inherit list-disc ',
           },
         },
         orderedList: {
           HTMLAttributes: {
-            class: "text-inherit list-decimal ",
+            class: 'text-inherit list-decimal ',
           },
         },
       }),
       TaskList.configure({
         HTMLAttributes: {
-          class: "rounded border border-gray-100 dark:border-none",
+          class: 'rounded border border-gray-100 dark:border-none',
         },
       }),
       TaskItem,
@@ -95,176 +102,235 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       Highlight.configure({
         HTMLAttributes: {
           class:
-            "px-[6px] py-[2px] rounded-md bg-[#ffc078] dark:bg-[#db8c32] dark:text-[#f8fafc]",
+            'px-[6px] py-[2px] rounded-md bg-[#ffc078] dark:bg-[#db8c32] dark:text-[#f8fafc]',
         },
       }),
       Underline,
       Link.configure({
         HTMLAttributes: {
-          class: "text-brand",
+          class: 'text-brand',
         },
       }),
       Typography,
       CharacterCount.configure({
-        mode: "nodeSize",
+        mode: 'nodeSize',
       }),
     ],
-    content: "",
+    content: '',
     autofocus: false,
     editorProps: {
       attributes: {
-        class: "p-4 focus:outline-none active:outline-none",
+        class: 'p-4 focus:outline-none active:outline-none',
       },
     },
-  });
+    // onFocus: async ({ editor: updatedEditor }) => {
+    //   // TODO: add auto sync on paid plan
+    //   console.log('saved to supabase on focus')
+    //   await sync(JSON.stringify(updatedEditor.getJSON()))
+    // },
+    // onBlur: async ({ editor: updatedEditor }) => {
+    //   // TODO: add auto sync on paid plan
+    //   console.log('saved to supabase on blur')
+    //   await sync(JSON.stringify(updatedEditor.getJSON()))
+    // },
+    onUpdate: ({ editor: updatedEditor }) => {
+      console.log('saved to local')
+      const dataInView = data?.find((note) => note.date === selectedDate)
+      let dataClone = [...data]
+      let dataInViewIndex = data?.findIndex(
+        (note) => note.date === selectedDate,
+      )
 
-  editor?.on("update", ({ editor: updatedEditor }) => {
-    const dataInView = data?.find((note) => note.date === selectedDate);
-    let dataClone = [...data];
-    let dataInViewIndex = data?.findIndex((note) => note.date === selectedDate);
+      if (data.length && !dataInView) {
+        setData([
+          {
+            date: selectedDate,
+            json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
+          },
+          ...data,
+        ])
+      }
 
-    if (data.length && !dataInView) {
-      setData([
-        {
-          date: selectedDate,
+      if (dataInView) {
+        dataClone[dataInViewIndex] = {
+          ...dataInView,
           json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-        },
-        ...data,
-      ]);
-    }
-
-    if (dataInView) {
-      dataClone[dataInViewIndex] = {
-        ...dataInView,
-        json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-      };
-      setData([...dataClone]);
-    }
-  });
+        }
+        setData([...dataClone])
+      }
+    },
+  })
 
   // HOTKEYS
   useHotkeys(
-    "command+/, ctrl+/",
+    'command+/, ctrl+/',
     () => {
-      setOpenFloatingMenu(!openFloatingMenu);
+      setOpenFloatingMenu(!openFloatingMenu)
     },
     {
       enableOnContentEditable: true,
-      enableOnTags: ["INPUT", "TEXTAREA", "SELECT"],
+      enableOnTags: ['INPUT', 'TEXTAREA', 'SELECT'],
     },
-    [openFloatingMenu]
-  );
+    [openFloatingMenu],
+  )
+
+  const notifySynced = () =>
+    toast('All synced', {
+      duration: 1500,
+      // Styling
+      style: {
+        fontFamily: 'Helvetica Neue',
+        fontSize: '14px',
+        backgroundColor: '#3f67e0',
+        color: '#f8fafc',
+      },
+
+      // Custom Icon
+      icon: <GoSync color="#f8fafc" />,
+    })
+
+  const notifyError = () =>
+    toast.error('Oops, something went wrong', {
+      style: {
+        fontFamily: 'Helvetica Neue',
+        fontSize: '14px',
+        backgroundColor: '#d15b6f',
+        color: '#f8fafc',
+      },
+
+      icon: <BiError />,
+    })
+
+  async function sync(content: string) {
+    if (!user) return
+    setStatus('SYNC')
+    const { error } = await saveLog({
+      unique_id: `${new Date(selectedDate).valueOf()}-${user?.id}`,
+      date: selectedDate,
+      json: content,
+      user_id: user.id,
+    })
+
+    if (error) {
+      notifyError()
+      setStatus('IDLE')
+      return
+    }
+    notifySynced()
+    setStatus('IDLE')
+  }
 
   const InsertNode = (block: FormattingBlock) => {
     switch (block.name) {
-      case "Paragraph":
+      case 'Paragraph':
         editor?.commands.insertContent({
-          type: "paragraph",
+          type: 'paragraph',
           content: [],
-        });
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+        })
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Heading 1":
+      case 'Heading 1':
         editor?.commands.insertContent({
-          type: "heading",
+          type: 'heading',
           content: [],
           attrs: {
             level: 1,
           },
-        });
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+        })
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Heading 2":
+      case 'Heading 2':
         editor?.commands.insertContent({
-          type: "heading",
+          type: 'heading',
           content: [],
           attrs: {
             level: 2,
           },
-        });
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+        })
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Bullet List":
-        editor?.commands.enter();
-        editor?.commands.toggleBulletList();
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+      case 'Bullet List':
+        editor?.commands.enter()
+        editor?.commands.toggleBulletList()
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Numbered List":
-        editor?.commands.enter();
-        editor?.commands.toggleOrderedList();
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+      case 'Numbered List':
+        editor?.commands.enter()
+        editor?.commands.toggleOrderedList()
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Blockquote":
-        editor?.commands.toggleBlockquote();
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+      case 'Blockquote':
+        editor?.commands.toggleBlockquote()
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Task":
-        editor?.commands.enter();
-        editor?.commands.toggleTaskList();
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+      case 'Task':
+        editor?.commands.enter()
+        editor?.commands.toggleTaskList()
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Code Block":
-        editor?.commands.setCodeBlock();
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+      case 'Code Block':
+        editor?.commands.setCodeBlock()
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
-      case "Horizontal Rule":
-        editor?.commands.setHorizontalRule();
-        editor?.commands.focus();
-        editor?.commands.scrollIntoView();
-        break;
+      case 'Horizontal Rule':
+        editor?.commands.setHorizontalRule()
+        editor?.commands.focus()
+        editor?.commands.scrollIntoView()
+        break
 
       default:
-        break;
+        break
     }
-  };
+  }
 
   useEffect(() => {
-    const dataInView = data?.find(({ date }) => date === selectedDate);
+    const dataInView = data?.find(({ date }) => date === selectedDate)
 
     const setInitialContent = () => {
-      editor?.commands?.setContent(initialContent);
+      editor?.commands?.setContent(initialContent)
       setData([
         {
           date: selectedDate,
           json: initialContent,
         },
-      ]);
-      return;
-    };
+      ])
+      return
+    }
 
     const createTodaysView = () => {
       setData([
         {
           date: selectedDate,
-          json: "",
+          json: '',
         },
         ...data,
-      ]);
-      !editor?.isDestroyed && editor?.commands.setContent("");
-    };
+      ])
+      !editor?.isDestroyed && editor?.commands.setContent('')
+    }
 
     const updateContent = () => {
-      !editor?.isDestroyed && editor?.commands.setContent(dataInView?.json || "");
-    };
+      !editor?.isDestroyed &&
+        editor?.commands.setContent(dataInView?.json || '')
+    }
 
     if ((!data || !data.length) && editor && !dataInView) {
-      setInitialContent();
+      setInitialContent()
     }
 
     if (
@@ -273,29 +339,29 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
       selectedDate === new Date().toDateString() &&
       !dataInView
     ) {
-      createTodaysView();
+      createTodaysView()
     }
 
     if (editor && dataInView) {
-      updateContent();
+      updateContent()
     }
-  }, [editor, selectedDate]);
+  }, [editor, selectedDate])
 
   useEffect(() => {
     const focusEditor = (e: any) => {
-      e.stopPropagation();
+      e.stopPropagation()
 
-      if (editor && e.target.id === "outer-editor" && !editor?.isFocused) {
-        !editor?.isDestroyed && editor?.commands.selectTextblockEnd();
-        !editor?.isDestroyed && editor?.commands.focus();
+      if (editor && e.target.id === 'outer-editor' && !editor?.isFocused) {
+        !editor?.isDestroyed && editor?.commands.selectTextblockEnd()
+        !editor?.isDestroyed && editor?.commands.focus()
       }
-    };
+    }
 
-    document.addEventListener("click", (e) => focusEditor(e));
+    document.addEventListener('click', (e) => focusEditor(e))
     return () => {
-      document.removeEventListener("click", (e) => focusEditor(e));
-    };
-  }, [editor]);
+      document.removeEventListener('click', (e) => focusEditor(e))
+    }
+  }, [editor])
 
   return (
     <>
@@ -310,7 +376,7 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
               editor?.state?.selection?.from &&
               editor?.state?.selection?.to -
                 editor?.state?.selection?.from +
-                " chars"}
+                ' chars'}
           </div>
           <button
             title="Heading"
@@ -320,14 +386,14 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .focus()
                 .toggleHeading({ level: 1 })
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("heading", { level: 1 })
-                ? "text-brand font-bold"
-                : "",
-              "mx-1"
+              editor.isActive('heading', { level: 1 })
+                ? 'text-brand font-bold'
+                : '',
+              'mx-1',
             )}
           >
             <BiHeading className="text-[18px]" />
@@ -340,14 +406,14 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .focus()
                 .toggleHeading({ level: 2 })
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("heading", { level: 2 })
-                ? "text-brand font-bold"
-                : "",
-              "mx-1 inline-flex items-center"
+              editor.isActive('heading', { level: 2 })
+                ? 'text-brand font-bold'
+                : '',
+              'mx-1 inline-flex items-center',
             )}
           >
             <BiHeading className="text-[18px]" />
@@ -362,12 +428,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .toggleBold()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
                 .toggleBold()
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("bold") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('bold') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiBold className="text-[18px]" />
@@ -381,12 +447,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .toggleItalic()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
                 .toggleItalic()
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("italic") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('italic') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiItalic className="text-[18px]" />
@@ -400,12 +466,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .toggleUnderline()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
                 .toggleUnderline()
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("underline") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('underline') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiUnderline className="text-[18px]" />
@@ -419,12 +485,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .toggleStrike()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
                 .toggleStrike()
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("strike") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('strike') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiStrikethrough className="text-[18px]" />
@@ -437,12 +503,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .focus()
                 .toggleBulletList()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("bulletList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('bulletList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiListUl className="text-[18px]" />
@@ -455,12 +521,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .focus()
                 .toggleOrderedList()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("orderedList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('orderedList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiListOl className="text-[18px]" />
@@ -473,12 +539,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .focus()
                 .toggleBlockquote()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("orderedList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('orderedList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <GrBlockQuote className="text-[18px]" />
@@ -491,12 +557,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .focus()
                 .toggleTaskList()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("taskList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('taskList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiTask className="text-[18px]" />
@@ -510,12 +576,12 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
                 .toggleHighlight()
                 .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
                 .toggleHighlight()
-                .insertContent("")
+                .insertContent('')
                 .run()
             }
             className={clsx(
-              editor.isActive("highlight") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('highlight') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiHighlight className="text-[18px]" />
@@ -538,8 +604,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
           editor={editor}
           tippyOptions={{ duration: 100 }}
           className={clsx(
-            "md:hidden w-full justify-start gap-2 overflow-x-auto px-2 py-2 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white transition-opacity rounded-md",
-            editor?.isFocused ? "flex opacity-100" : "hidden opacity-0"
+            'md:hidden w-full justify-start gap-2 overflow-x-auto px-2 py-2 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white transition-opacity rounded-md',
+            editor?.isFocused ? 'flex opacity-100' : 'hidden opacity-0',
           )}
         >
           <button
@@ -548,10 +614,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
             className={clsx(
-              editor.isActive("heading", { level: 1 })
-                ? "text-brand font-bold"
-                : "",
-              "mx-1"
+              editor.isActive('heading', { level: 1 })
+                ? 'text-brand font-bold'
+                : '',
+              'mx-1',
             )}
           >
             <BiHeading className="text-xl" />
@@ -563,10 +629,10 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
             className={clsx(
-              editor.isActive("heading", { level: 2 })
-                ? "text-brand font-bold"
-                : "",
-              "mx-1 inline-flex items-center"
+              editor.isActive('heading', { level: 2 })
+                ? 'text-brand font-bold'
+                : '',
+              'mx-1 inline-flex items-center',
             )}
           >
             <BiHeading className="text-xl" />
@@ -577,8 +643,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Bold"
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={clsx(
-              editor.isActive("bold") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('bold') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiBold className="text-xl" />
@@ -588,8 +654,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Italic"
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className={clsx(
-              editor.isActive("italic") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('italic') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiItalic className="text-xl" />
@@ -599,8 +665,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Underline"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className={clsx(
-              editor.isActive("underline") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('underline') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiUnderline className="text-xl" />
@@ -610,8 +676,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Strike-through"
             onClick={() => editor.chain().focus().toggleStrike().run()}
             className={clsx(
-              editor.isActive("strike") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('strike') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiStrikethrough className="text-xl" />
@@ -621,8 +687,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Bullet list"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={clsx(
-              editor.isActive("bulletList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('bulletList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiListUl className="text-xl" />
@@ -632,8 +698,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Ordered List"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={clsx(
-              editor.isActive("orderedList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('orderedList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiListOl className="text-xl" />
@@ -643,8 +709,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Blockquote"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className={clsx(
-              editor.isActive("orderedList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('orderedList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <GrBlockQuote className="text-xl" />
@@ -654,8 +720,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="To do"
             onClick={() => editor.chain().focus().toggleTaskList().run()}
             className={clsx(
-              editor.isActive("taskList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('taskList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiTask className="text-xl" />
@@ -665,8 +731,8 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Code Block"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={clsx(
-              editor.isActive("taskList") ? "text-brand font-bold" : "",
-              "mx-1"
+              editor.isActive('taskList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
             <BiCode className="text-xl" />
@@ -676,16 +742,31 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
             title="Highlight"
             onClick={() => editor.chain().focus().toggleHighlight().run()}
             className={clsx(
-              editor.isActive("highlight") ? "text-brand font-bold" : "",
-              "mx-1 pr-[6px]"
+              editor.isActive('highlight') ? 'text-brand font-bold' : '',
+              'mx-1 pr-[6px]',
             )}
           >
             <BiHighlight className="text-xl" />
           </button>
         </MobileFloatingMenu>
       )}
+      {user ? (
+        <button
+          onClick={async () => await sync(JSON.stringify(editor?.getJSON()))}
+          title="Sync"
+          className={clsx(
+            'fixed z-50 top-5 md:top-4 right-16 cursor-pointer rounded-full',
+            status === 'SYNC'
+              ? 'animate-spin text-brand'
+              : 'text-gray-400 hover:text-gray-500',
+          )}
+        >
+          <GoSync size={24} />
+        </button>
+      ) : null}
+      <Toaster position="bottom-right" />
     </>
-  );
-};
+  )
+}
 
-export default Tiptap;
+export default Tiptap

@@ -4,12 +4,11 @@ import Head from 'next/head'
 import Header from '@/components/Header'
 import TipTap from '@/components/TipTap'
 import { useUser } from '@/lib/contexts/authContext'
+import { useSyncState } from '@/lib/contexts/syncContext'
 
 const Home: NextPage = () => {
   // const { user } = useUser();
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toDateString(),
-  );
+  const { setSelectedDate } = useSyncState()
 
   useEffect(() => {
     const updateToTodayView = () => {
@@ -33,9 +32,9 @@ const Home: NextPage = () => {
         <title>:minutes</title>
       </Head>
 
-      <Header selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+      <Header />
       <main className="flex w-full max-w-[768px] flex-1 mb-24 lg:mb-20">
-        <TipTap selectedDate={selectedDate} />
+        <TipTap />
       </main>
     </div>
   )

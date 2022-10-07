@@ -11,7 +11,6 @@ import { supabase } from '@/utils/supabaseClient'
 const Dropdown: FC = () => {
   const router = useRouter()
   const { user } = useUser()
-  console.log(user)
 
   const notifyLogOut = () =>
     toast('Successfully logged out.', {
@@ -25,8 +24,6 @@ const Dropdown: FC = () => {
 
       // Custom Icon
       icon: '👋',
-
-      // Change colors of success/error/loading icon
     })
 
   const signOut = async (e: any) => {
@@ -44,7 +41,7 @@ const Dropdown: FC = () => {
             <Avvvatars value={user.email || 'Unauthenticated'} style="shape" />
           </Menu.Button>
         ) : (
-          <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand" />
+          <Menu.Button className="h-8 w-8 rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand" />
         )}
         <Transition
           as={Fragment}
@@ -55,7 +52,7 @@ const Dropdown: FC = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-50 w-64 mt-12 origin-top-right bg-gray-200 dark:bg-[#333338] dark:text-[#f8fafc] rounded-lg shadow-sm ring-1 ring-black ring-opacity-5 focus:outline-brand">
+          <Menu.Items className="absolute right-0 z-50 w-64 mt-10 origin-top-right bg-gray-200 dark:bg-[#333338] dark:text-[#f8fafc] rounded-lg shadow-sm ring-1 ring-black ring-opacity-5 focus:outline-brand">
             {user ? (
               <>
                 <div className="px-4 py-3">

@@ -849,7 +849,7 @@ const Tiptap: FC = () => {
           onClick={async () => await sync(editor?.getJSON())}
           title="Sync"
           className={clsx(
-            'fixed z-50 top-5 md:top-4 right-16 cursor-pointer rounded-full',
+            'absolute md:fixed z-50 top-5 md:top-4 right-16 cursor-pointer rounded-full',
             status === 'SYNC'
               ? 'animate-spin text-brand'
               : 'text-gray-400 hover:text-gray-500',

@@ -9,7 +9,7 @@ import { getLogs } from '@/lib/supabase/handlers'
 
 const Home: NextPage = () => {
   const { user } = useUser()
-  const { setSelectedDate, setSyncedData } = useSyncState()
+  const { setSelectedDate, setSyncedData, syncedData } = useSyncState()
 
   useEffect(() => {
     const syncLogsFromDb = async () => {
@@ -28,26 +28,34 @@ const Home: NextPage = () => {
       ])
     }
 
-    const updateToTodayView = () => {
-      const data = JSON.parse(localStorage.getItem('minutes-data') || '')
-      let updated = data.find(
-        ({ date }: { date: string }) => date === new Date().toDateString(),
-      )
+    const updateToDate = () => {
+      if (!user) {
+        const localData = JSON.parse(localStorage.getItem('minutes-data') || '')
+        let updated = localData.find(
+          ({ date }: { date: string }) => date === new Date().toDateString(),
+        )
 
-      if (!updated) {
-        setSelectedDate(new Date().toDateString())
+        if (!updated) {
+          setSelectedDate(new Date().toDateString())
+        }
+      }
+
+      if (user) {
+        let updated = syncedData.find(
+          ({ date }: { date: string }) => date === new Date().toDateString(),
+        )
+
+        if (!updated) {
+          setSelectedDate(new Date().toDateString())
+        }
+
+        syncLogsFromDb()
       }
     }
 
-    if (user) {
-      syncLogsFromDb()
-      window.addEventListener('focus', syncLogsFromDb)
-    }
-
-    window.addEventListener('focus', updateToTodayView)
+    window.addEventListener('focus', updateToDate)
     return () => {
-      window.removeEventListener('focus', updateToTodayView)
-      if (user) window.removeEventListener('focus', syncLogsFromDb)
+      window.removeEventListener('focus', updateToDate)
     }
   }, [user])
 

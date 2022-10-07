@@ -5,10 +5,12 @@ import Header from '@/components/Header'
 import TipTap from '@/components/TipTap'
 import { useUser } from '@/lib/contexts/authContext'
 import { useSyncState } from '@/lib/contexts/syncContext'
+import { getLogs } from '@/lib/supabase/handlers'
+import useLocalStorageState from 'use-local-storage-state'
 
 const Home: NextPage = () => {
-  // const { user } = useUser();
-  const { setSelectedDate } = useSyncState()
+  const { user } = useUser()
+  const { setSelectedDate, setSyncedData } = useSyncState()
 
   useEffect(() => {
     const updateToTodayView = () => {
@@ -22,9 +24,29 @@ const Home: NextPage = () => {
       }
     }
 
+    const syncLogsFromDb = async () => {
+      const { data, error } = await getLogs(user?.id)
+      if (error) {
+        console.log(error)
+        return
+      }
+
+      setSyncedData([
+        ...data.sort((a, b) => {
+          const firsDate: any = new Date(a.date)
+          const secondDate: any = new Date(b.date)
+          return secondDate - firsDate
+        }),
+      ])
+    }
+
+    if (user) {
+      syncLogsFromDb()
+    }
+
     window.addEventListener('focus', updateToTodayView)
     return () => window.removeEventListener('focus', updateToTodayView)
-  }, [])
+  }, [user])
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">

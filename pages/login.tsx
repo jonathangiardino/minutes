@@ -116,7 +116,6 @@ const Login = () => {
       setLoading(true)
       getUserTable(user.id)
         .then(async (response: User[] | PostgrestError) => {
-          let localData = JSON.parse(localStorage.getItem('minutes-data') || '')
           if (response && Object.values(response).length) {
             return
           }
@@ -124,7 +123,8 @@ const Login = () => {
           createNewUserTable(user.id).then((response) => {
             return response
           })
-
+          
+          let localData = JSON.parse(localStorage.getItem('minutes-data') || '')
           if (localData) {
             const payload = localData.map((log: any) => ({
               date: log.date,

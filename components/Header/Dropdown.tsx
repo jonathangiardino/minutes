@@ -109,7 +109,7 @@ const Dropdown: FC = () => {
                     )}
                   </Menu.Item>
                 </div>
-                <div className="py-2 px-1">
+                <div className="py-1 px-1">
                   <form onSubmit={signOut}>
                     <Menu.Item>
                       {({ active }) => (

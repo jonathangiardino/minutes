@@ -54,7 +54,7 @@ export const saveBulkLogs = async (logs: Log[]) => {
   return { error: null };
 };
 
-export const getLogs = async (uuid: string) => {
+export const getLogs = async (uuid: string | undefined) => {
   const { data, error } = await supabase
     .from("log")
     .select("*")

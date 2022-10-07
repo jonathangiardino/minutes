@@ -30,34 +30,6 @@ const Account = () => {
     <div className="flex min-h-screen flex-col items-center justify-start">
       <Head>
         <title>My account</title>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta
-          name="theme-color"
-          content="#f8fafc"
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          name="theme-color"
-          content="#28282b"
-          media="(prefers-color-scheme: dark)"
-        />
       </Head>
       <header className="w-full py-3 px-4 flex justify-between items-center lg:fixed z-50">
         <div className="flex gap-2 items-center">

@@ -95,34 +95,6 @@ const Login = () => {
     <div className="absolute inset-0">
       <Head>
         <title>Sign in</title>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta
-          name="theme-color"
-          content="#f8fafc"
-          media="(prefers-color-scheme: light)"
-        />
-        <meta
-          name="theme-color"
-          content="#28282b"
-          media="(prefers-color-scheme: dark)"
-        />
       </Head>
       <Toaster position="bottom-right" />
       <div className="w-screen max-w-full h-full flex justify-center items-center relative">

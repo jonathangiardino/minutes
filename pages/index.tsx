@@ -6,24 +6,12 @@ import TipTap from '@/components/TipTap'
 import { useUser } from '@/lib/contexts/authContext'
 import { useSyncState } from '@/lib/contexts/syncContext'
 import { getLogs } from '@/lib/supabase/handlers'
-import useLocalStorageState from 'use-local-storage-state'
 
 const Home: NextPage = () => {
   const { user } = useUser()
   const { setSelectedDate, setSyncedData } = useSyncState()
 
   useEffect(() => {
-    const updateToTodayView = () => {
-      const data = JSON.parse(localStorage.getItem('minutes-data') || '')
-      let updated = data.find(
-        ({ date }: { date: string }) => date === new Date().toDateString(),
-      )
-
-      if (!updated) {
-        setSelectedDate(new Date().toDateString())
-      }
-    }
-
     const syncLogsFromDb = async () => {
       const { data, error } = await getLogs(user?.id)
       if (error) {
@@ -40,12 +28,27 @@ const Home: NextPage = () => {
       ])
     }
 
+    const updateToTodayView = () => {
+      const data = JSON.parse(localStorage.getItem('minutes-data') || '')
+      let updated = data.find(
+        ({ date }: { date: string }) => date === new Date().toDateString(),
+      )
+
+      if (!updated) {
+        setSelectedDate(new Date().toDateString())
+      }
+    }
+
     if (user) {
       syncLogsFromDb()
+      window.addEventListener('focus', syncLogsFromDb)
     }
 
     window.addEventListener('focus', updateToTodayView)
-    return () => window.removeEventListener('focus', updateToTodayView)
+    return () => {
+      window.removeEventListener('focus', updateToTodayView)
+      if (user) window.removeEventListener('focus', syncLogsFromDb)
+    }
   }, [user])
 
   return (

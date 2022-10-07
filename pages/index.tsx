@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   // const { user } = useUser();
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toDateString(),
-  )
+  );
 
   useEffect(() => {
     const updateToTodayView = () => {

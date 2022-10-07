@@ -239,7 +239,6 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
 
     const setInitialContent = () => {
       editor?.commands?.setContent(initialContent);
-      // editor?.commands.scrollIntoView();
       setData([
         {
           date: selectedDate,
@@ -257,13 +256,11 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
         },
         ...data,
       ]);
-      editor?.commands.setContent("");
+      !editor?.isDestroyed && editor?.commands.setContent("");
     };
 
-    // T-13 move to a handler instead of effect
     const updateContent = () => {
-      editor?.commands.setContent(dataInView?.json);
-      // editor?.commands.scrollIntoView();
+      !editor?.isDestroyed && editor?.commands.setContent(dataInView?.json || "");
     };
 
     if ((!data || !data.length) && editor && !dataInView) {
@@ -288,9 +285,9 @@ const Tiptap: FC<{ selectedDate: string }> = ({ selectedDate }) => {
     const focusEditor = (e: any) => {
       e.stopPropagation();
 
-      if (e.target.id === "outer-editor" && !editor?.isFocused) {
-        editor?.commands.selectTextblockEnd();
-        editor?.commands.focus();
+      if (editor && e.target.id === "outer-editor" && !editor?.isFocused) {
+        !editor?.isDestroyed && editor?.commands.selectTextblockEnd();
+        !editor?.isDestroyed && editor?.commands.focus();
       }
     };
 

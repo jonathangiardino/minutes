@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useHotkeys } from 'react-hotkeys-hook'
 import Dropdown from '@/components/Header/Dropdown'
 import { useUser } from '@/lib/contexts/authContext'
+import { NextLink } from '@/components/shared/NextLink'
 
 const Account = () => {
   const { user } = useUser()
@@ -61,11 +61,11 @@ const Account = () => {
       </Head>
       <header className="w-full py-3 px-4 flex justify-between items-center lg:fixed z-50">
         <div className="flex gap-2 items-center">
-          <Link href="/">
+          <NextLink href="/">
             <span className="font-bold text-xs tracking-tighter text-[#28282c] dark:text-[#f8fafc] hover:text-brand transition cursor-pointer duration-200 ease-out">
               &#8592; Go back
             </span>
-          </Link>
+          </NextLink>
           <div className="hidden md:flex bg-gray-100 dark:bg-[#7d8082] text-gray-500 dark:text-[#f8fafc] text-[10px] rounded-md py-1 px-2 font-bold">
             ESC
           </div>

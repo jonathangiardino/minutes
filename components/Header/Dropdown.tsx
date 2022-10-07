@@ -1,5 +1,5 @@
-import React, { FC, Fragment, useState } from 'react'
-import Link from 'next/link'
+import React, { FC, Fragment } from 'react'
+import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import toast, { Toaster } from 'react-hot-toast'
 import Avvvatars from 'avvvatars-react'
@@ -9,6 +9,7 @@ import { useUser } from '@/lib/contexts/authContext'
 import { supabase } from '@/utils/supabaseClient'
 
 const Dropdown: FC = () => {
+  const router = useRouter()
   const { user } = useUser()
   console.log(user)
 
@@ -39,11 +40,11 @@ const Dropdown: FC = () => {
     <>
       <Menu as="div" className="relative flex">
         {user ? (
-          <Menu.Button className="h-[39px] w-[39px] rounded-full cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300">
+          <Menu.Button className="rounded-full cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand">
             <Avvvatars value={user.email || 'Unauthenticated'} style="shape" />
           </Menu.Button>
         ) : (
-          <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300" />
+          <Menu.Button className="h-[39px] w-[39px] rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand" />
         )}
         <Transition
           as={Fragment}
@@ -64,11 +65,11 @@ const Dropdown: FC = () => {
                   </p>
                 </div>
                 <div className="py-1">
-                  <Menu.Item as="div">
+                  <Menu.Item>
                     {({ active }) => (
-                      <Link
-                        href="/account"
-                        passHref
+                      <div
+                        onClick={() => router.push('/account')}
+                        role="button"
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
@@ -76,17 +77,8 @@ const Dropdown: FC = () => {
                           'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1',
                         )}
                       >
-                        <a
-                          className={clsx(
-                            active
-                              ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
-                              : '',
-                            'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1',
-                          )}
-                        >
-                          <span>Account</span>
-                        </a>
-                      </Link>
+                        Account
+                      </div>
                     )}
                   </Menu.Item>
                   <Menu.Item>
@@ -144,11 +136,11 @@ const Dropdown: FC = () => {
             ) : (
               <>
                 <div className="py-1">
-                  <Menu.Item as="div">
+                  <Menu.Item>
                     {({ active }) => (
-                      <Link
-                        href="/login"
-                        passHref
+                      <div
+                        onClick={() => router.push('/login')}
+                        role="button"
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
@@ -156,18 +148,9 @@ const Dropdown: FC = () => {
                           'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold',
                         )}
                       >
-                        <a
-                          className={clsx(
-                            active
-                              ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
-                              : '',
-                            'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold',
-                          )}
-                        >
-                          <span>Sign in</span>
-                          <FiLogIn />
-                        </a>
-                      </Link>
+                        <span>Sign in</span>
+                        <FiLogIn />
+                      </div>
                     )}
                   </Menu.Item>
                   <Menu.Item>

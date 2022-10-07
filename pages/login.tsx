@@ -1,95 +1,95 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { Provider } from "@supabase/supabase-js";
-import { supabase } from "@/utils/supabaseClient";
-import Head from "next/head";
-import toast, { Toaster } from "react-hot-toast";
-import { FaMagic } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { BsTwitter } from "react-icons/bs";
-import { IoMdClose } from "react-icons/io";
-import { AiFillCheckCircle } from "react-icons/ai";
-import Icon from "@/components/shared/Icon";
-import { useUser } from "@/lib/contexts/authContext";
-import { FiZap } from "react-icons/fi";
-import { BiError } from "react-icons/bi";
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { Provider } from '@supabase/supabase-js'
+import { supabase } from '@/utils/supabaseClient'
+import Head from 'next/head'
+import toast, { Toaster } from 'react-hot-toast'
+import { FaMagic } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
+import { BsTwitter } from 'react-icons/bs'
+import { IoMdClose } from 'react-icons/io'
+import { AiFillCheckCircle } from 'react-icons/ai'
+import Icon from '@/components/shared/Icon'
+import { NextLink } from '@/components/shared/NextLink'
+import { useUser } from '@/lib/contexts/authContext'
+import { FiZap } from 'react-icons/fi'
+import { BiError } from 'react-icons/bi'
 
 const Login = () => {
-  const { user } = useUser();
-  const router = useRouter();
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
+  const { user } = useUser()
+  const router = useRouter()
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('')
 
   const notifySubmit = () =>
-    toast("Great job, email sent!", {
+    toast('Great job, email sent!', {
       // Styling
       style: {
-        fontFamily: "Helvetica Neue",
-        fontSize: "14px",
-        backgroundColor: "#3f67e0",
-        color: "#f8fafc",
+        fontFamily: 'Helvetica Neue',
+        fontSize: '14px',
+        backgroundColor: '#3f67e0',
+        color: '#f8fafc',
       },
 
       // Custom Icon
       icon: <FiZap />,
-    });
+    })
 
   const notifyError = () =>
-    toast.error("Oops, something went wrong", {
+    toast.error('Oops, something went wrong', {
       style: {
-        fontFamily: "Helvetica Neue",
-        fontSize: "14px",
-        backgroundColor: "#d15b6f",
-        color: "#f8fafc",
+        fontFamily: 'Helvetica Neue',
+        fontSize: '14px',
+        backgroundColor: '#d15b6f',
+        color: '#f8fafc',
       },
 
       icon: <BiError />,
-    });
+    })
 
   const signInWithEmail = async (e: any) => {
-    e.preventDefault();
+    e.preventDefault()
     let { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo:
-        //TODO: add prod url
-          process.env.NODE_ENV === "development"
-            ? "http://localhost:3000/login"
-            : "https://minutes-six.vercel.app/login",
+          //TODO: add prod url
+          process.env.NODE_ENV === 'development'
+            ? 'http://localhost:3000/login'
+            : 'https://minutes-six.vercel.app/login',
       },
-    });
+    })
 
     if (error) {
-      notifyError();
-      return;
+      notifyError()
+      return
     }
 
-    setIsSubmitted(true);
-    notifySubmit();
-  };
+    setIsSubmitted(true)
+    notifySubmit()
+  }
 
   const signInWithProvider = async (provider: Provider) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo:
-        //TODO: add prod url
-          process.env.NODE_ENV === "development"
-            ? "http://localhost:3000/login"
-            : "https://minutes-six.vercel.app/login",
+          //TODO: add prod url
+          process.env.NODE_ENV === 'development'
+            ? 'http://localhost:3000/login'
+            : 'https://minutes-six.vercel.app/login',
       },
-    });
+    })
 
     if (error) {
-      notifyError();
-      return;
+      notifyError()
+      return
     }
-  };
+  }
 
   useEffect(() => {
-    user && router.push("/");
-  }, [user]);
+    user && router.push('/')
+  }, [user])
 
   return (
     <div className="absolute inset-0">
@@ -133,9 +133,9 @@ const Login = () => {
           </h2>
         </div>
         <div className="absolute right-3 top-4">
-          <Link href="/">
+          <NextLink href="/">
             <IoMdClose size={28} />
-          </Link>
+          </NextLink>
         </div>
         <div className="flex-1 max-w-sm px-6">
           <div className="flex min-h-full flex-col justify-center">
@@ -152,7 +152,7 @@ const Login = () => {
                       </div>
                       <div className="ml-3">
                         <h3 className="text-sm font-normal text-[#f8fafc]">
-                          Check your email, you'll get a{" "}
+                          Check your email, you'll get a{' '}
                           <strong>magic link</strong> to sign in!
                         </h3>
                       </div>
@@ -209,7 +209,7 @@ const Login = () => {
                       <div className="mt-6 grid grid-cols-3 gap-3">
                         <div>
                           <button
-                            onClick={() => signInWithProvider("google")}
+                            onClick={() => signInWithProvider('google')}
                             className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm inline-flex w-full justify-center rounded-md py-2 px-4 text-sm font-medium"
                           >
                             <span className="sr-only">Sign in with Google</span>
@@ -219,7 +219,7 @@ const Login = () => {
 
                         <div>
                           <button
-                            onClick={() => signInWithProvider("twitter")}
+                            onClick={() => signInWithProvider('twitter')}
                             className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm inline-flex w-full justify-center rounded-md py-2 px-4 text-sm font-medium"
                           >
                             <span className="sr-only">
@@ -231,7 +231,7 @@ const Login = () => {
 
                         <div>
                           <button
-                            onClick={() => signInWithProvider("github")}
+                            onClick={() => signInWithProvider('github')}
                             className="bg-gray-200 hover:bg-gray-300 text-[#28282c] dark:bg-[#333338] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm inline-flex w-full justify-center rounded-md py-2 px-4 text-sm font-medium"
                           >
                             <span className="sr-only">Sign in with GitHub</span>
@@ -269,7 +269,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

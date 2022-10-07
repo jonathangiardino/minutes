@@ -21,11 +21,13 @@ import {
   saveLog,
   User,
 } from '@/lib/supabase/handlers'
+import { GoZap } from 'react-icons/go'
 
 const Login = () => {
   const { user } = useUser()
   const router = useRouter()
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
 
   const notifySubmit = () =>
@@ -62,8 +64,8 @@ const Login = () => {
         emailRedirectTo:
           //TODO: add prod url
           process.env.NODE_ENV === 'development'
-            ? 'http://localhost:3000/login'
-            : 'https://minutes-six.vercel.app/login',
+            ? 'http://localhost:3000'
+            : 'https://minutes-six.vercel.app',
       },
     })
 
@@ -111,9 +113,18 @@ const Login = () => {
     }
 
     if (user) {
+      setLoading(true)
       getUserTable(user.id)
         .then(async (response: User[] | PostgrestError) => {
           let localData = JSON.parse(localStorage.getItem('minutes-data') || '')
+          if (response && Object.values(response).length) {
+            return
+          }
+
+          createNewUserTable(user.id).then((response) => {
+            return response
+          })
+
           if (localData) {
             const payload = localData.map((log: any) => ({
               date: log.date,
@@ -127,21 +138,15 @@ const Login = () => {
             if (error) {
               console.log(error)
             }
-
           }
-          if (response && Object.values(response).length) {
-            return
-          }
-
-          createNewUserTable(user.id).then((response) => {
-            return response
-          })
         })
-        .finally(() => router.push('/'))
+        .finally(() => {
+          router.push('/');
+        })
     }
   }, [user])
 
-  return (
+  return !loading ? (
     <div className="absolute inset-0">
       <Head>
         <title>Sign in</title>
@@ -286,6 +291,37 @@ const Login = () => {
                   </>
                 ) : null}
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="w-screen max-w-full h-full flex justify-center items-center relative">
+      <div className="absolute left-3 top-3 flex gap-4 items-center">
+        <Icon type="logo" className="h-8 w-8" />
+        <h2 className="text-md font-semibold tracking-tight text-[#28282b] dark:text-[#f8fafc]">
+          Signed in
+        </h2>
+      </div>
+      <div className="absolute right-3 top-4">
+        <NextLink href="/">
+          <IoMdClose size={28} />
+        </NextLink>
+      </div>
+      <div className="flex min-h-screen flex-col justify-center">
+        <div className="rounded-md bg-brand p-4 animate-pulse">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <GoZap
+                className="h-5 w-5 text-[#f8fafc]"
+                aria-hidden="true"
+              />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-normal text-[#f8fafc]">
+                Redirecting to your home page
+              </h3>
             </div>
           </div>
         </div>

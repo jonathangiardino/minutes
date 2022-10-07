@@ -25,12 +25,7 @@ const Header: FC = () => {
 
   return (
     <nav className="w-full py-3 px-4 flex justify-between items-center lg:fixed z-50">
-      <DateMenu
-        open={open}
-        setOpen={setOpen}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-      />
+      <DateMenu open={open} setOpen={setOpen} />
       <div className="hidden md:flex gap-3 items-center">
         <Icon type="logo" className="h-[38px] w-[38px] md:w-5 md:h-5" />
         <button

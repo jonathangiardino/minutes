@@ -41,11 +41,13 @@ const Home: NextPage = () => {
 
     if (user) {
       syncLogsFromDb()
+      window.addEventListener('focus', syncLogsFromDb)
     }
 
     window.addEventListener('focus', updateToTodayView)
     return () => {
       window.removeEventListener('focus', updateToTodayView)
+      if (user) window.removeEventListener('focus', syncLogsFromDb)
     }
   }, [user])
 

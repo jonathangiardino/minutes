@@ -123,11 +123,11 @@ const Tiptap: FC = () => {
         class: 'p-4 focus:outline-none active:outline-none',
       },
     },
-    onFocus: async ({ editor: updatedEditor }) => {
-      // TODO: add auto sync on paid plan
-      console.log('saved to supabase on focus')
-      await sync(updatedEditor.getJSON())
-    },
+    // onFocus: async ({ editor: updatedEditor }) => {
+    //   // TODO: add auto sync on paid plan
+    //   console.log('saved to supabase on focus')
+    //   await sync(updatedEditor.getJSON())
+    // },
     onBlur: async ({ editor: updatedEditor }) => {
       // TODO: add auto sync on paid plan
       console.log('saved to supabase on blur')
@@ -386,6 +386,8 @@ const Tiptap: FC = () => {
 
     if (user && syncedData.length) {
       // console.log('LOGGED USER', syncedData)
+
+
 
       const dataInView = syncedData?.find(
         ({ date }: { date: string }) => date === selectedDate,

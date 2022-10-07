@@ -62,11 +62,11 @@ const Login = () => {
     let { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo:
-          //TODO: add prod url
-          process.env.NODE_ENV === 'development'
-            ? 'http://localhost:3000'
-            : 'https://minutes-six.vercel.app',
+        emailRedirectTo: 'https://minutes-six.vercel.app',
+        //TODO: add prod url
+        // process.env.NODE_ENV === 'development'
+        //   ? 'http://localhost:3000'
+        //   : 'https://minutes-six.vercel.app',
       },
     })
 
@@ -83,11 +83,11 @@ const Login = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo:
-          //TODO: add prod url
-          process.env.NODE_ENV === 'development'
-            ? 'http://localhost:3000/login'
-            : 'https://minutes-six.vercel.app/login',
+        redirectTo: 'https://minutes-six.vercel.app',
+        //TODO: add prod url
+        // process.env.NODE_ENV === 'development'
+        //   ? 'http://localhost:3000/login'
+        //   : 'https://minutes-six.vercel.app/login',
       },
     })
 

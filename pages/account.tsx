@@ -57,7 +57,7 @@ const Account = () => {
         </div>
         <div className="rounded-md border-2 border-gray-200 dark:border-[#333338]">
           <div className="px-4 py-5 sm:p-6">
-            <div className="sm:flex sm:items-start sm:justify-between">
+            {/* <div className="sm:flex sm:items-start sm:justify-between">
               <div>
                 <h3 className="text-lg font-medium leading-6 text-[#28282c] dark:text-[#f8fafc]">
                   Manage plan
@@ -69,9 +69,27 @@ const Account = () => {
               <div className="mt-5 sm:mt-0 sm:ml-6 sm:flex sm:flex-shrink-0 sm:items-center">
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-md border border-transparent bg-brand px-4 py-2 font-medium text-[#f8fafc] shadow-sm hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 sm:text-sm"
+                  className="inline-flex items-center rounded-md border border-transparent bg-brand px-4 py-2 font-medium text-[#f8fafc] shadow-sm hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-xs"
                 >
                   Upgrade now
+                </button>
+              </div>
+            </div> */}
+            <div className="sm:flex sm:items-start sm:justify-between">
+              <div>
+                <h3 className="text-lg font-medium leading-6 text-[#28282c] dark:text-[#f8fafc]">
+                  Manage plan
+                </h3>
+                <div className="mt-2 max-w-xl text-sm text-[#28282c] dark:text-[#f8fafc]">
+                  <p>No plans for now, you are currently on the beta program. 🎉🎉</p>
+                </div>
+              </div>
+              <div className="mt-5 sm:mt-0 sm:ml-6 sm:flex sm:flex-shrink-0 sm:items-center">
+                <button
+                  type="button"
+                  className="inline-flex items-center rounded-md border border-transparent bg-brand px-4 py-2 font-medium text-[#f8fafc] shadow-sm hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-xs"
+                >
+                  Leave feedback
                 </button>
               </div>
             </div>
@@ -84,7 +102,7 @@ const Account = () => {
               Payment method
             </h3>
             <div className="mt-5">
-              <div className="rounded-md bg-gray-200 dark:bg-[#333338] px-6 py-5 sm:flex sm:items-start sm:justify-between">
+              {/* <div className="rounded-md bg-gray-200 dark:bg-[#333338] px-6 py-5 sm:flex sm:items-start sm:justify-between">
                 <h4 className="sr-only">Visa</h4>
                 <div className="sm:flex sm:items-start">
                   <svg
@@ -119,10 +137,15 @@ const Account = () => {
                 <div className="mt-4 sm:mt-0 sm:ml-6 sm:flex-shrink-0">
                   <button
                     type="button"
-                    className="inline-flex items-center rounded-md bg-[#f8fafc] hover:bg-gray-300 text-[#28282c] dark:bg-[#28282c] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm px-4 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 sm:text-sm"
+                    className="inline-flex items-center rounded-md bg-[#f8fafc] hover:bg-gray-300 text-[#28282c] dark:bg-[#28282c] dark:text-[#f8fafc] dark:hover:bg-[#1d1d20] bg-opacity-90 dark:bg-opacity-90 shadow-sm px-4 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 text-xs"
                   >
                     Edit
                   </button>
+                </div>
+              </div> */}
+              <div className="rounded-md bg-gray-200 dark:bg-[#333338] px-2 py-5 sm:flex sm:items-start sm:justify-between">
+                <div className="ml-3 sm:flex-shrink-0 text-sm">
+                  No payment methods yet
                 </div>
               </div>
             </div>

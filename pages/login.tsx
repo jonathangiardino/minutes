@@ -18,7 +18,6 @@ import {
   createUser,
   getUser,
   saveBulkLogs,
-  saveLog,
   User,
 } from '@/lib/supabase/handlers'
 import { GoZap } from 'react-icons/go'
@@ -32,6 +31,7 @@ const Login = () => {
 
   const notifySubmit = () =>
     toast('Great job, email sent!', {
+      duration: 1500,
       // Styling
       style: {
         fontFamily: 'Helvetica Neue',
@@ -46,6 +46,7 @@ const Login = () => {
 
   const notifyError = () =>
     toast.error('Oops, something went wrong', {
+      duration: 1500,
       style: {
         fontFamily: 'Helvetica Neue',
         fontSize: '14px',
@@ -123,7 +124,7 @@ const Login = () => {
           createNewUserTable(user.id).then((response) => {
             return response
           })
-          
+
           let localData = JSON.parse(localStorage.getItem('minutes-data') || '')
           if (localData) {
             const payload = localData.map((log: any) => ({
@@ -141,7 +142,7 @@ const Login = () => {
           }
         })
         .finally(() => {
-          router.push('/');
+          router.push('/')
         })
     }
   }, [user])
@@ -313,10 +314,7 @@ const Login = () => {
         <div className="rounded-md bg-brand p-4 animate-pulse">
           <div className="flex">
             <div className="flex-shrink-0">
-              <GoZap
-                className="h-5 w-5 text-[#f8fafc]"
-                aria-hidden="true"
-              />
+              <GoZap className="h-5 w-5 text-[#f8fafc]" aria-hidden="true" />
             </div>
             <div className="ml-3">
               <h3 className="text-sm font-normal text-[#f8fafc]">

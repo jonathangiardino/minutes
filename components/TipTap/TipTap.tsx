@@ -46,6 +46,9 @@ import { saveLog } from '@/lib/supabase/handlers'
 import { useUser } from '@/lib/contexts/authContext'
 import toast, { Toaster } from 'react-hot-toast'
 import { useSyncState } from '@/lib/contexts/syncContext'
+import { addLog, db, getAllLogs, updateLog } from '@/lib/localdb'
+import useDebounce from '@/lib/hooks/useDebounce'
+import useUpdateEffect from '@/lib/hooks/useUpdateEffect'
 
 lowlight.registerLanguage('html', html)
 lowlight.registerLanguage('css', css)
@@ -64,11 +67,10 @@ export interface FormattingBlock {
 const Tiptap: FC = () => {
   const { user } = useUser()
   const [status, setStatus] = useState<string>('IDLE')
+  const [snapshot, setSnapshot] = useState<any>({})
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false)
-  const { selectedDate, syncedData, setSyncedData } = useSyncState()
-  const [data, setData] = useLocalStorageState<any[]>('minutes-data', {
-    defaultValue: [],
-  })
+  const { selectedDate, currentDoc, setCurrentDoc } = useSyncState()
+  const debouncedValue = useDebounce<any>(snapshot, 5000)
 
   const editor = useEditor({
     extensions: [
@@ -118,75 +120,11 @@ const Tiptap: FC = () => {
     ],
     content: '',
     autofocus: false,
+    onUpdate: ({ editor }) => setSnapshot(editor.getJSON()),
     editorProps: {
       attributes: {
         class: 'p-4 focus:outline-none active:outline-none',
       },
-    },
-    // onFocus: async ({ editor: updatedEditor }) => {
-    //   // TODO: add auto sync on paid plan
-    //   console.log('saved to supabase on focus')
-    //   await sync(updatedEditor.getJSON())
-    // },
-    // onBlur: async ({ editor: updatedEditor }) => {
-    //   // TODO: add auto sync on paid plan
-    //   console.log('saved to supabase on blur')
-    //   await sync(updatedEditor.getJSON())
-    // },
-    onUpdate: ({ editor: updatedEditor }) => {
-      // if (!user) {
-      const dataInView = data?.find((note) => note.date === selectedDate)
-      let dataClone = [...data]
-      let dataInViewIndex = data?.findIndex(
-        (note) => note.date === selectedDate,
-      )
-
-      if (data.length && !dataInView) {
-        setData([
-          {
-            date: selectedDate,
-            json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-          },
-          ...data,
-        ])
-      }
-
-      if (dataInView) {
-        dataClone[dataInViewIndex] = {
-          ...dataInView,
-          json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-        }
-        setData([...dataClone])
-      }
-      // }
-
-      // if (user && syncedData) {
-      //   const dataInView = syncedData?.find(
-      //     (note: any) => note.date === selectedDate,
-      //   )
-      //   let dataClone = [...syncedData]
-      //   let dataInViewIndex = syncedData?.findIndex(
-      //     (note: any) => note.date === selectedDate,
-      //   )
-
-      //   if (syncedData.length && !dataInView) {
-      //     setSyncedData([
-      //       {
-      //         date: selectedDate,
-      //         json: updatedEditor.getJSON(),
-      //       },
-      //       ...syncedData,
-      //     ])
-      //   }
-
-      //   if (dataInView) {
-      //     dataClone[dataInViewIndex] = {
-      //       ...dataInView,
-      //       json: updatedEditor.getJSON(),
-      //     }
-      //     setSyncedData([...dataClone])
-      //   }
-      // }
     },
   })
 
@@ -203,7 +141,12 @@ const Tiptap: FC = () => {
     [openFloatingMenu],
   )
 
-  // const notifySynced = () =>
+  async function getLogs() {
+    const logs = await getAllLogs()
+    return logs
+  }
+
+  // function notifySynced () {
   //   toast('All synced', {
   //     duration: 1500,
   //     // Styling
@@ -216,9 +159,9 @@ const Tiptap: FC = () => {
 
   //     // Custom Icon
   //     icon: <GoSync color="#f8fafc" />,
-  //   })
+  //   })}
 
-  const notifyError = () =>
+  function notifyError() {
     toast.error('Oops, something went wrong', {
       style: {
         fontFamily: 'Helvetica Neue',
@@ -229,6 +172,7 @@ const Tiptap: FC = () => {
 
       icon: <BiError />,
     })
+  }
 
   async function sync(content: any) {
     if (!user) return
@@ -245,17 +189,11 @@ const Tiptap: FC = () => {
       setStatus('IDLE')
       return
     }
-
-    const localParsedData = syncedData?.map((log: any) => ({
-      date: log.date,
-      json: log.json,
-    }))
-    setData([...localParsedData])
     // notifySynced()
     setStatus('IDLE')
   }
 
-  const InsertNode = (block: FormattingBlock) => {
+  function InsertNode(block: FormattingBlock) {
     switch (block.name) {
       case 'Paragraph':
         editor?.commands.insertContent({
@@ -334,54 +272,84 @@ const Tiptap: FC = () => {
     }
   }
 
+  useUpdateEffect(() => {
+    const update = async () => {
+      await updateLog({
+        _id: currentDoc._id,
+        _rev: currentDoc._rev,
+        date: selectedDate,
+        json: editor?.getJSON(),
+      })
+
+      setCurrentDoc({
+        _id: currentDoc._id,
+        _rev: currentDoc._rev,
+        date: selectedDate,
+        json: editor?.getJSON(),
+      })
+    }
+
+    if (currentDoc._id && currentDoc._rev) update()
+
+    console.log(debouncedValue)
+  }, [debouncedValue])
+
   useEffect(() => {
     // if (!user) {
     // console.log('UNAUTHENTICATED USER')
-    const dataInView = data?.find(({ date }) => date === selectedDate)
+    getLogs().then((data: any) => {
+      const dataInView = data?.find(
+        ({ doc }: { doc: any }) => doc.date === selectedDate,
+      )
 
-    const setInitialContent = () => {
-      editor?.commands?.setContent(initialContent)
-      setData([
-        {
+      const allData = data
+      const setInitialContent = async () => {
+        editor?.commands?.setContent(initialContent)
+        await addLog({
           date: selectedDate,
           json: initialContent,
-        },
-      ])
-      return
-    }
+        })
+        return
+      }
 
-    const createTodaysView = () => {
-      setData([
-        {
+      const createTodaysView = async () => {
+        await addLog({
           date: selectedDate,
-          json: '',
-        },
-        ...data,
-      ])
-      !editor?.isDestroyed && editor?.commands.setContent('')
-    }
+          json: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+              },
+            ],
+          },
+        })
+        !editor?.isDestroyed && editor?.commands.setContent('')
+      }
 
-    const updateContent = () => {
-      !editor?.isDestroyed &&
-        editor?.commands.setContent(dataInView?.json || '')
-    }
+      const updateContent = () => {
+        !editor?.isDestroyed &&
+          editor?.commands.setContent(dataInView?.doc?.json || '')
+      }
 
-    if ((!data || !data.length) && editor && !dataInView) {
-      setInitialContent()
-    }
+      if ((!data || !allData?.length) && editor && !dataInView) {
+        setInitialContent()
+      }
 
-    if (
-      data.length &&
-      editor &&
-      selectedDate === new Date().toDateString() &&
-      !dataInView
-    ) {
-      createTodaysView()
-    }
+      if (
+        allData?.length &&
+        editor &&
+        selectedDate === new Date().toDateString() &&
+        !dataInView
+      ) {
+        createTodaysView()
+      }
 
-    if (editor && dataInView) {
-      updateContent()
-    }
+      if (editor && dataInView) {
+        setCurrentDoc(dataInView.doc)
+        updateContent()
+      }
+    })
   }, [editor, selectedDate])
 
   useEffect(() => {
@@ -403,227 +371,229 @@ const Tiptap: FC = () => {
   return (
     <>
       {editor && (
-        <BubbleMenu
-          editor={editor}
-          tippyOptions={{ delay: 300, duration: 300 }}
-          className="pt-[5px] px-1 pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-lg"
-        >
-          <div className="mx-1 pointer-events-none text-[11px] bg-[#28282c] dark:bg-[#45454d] text-white fixed -bottom-4 right-0 rounded-sm px-[3px]">
-            {editor?.state?.selection?.to &&
-              editor?.state?.selection?.from &&
-              editor?.state?.selection?.to -
-                editor?.state?.selection?.from +
-                ' chars'}
-          </div>
-          <button
-            title="Heading"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleHeading({ level: 1 })
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('heading', { level: 1 })
-                ? 'text-brand font-bold'
-                : '',
-              'mx-1',
-            )}
+        <div>
+          <BubbleMenu
+            editor={editor}
+            tippyOptions={{ delay: 300, duration: 300 }}
+            className="pt-[5px] px-1 pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-lg"
           >
-            <BiHeading className="text-[18px]" />
-          </button>
-          <button
-            title="Heading 2"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleHeading({ level: 2 })
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('heading', { level: 2 })
-                ? 'text-brand font-bold'
-                : '',
-              'mx-1 inline-flex items-center',
-            )}
-          >
-            <BiHeading className="text-[18px]" />
-            <RiNumber2 className="text-sm font-semibold -ml-[6px]" />
-          </button>
-          <button
-            title="Bold"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleBold()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .toggleBold()
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('bold') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiBold className="text-[18px]" />
-          </button>
-          <button
-            title="Italic"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleItalic()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .toggleItalic()
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('italic') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiItalic className="text-[18px]" />
-          </button>
-          <button
-            title="Underline"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleUnderline()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .toggleUnderline()
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('underline') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiUnderline className="text-[18px]" />
-          </button>
-          <button
-            title="Strike-through"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleStrike()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .toggleStrike()
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('strike') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiStrikethrough className="text-[18px]" />
-          </button>
-          <button
-            title="Bullet list"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleBulletList()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('bulletList') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiListUl className="text-[18px]" />
-          </button>
-          <button
-            title="Ordered List"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleOrderedList()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('orderedList') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiListOl className="text-[18px]" />
-          </button>
-          <button
-            title="Blockquote"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleBlockquote()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('orderedList') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <GrBlockQuote className="text-[18px]" />
-          </button>
-          <button
-            title="To do"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleTaskList()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('taskList') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiTask className="text-[18px]" />
-          </button>
-          <button
-            title="Highlight"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .toggleHighlight()
-                .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
-                .toggleHighlight()
-                .insertContent('')
-                .run()
-            }
-            className={clsx(
-              editor.isActive('highlight') ? 'text-brand font-bold' : '',
-              'mx-1',
-            )}
-          >
-            <BiHighlight className="text-[18px]" />
-          </button>
-        </BubbleMenu>
+            <div className="mx-1 pointer-events-none text-[11px] bg-[#28282c] dark:bg-[#45454d] text-white fixed -bottom-4 right-0 rounded-sm px-[3px]">
+              {editor?.state?.selection?.to &&
+                editor?.state?.selection?.from &&
+                editor?.state?.selection?.to -
+                  editor?.state?.selection?.from +
+                  ' chars'}
+            </div>
+            <button
+              title="Heading"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 1 })
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('heading', { level: 1 })
+                  ? 'text-brand font-bold'
+                  : '',
+                'mx-1',
+              )}
+            >
+              <BiHeading className="text-[18px]" />
+            </button>
+            <button
+              title="Heading 2"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 2 })
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('heading', { level: 2 })
+                  ? 'text-brand font-bold'
+                  : '',
+                'mx-1 inline-flex items-center',
+              )}
+            >
+              <BiHeading className="text-[18px]" />
+              <RiNumber2 className="text-sm font-semibold -ml-[6px]" />
+            </button>
+            <button
+              title="Bold"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleBold()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .toggleBold()
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('bold') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiBold className="text-[18px]" />
+            </button>
+            <button
+              title="Italic"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleItalic()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .toggleItalic()
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('italic') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiItalic className="text-[18px]" />
+            </button>
+            <button
+              title="Underline"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleUnderline()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .toggleUnderline()
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('underline') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiUnderline className="text-[18px]" />
+            </button>
+            <button
+              title="Strike-through"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleStrike()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .toggleStrike()
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('strike') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiStrikethrough className="text-[18px]" />
+            </button>
+            <button
+              title="Bullet list"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleBulletList()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('bulletList') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiListUl className="text-[18px]" />
+            </button>
+            <button
+              title="Ordered List"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleOrderedList()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('orderedList') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiListOl className="text-[18px]" />
+            </button>
+            <button
+              title="Blockquote"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleBlockquote()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('orderedList') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <GrBlockQuote className="text-[18px]" />
+            </button>
+            <button
+              title="To do"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleTaskList()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('taskList') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiTask className="text-[18px]" />
+            </button>
+            <button
+              title="Highlight"
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHighlight()
+                  .setTextSelection(editor.state.tr.selection.$anchor.pos + 1)
+                  .toggleHighlight()
+                  .insertContent('')
+                  .run()
+              }
+              className={clsx(
+                editor.isActive('highlight') ? 'text-brand font-bold' : '',
+                'mx-1',
+              )}
+            >
+              <BiHighlight className="text-[18px]" />
+            </button>
+          </BubbleMenu>
+        </div>
       )}
       <EditorContent
         editor={editor}

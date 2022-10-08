@@ -12,17 +12,17 @@ const DateMenu = ({
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) => {
-  const [minutes] = useLocalStorageState('minutes-data', {
-    defaultValue: [],
-  })
   const [query, setQuery] = useState('')
-  const { selectedDate, setSelectedDate } = useSyncState()
+  const { selectedDate, setSelectedDate, allDocs } = useSyncState()
+
+  console.log(allDocs);
+  
 
   const filteredItems =
-    minutes && query === ''
-      ? [...minutes]
-      : minutes.filter((item: any) => {
-          const words = item.date.split(' ')
+    allDocs && query === ''
+      ? [...allDocs]
+      : allDocs.filter((item: any) => {
+          const words = item.doc.date.split(' ')
           return words.some((word: string) =>
             word.toLowerCase().startsWith(query.toLowerCase()),
           )
@@ -49,9 +49,9 @@ const DateMenu = ({
             >
               <Dialog.Panel className="bg-gray-200 dark:bg-[#333338] text-[#28282c] dark:text-[#f8fafc] shadow-sm fixed top-3 w-[320px] md:w-[280px] transform overflow-hidden rounded-xl transition-all">
                 <Combobox
-                  onChange={(date: any) => {
+                  onChange={(item: any) => {
                     setOpen(false)
-                    setSelectedDate(date.date)
+                    setSelectedDate(item.doc.date)
                   }}
                 >
                   <div className="relative">
@@ -69,39 +69,38 @@ const DateMenu = ({
                     static
                     className="max-h-96 md:max-h-64 scroll-py-3 overflow-y-auto p-1"
                   >
-                    {Array.isArray(minutes) &&
-                      filteredItems.map((item: any) => (
-                        <Combobox.Option
-                          key={item.date}
-                          value={item}
-                          className={({ active }) =>
-                            clsx(
-                              'flex cursor-default select-none rounded-lg p-2',
-                              active && 'bg-gray-300 dark:bg-[#45454d]',
-                            )
-                          }
-                        >
-                          <>
-                            <div className="ml-4 flex gap-2 items-center flex-auto">
-                              <p
-                                className={clsx(
-                                  'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
-                                  item.date === selectedDate
-                                    ? 'font-bold opacity-100'
-                                    : 'opacity-75',
-                                )}
-                              >
-                                {item.date === new Date().toDateString()
-                                  ? 'Today'
-                                  : item.date}
-                              </p>
-                              {item.date === selectedDate && (
-                                <VscEye className="stroke-[1px]" />
+                    {filteredItems.map((item: any) => (
+                      <Combobox.Option
+                        key={item.doc.date}
+                        value={item}
+                        className={({ active }) =>
+                          clsx(
+                            'flex cursor-default select-none rounded-lg p-2',
+                            active && 'bg-gray-300 dark:bg-[#45454d]',
+                          )
+                        }
+                      >
+                        <>
+                          <div className="ml-4 flex gap-2 items-center flex-auto">
+                            <p
+                              className={clsx(
+                                'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
+                                item.doc.date === selectedDate
+                                  ? 'font-bold opacity-100'
+                                  : 'opacity-75',
                               )}
-                            </div>
-                          </>
-                        </Combobox.Option>
-                      ))}
+                            >
+                              {item.doc.date === new Date().toDateString()
+                                ? 'Today'
+                                : item.doc.date}
+                            </p>
+                            {item.doc.date === selectedDate && (
+                              <VscEye className="stroke-[1px]" />
+                            )}
+                          </div>
+                        </>
+                      </Combobox.Option>
+                    ))}
                   </Combobox.Options>
                   {query !== '' && filteredItems.length === 0 && (
                     <div className="pt-1 px-6 text-center text-sm flex flex-col items-center justify-center">

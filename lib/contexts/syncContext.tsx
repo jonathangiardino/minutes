@@ -10,15 +10,19 @@ import React, {
 interface SyncContextType {
   selectedDate: string
   setSelectedDate: React.Dispatch<SetStateAction<string>>
-  syncedData: any
-  setSyncedData: React.Dispatch<SetStateAction<any>>
+  currentDoc: any
+  setCurrentDoc: React.Dispatch<SetStateAction<any>>
+  allDocs: any[]
+  setAllDocs: React.Dispatch<SetStateAction<any>>
 }
 
 const initialState = {
   selectedDate: new Date().toDateString(),
   setSelectedDate: () => '',
-  syncedData: [],
-  setSyncedData: () => '',
+  currentDoc: '',
+  setCurrentDoc: () => '',
+  allDocs: [],
+  setAllDocs: () => '',
 }
 
 export const SyncContext = createContext<SyncContextType>(initialState)
@@ -34,10 +38,16 @@ function reducer(
         selectedDate: action.payload,
       }
     }
-    case 'SET_SYNCED_DATA': {
+    case 'SET_CURRENT_DOC': {
       return {
         ...state,
-        syncedData: action.payload,
+        currentDoc: action.payload,
+      }
+    }
+    case 'SET_ALL_DOCS': {
+      return {
+        ...state,
+        allDocs: action.payload,
       }
     }
     default: {
@@ -52,14 +62,18 @@ export const SyncProvider = (props: any) => {
   const setSelectedDate = (payload: string) =>
     dispatch({ type: 'SET_SELECTED_DATE', payload })
 
-  const setSyncedData = (payload: string) =>
-    dispatch({ type: 'SET_SYNCED_DATA', payload })
+  const setCurrentDoc = (payload: string) =>
+    dispatch({ type: 'SET_CURRENT_DOC', payload })
+
+  const setAllDocs = (payload: string) =>
+    dispatch({ type: 'SET_ALL_DOCS', payload })
 
   const value = useMemo(
     () => ({
       ...state,
       setSelectedDate,
-      setSyncedData,
+      setCurrentDoc,
+      setAllDocs
     }),
     [state],
   )
@@ -67,7 +81,7 @@ export const SyncProvider = (props: any) => {
   return <SyncContext.Provider value={value} {...props} />
 }
 
-export const useSyncState = () => {
+export const useSyncState: any = () => {
   const context = useContext<SyncContextType>(SyncContext)
   if (context === undefined) {
     throw new Error(`must be used within a Sync Provider`)

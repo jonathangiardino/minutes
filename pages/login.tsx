@@ -111,38 +111,37 @@ const Login = () => {
       return { error: null }
     }
 
-    // if (user) {
-    //   setLoading(true)
-    //   getUserTable(user.id)
-    //     .then(async (response: User[] | PostgrestError) => {
-    //       if (response && Object.values(response).length) {
-    //         return
-    //       }
+    if (user) {
+      setLoading(true)
+      getUserTable(user.id)
+        .then(async (response: User[] | PostgrestError) => {
+          if (response && Object.values(response).length) {
+            return
+          }
 
-    //       createNewUserTable(user.id).then((response) => {
-    //         return response
-    //       })
+          createNewUserTable(user.id).then((response) => {
+            return response
+          })
 
-    //       let localData = JSON.parse(localStorage.getItem('minutes-data') || '')
-    //       if (localData) {
-    //         const payload = localData.map((log: any) => ({
-    //           date: log.date,
-    //           json: log.json,
-    //           user_id: user.id,
-    //           unique_id: `${new Date(log.date).valueOf()}-${user?.id}`,
-    //         }))
+          // if (localData) {
+          //   const payload = localData.map((log: any) => ({
+          //     date: log.date,
+          //     json: log.json,
+          //     user_id: user.id,
+          //     unique_id: `${new Date(log.date).valueOf()}-${user?.id}`,
+          //   }))
 
-    //         const { error } = await saveBulkLogs([...payload])
+          //   const { error } = await saveBulkLogs([...payload])
 
-    //         if (error) {
-    //           console.log(error)
-    //         }
-    //       }
-    //     })
-    //     .finally(() => {
-    //       router.push('/')
-    //     })
-    // }
+          //   if (error) {
+          //     console.log(error)
+          //   }
+          // }
+        })
+        .finally(() => {
+          router.push('/')
+        })
+    }
   }, [user])
 
   return !loading ? (

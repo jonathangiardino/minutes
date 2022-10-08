@@ -69,7 +69,7 @@ const Tiptap: FC = () => {
   const [status, setStatus] = useState<string>('IDLE')
   const [snapshot, setSnapshot] = useState<any>({})
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false)
-  const { selectedDate, currentDoc, setCurrentDoc } = useSyncState()
+  const { selectedDate, currentDoc, setCurrentDoc, setAllDocs } = useSyncState()
   const debouncedValue = useDebounce<any>(snapshot, 5000)
 
   const editor = useEditor({
@@ -290,8 +290,6 @@ const Tiptap: FC = () => {
     }
 
     if (currentDoc._id && currentDoc._rev) update()
-
-    console.log(debouncedValue)
   }, [debouncedValue])
 
   useEffect(() => {
@@ -332,7 +330,7 @@ const Tiptap: FC = () => {
           editor?.commands.setContent(dataInView?.doc?.json || '')
       }
 
-      if ((!data || !allData?.length) && editor && !dataInView) {
+      if ((!allData || !allData?.length) && editor && !dataInView) {
         setInitialContent()
       }
 

@@ -13,10 +13,7 @@ const DateMenu = ({
   setOpen: Dispatch<SetStateAction<boolean>>
 }) => {
   const [query, setQuery] = useState('')
-  const { selectedDate, setSelectedDate, allDocs } = useSyncState()
-
-  console.log(allDocs);
-  
+  const { selectedDate, setSelectedDate, allDocs } = useSyncState()  
 
   const filteredItems =
     allDocs && query === ''

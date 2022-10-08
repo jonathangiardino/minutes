@@ -3,7 +3,6 @@ import React, {
   useReducer,
   createContext,
   useContext,
-  FC,
   SetStateAction,
 } from 'react'
 

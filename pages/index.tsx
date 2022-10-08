@@ -9,7 +9,7 @@ import { getAllLogs } from '@/lib/localdb'
 
 const Home: NextPage = () => {
   const { user } = useUser()
-  const { setSelectedDate, setAllDocs } = useSyncState()
+  const { setSelectedDate, setAllDocs, allDocs } = useSyncState()
 
   useEffect(() => {
     const getLogs = async () => {
@@ -17,11 +17,8 @@ const Home: NextPage = () => {
       return logs
     }
 
-    const updateToDate = async () => {
-      // if (!user) {
-      const localData: any = await getLogs()
-
-      if (localData) {
+    getLogs().then((localData) => {
+      if (localData && localData.length) {
         const sortedData = [
           ...localData.sort((a: any, b: any) => {
             const firsDate: any = new Date(a.doc.date)
@@ -29,15 +26,22 @@ const Home: NextPage = () => {
             return secondDate - firsDate
           }),
         ]
-        let updated = sortedData?.find(
+
+        setAllDocs([...sortedData])
+      }
+    })
+
+    const updateToDate = async () => {
+      // if (!user) {
+      const localData: any = await getLogs()
+      if (allDocs) {
+        let updated = allDocs?.find(
           ({ doc }: { doc: any }) => doc.date === new Date().toDateString(),
         )
 
         if (!updated) {
           setSelectedDate(new Date().toDateString())
         }
-
-        setAllDocs([...sortedData])
       }
       // }
 

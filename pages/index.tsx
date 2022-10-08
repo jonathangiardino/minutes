@@ -18,7 +18,7 @@ const Home: NextPage = () => {
     }
 
     getLogs().then((localData) => {
-      if (localData && localData.length) {
+      if (localData) {
         const sortedData = [
           ...localData.sort((a: any, b: any) => {
             const firsDate: any = new Date(a.doc.date)

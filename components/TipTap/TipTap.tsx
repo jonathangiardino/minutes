@@ -69,8 +69,8 @@ const Tiptap: FC = () => {
   const [status, setStatus] = useState<string>('IDLE')
   const [snapshot, setSnapshot] = useState<any>({})
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false)
-  const { selectedDate, currentDoc, setCurrentDoc } = useSyncState()
-  const debouncedValue = useDebounce<any>(snapshot, 2000)
+  const { selectedDate, currentDoc, setCurrentDoc, setAllDocs } = useSyncState()
+  const debouncedValue = useDebounce<any>(snapshot, 1500)
 
   const editor = useEditor({
     extensions: [
@@ -303,10 +303,21 @@ const Tiptap: FC = () => {
       const allData = data
       const setInitialContent = async () => {
         editor?.commands?.setContent(initialContent)
-        await addLog({
+        const newLog: any = await addLog({
           date: selectedDate,
           json: initialContent,
         })
+
+        if (newLog.ok) {
+          setAllDocs([
+            {
+              _id: newLog.id,
+              _rev: newLog.rev,
+              date: newLog.date,
+              json: newLog.json,
+            },
+          ])
+        }
         return
       }
 

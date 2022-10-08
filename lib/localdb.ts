@@ -22,7 +22,9 @@ export const addLogs = async (logs: Log[]) => {
 
 export const addLog = async (log: Log) => {
   try {
-    await db.post(log);
+    const newLog = await db.post(log);
+
+    return newLog;
   } catch (err) {
     console.log(err);
   }

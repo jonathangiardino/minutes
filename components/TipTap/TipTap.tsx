@@ -69,8 +69,8 @@ const Tiptap: FC = () => {
   const [status, setStatus] = useState<string>('IDLE')
   const [snapshot, setSnapshot] = useState<any>({})
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false)
-  const { selectedDate, currentDoc, setCurrentDoc, setAllDocs } = useSyncState()
-  const debouncedValue = useDebounce<any>(snapshot, 5000)
+  const { selectedDate, currentDoc, setCurrentDoc } = useSyncState()
+  const debouncedValue = useDebounce<any>(snapshot, 1500)
 
   const editor = useEditor({
     extensions: [

@@ -757,7 +757,7 @@ const Tiptap: FC = () => {
           </button>
         </MobileFloatingMenu>
       )}
-      {user ? (
+      {/* {user ? (
         <button
           onClick={async () => await sync(editor?.getJSON())}
           title="Sync"
@@ -770,7 +770,7 @@ const Tiptap: FC = () => {
         >
           <GoSync size={24} />
         </button>
-      ) : null}
+      ) : null} */}
       <Toaster position="bottom-right" />
     </>
   )

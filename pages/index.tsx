@@ -5,39 +5,40 @@ import Header from '@/components/Header'
 import TipTap from '@/components/TipTap'
 import { useUser } from '@/lib/contexts/authContext'
 import { useSyncState } from '@/lib/contexts/syncContext'
-import { getLogs } from '@/lib/supabase/handlers'
 
 const Home: NextPage = () => {
   const { user } = useUser()
-  const { setSelectedDate, setSyncedData, syncedData } = useSyncState()
+  const { setSelectedDate, setSyncedData } = useSyncState()
 
   useEffect(() => {
-    const syncLogsFromDb = async () => {
-      const { data, error } = await getLogs(user?.id)
-      if (error) {
-        console.log(error)
-        return
-      }
+    // const syncLogsFromDb = async () => {
+    //   const { data, error } = await getLogs(user?.id)
+    //   if (error) {
+    //     console.log(error)
+    //     return
+    //   }
 
-      let updated = data.find(
-        ({ date }: { date: string }) => date === new Date().toDateString(),
-      )
+    //   if (data) {
+    //     let updated = data.find(
+    //       ({ date }: { date: string }) => date === new Date().toDateString(),
+    //     )
 
-      if (!updated) {
-        setSelectedDate(new Date().toDateString())
-      }
+    //     if (!updated) {
+    //       setSelectedDate(new Date().toDateString())
+    //     }
 
-      setSyncedData([
-        ...data.sort((a, b) => {
-          const firsDate: any = new Date(a.date)
-          const secondDate: any = new Date(b.date)
-          return secondDate - firsDate
-        }),
-      ])
-    }
+    //     setSyncedData([
+    //       ...data.sort((a, b) => {
+    //         const firsDate: any = new Date(a.date)
+    //         const secondDate: any = new Date(b.date)
+    //         return secondDate - firsDate
+    //       }),
+    //     ])
+    //   }
+    // }
 
     const updateToDate = () => {
-      if (!user) {
+      // if (!user) {
         const localData = JSON.parse(localStorage.getItem('minutes-data') || '')
         let updated = localData.find(
           ({ date }: { date: string }) => date === new Date().toDateString(),
@@ -46,11 +47,11 @@ const Home: NextPage = () => {
         if (!updated) {
           setSelectedDate(new Date().toDateString())
         }
-      }
+      // }
 
-      if (user) {
-        syncLogsFromDb()
-      }
+      // if (user) {
+      //   syncLogsFromDb()
+      // }
     }
 
     window.addEventListener('focus', updateToDate)

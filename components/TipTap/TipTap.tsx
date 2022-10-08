@@ -134,59 +134,59 @@ const Tiptap: FC = () => {
     //   await sync(updatedEditor.getJSON())
     // },
     onUpdate: ({ editor: updatedEditor }) => {
-      if (!user) {
-        const dataInView = data?.find((note) => note.date === selectedDate)
-        let dataClone = [...data]
-        let dataInViewIndex = data?.findIndex(
-          (note) => note.date === selectedDate,
-        )
+      // if (!user) {
+      const dataInView = data?.find((note) => note.date === selectedDate)
+      let dataClone = [...data]
+      let dataInViewIndex = data?.findIndex(
+        (note) => note.date === selectedDate,
+      )
 
-        if (data.length && !dataInView) {
-          setData([
-            {
-              date: selectedDate,
-              json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-            },
-            ...data,
-          ])
-        }
-
-        if (dataInView) {
-          dataClone[dataInViewIndex] = {
-            ...dataInView,
+      if (data.length && !dataInView) {
+        setData([
+          {
+            date: selectedDate,
             json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
-          }
-          setData([...dataClone])
-        }
+          },
+          ...data,
+        ])
       }
 
-      if (user && syncedData) {
-        const dataInView = syncedData?.find(
-          (note: any) => note.date === selectedDate,
-        )
-        let dataClone = [...syncedData]
-        let dataInViewIndex = syncedData?.findIndex(
-          (note: any) => note.date === selectedDate,
-        )
-
-        if (syncedData.length && !dataInView) {
-          setSyncedData([
-            {
-              date: selectedDate,
-              json: updatedEditor.getJSON(),
-            },
-            ...syncedData,
-          ])
+      if (dataInView) {
+        dataClone[dataInViewIndex] = {
+          ...dataInView,
+          json: JSON.parse(JSON.stringify(updatedEditor.getJSON())),
         }
-
-        if (dataInView) {
-          dataClone[dataInViewIndex] = {
-            ...dataInView,
-            json: updatedEditor.getJSON(),
-          }
-          setSyncedData([...dataClone])
-        }
+        setData([...dataClone])
       }
+      // }
+
+      // if (user && syncedData) {
+      //   const dataInView = syncedData?.find(
+      //     (note: any) => note.date === selectedDate,
+      //   )
+      //   let dataClone = [...syncedData]
+      //   let dataInViewIndex = syncedData?.findIndex(
+      //     (note: any) => note.date === selectedDate,
+      //   )
+
+      //   if (syncedData.length && !dataInView) {
+      //     setSyncedData([
+      //       {
+      //         date: selectedDate,
+      //         json: updatedEditor.getJSON(),
+      //       },
+      //       ...syncedData,
+      //     ])
+      //   }
+
+      //   if (dataInView) {
+      //     dataClone[dataInViewIndex] = {
+      //       ...dataInView,
+      //       json: updatedEditor.getJSON(),
+      //     }
+      //     setSyncedData([...dataClone])
+      //   }
+      // }
     },
   })
 
@@ -335,111 +335,54 @@ const Tiptap: FC = () => {
   }
 
   useEffect(() => {
-    if (!user) {
-      // console.log('UNAUTHENTICATED USER')
-      const dataInView = data?.find(({ date }) => date === selectedDate)
+    // if (!user) {
+    // console.log('UNAUTHENTICATED USER')
+    const dataInView = data?.find(({ date }) => date === selectedDate)
 
-      const setInitialContent = () => {
-        editor?.commands?.setContent(initialContent)
-        setData([
-          {
-            date: selectedDate,
-            json: initialContent,
-          },
-        ])
-        return
-      }
-
-      const createTodaysView = () => {
-        setData([
-          {
-            date: selectedDate,
-            json: '',
-          },
-          ...data,
-        ])
-        !editor?.isDestroyed && editor?.commands.setContent('')
-      }
-
-      const updateContent = () => {
-        !editor?.isDestroyed &&
-          editor?.commands.setContent(dataInView?.json || '')
-      }
-
-      if ((!data || !data.length) && editor && !dataInView) {
-        setInitialContent()
-      }
-
-      if (
-        data.length &&
-        editor &&
-        selectedDate === new Date().toDateString() &&
-        !dataInView
-      ) {
-        createTodaysView()
-      }
-
-      if (editor && dataInView) {
-        updateContent()
-      }
+    const setInitialContent = () => {
+      editor?.commands?.setContent(initialContent)
+      setData([
+        {
+          date: selectedDate,
+          json: initialContent,
+        },
+      ])
+      return
     }
 
-    if (user && syncedData.length) {
-      // console.log('LOGGED USER', syncedData)
-
-      const dataInView = syncedData?.find(
-        ({ date }: { date: string }) => date === selectedDate,
-      )
-
-      const setInitialContent = () => {
-        editor?.commands?.setContent(initialContent)
-        setSyncedData(
-          JSON.stringify([
-            {
-              date: selectedDate,
-              json: initialContent,
-            },
-          ]),
-        )
-        return
-      }
-
-      const createTodaysView = () => {
-        setSyncedData(
-          JSON.stringify([
-            {
-              date: selectedDate,
-              json: '',
-            },
-            ...syncedData,
-          ]),
-        )
-        !editor?.isDestroyed && editor?.commands.setContent('')
-      }
-
-      const updateContent = () => {
-        !editor?.isDestroyed &&
-          editor?.commands.setContent(dataInView?.json || '')
-      }
-
-      if ((!syncedData || !syncedData.length) && editor && !dataInView) {
-        setInitialContent()
-      }
-
-      if (
-        syncedData.length &&
-        editor &&
-        selectedDate === new Date().toDateString() &&
-        !dataInView
-      ) {
-        createTodaysView()
-      }
-
-      if (editor && dataInView) {
-        updateContent()
-      }
+    const createTodaysView = () => {
+      setData([
+        {
+          date: selectedDate,
+          json: '',
+        },
+        ...data,
+      ])
+      !editor?.isDestroyed && editor?.commands.setContent('')
     }
-  }, [editor, selectedDate, syncedData])
+
+    const updateContent = () => {
+      !editor?.isDestroyed &&
+        editor?.commands.setContent(dataInView?.json || '')
+    }
+
+    if ((!data || !data.length) && editor && !dataInView) {
+      setInitialContent()
+    }
+
+    if (
+      data.length &&
+      editor &&
+      selectedDate === new Date().toDateString() &&
+      !dataInView
+    ) {
+      createTodaysView()
+    }
+
+    if (editor && dataInView) {
+      updateContent()
+    }
+  }, [editor, selectedDate])
 
   useEffect(() => {
     const focusEditor = (e: any) => {

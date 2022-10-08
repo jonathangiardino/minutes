@@ -8,7 +8,7 @@ import Dropdown from './Dropdown'
 
 const Header: FC = () => {
   const [open, setOpen] = useState(false)
-  const { selectedDate, setSelectedDate } = useSyncState()
+  const { selectedDate } = useSyncState()
 
   // HOTKEYS
   useHotkeys(

@@ -11,13 +11,9 @@ const Home: NextPage = () => {
   const { user } = useUser()
   const { selectedDate, setSelectedDate, setAllDocs, allDocs } = useSyncState()
 
+  // deleteLog("9f1fd647-cacd-4e40-9d6c-4864b918b266", "1-2304698e24ac45f9d1072d9acb17eff3")
   console.log(allDocs)
   useEffect(() => {
-    // deleteLog(
-    //   "6bfd3c2c-b81f-49d2-890a-430934a2d215",
-    //   "1-2cf308d22108005ff1ed4480884af988",
-    //   )
-      
     const getLogs = async () => {
       const logs = await getAllLogs()
       return logs
@@ -46,16 +42,16 @@ const Home: NextPage = () => {
         if (!updated) {
           setSelectedDate(new Date().toDateString())
           await addLog({
-          date: new Date().toDateString(),
-          json: {
-            type: 'doc',
-            content: [
-              {
-                type: 'paragraph',
-              },
-            ],
-          },
-        })
+            date: new Date().toDateString(),
+            json: {
+              type: 'doc',
+              content: [
+                {
+                  type: 'paragraph',
+                },
+              ],
+            },
+          })
         }
       }
     }

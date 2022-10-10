@@ -25,6 +25,7 @@ const DateMenu = ({
           )
         })
 
+  console.log(filteredItems)
   return (
     <div className="fixed top-4 left-4 max-w-[320px]">
       <Transition.Root
@@ -66,10 +67,43 @@ const DateMenu = ({
                     static
                     className="max-h-96 md:max-h-64 scroll-py-3 overflow-y-auto p-1"
                   >
-                    {filteredItems.map((item: any) => (
+                    {filteredItems?.length ? (
+                      filteredItems.map((item: any) => (
+                        <Combobox.Option
+                          key={item.doc.date}
+                          value={item}
+                          className={({ active }) =>
+                            clsx(
+                              'flex cursor-default select-none rounded-lg p-2',
+                              active && 'bg-gray-300 dark:bg-[#45454d]',
+                            )
+                          }
+                        >
+                          <>
+                            <div className="ml-4 flex gap-2 items-center flex-auto">
+                              <p
+                                className={clsx(
+                                  'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
+                                  item.doc.date === selectedDate
+                                    ? 'font-bold opacity-100'
+                                    : 'opacity-75',
+                                )}
+                              >
+                                {item.doc.date === new Date().toDateString()
+                                  ? 'Today'
+                                  : item.doc.date}
+                              </p>
+                              {item.doc.date === selectedDate && (
+                                <VscEye className="stroke-[1px]" />
+                              )}
+                            </div>
+                          </>
+                        </Combobox.Option>
+                      ))
+                    ) : (
                       <Combobox.Option
-                        key={item.doc.date + Math.random()}
-                        value={item}
+                        key={new Date().toDateString()}
+                        value={new Date().toDateString()}
                         className={({ active }) =>
                           clsx(
                             'flex cursor-default select-none rounded-lg p-2',
@@ -82,22 +116,17 @@ const DateMenu = ({
                             <p
                               className={clsx(
                                 'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
-                                item.doc.date === selectedDate
-                                  ? 'font-bold opacity-100'
-                                  : 'opacity-75',
+
+                                'font-bold opacity-100',
                               )}
                             >
-                              {item.doc.date === new Date().toDateString()
-                                ? 'Today'
-                                : item.doc.date}
+                              Today
                             </p>
-                            {item.doc.date === selectedDate && (
-                              <VscEye className="stroke-[1px]" />
-                            )}
+                            <VscEye className="stroke-[1px]" />
                           </div>
                         </>
                       </Combobox.Option>
-                    ))}
+                    )}
                   </Combobox.Options>
                   {query !== '' && filteredItems.length === 0 && (
                     <div className="pt-1 px-6 text-center text-sm flex flex-col items-center justify-center">

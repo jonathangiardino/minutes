@@ -11,8 +11,6 @@ const Home: NextPage = () => {
   const { user } = useUser()
   const { selectedDate, setSelectedDate, setAllDocs, allDocs } = useSyncState()
 
-  // deleteLog("9f1fd647-cacd-4e40-9d6c-4864b918b266", "1-2304698e24ac45f9d1072d9acb17eff3")
-  console.log(allDocs)
   useEffect(() => {
     const getLogs = async () => {
       const logs = await getAllLogs()
@@ -35,6 +33,8 @@ const Home: NextPage = () => {
 
     const updateToDate = async () => {
       if (allDocs) {
+        console.log("Update on focus");
+        
         let updated = allDocs?.find(
           ({ doc }: { doc: any }) => doc.date === new Date().toDateString(),
         )

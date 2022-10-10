@@ -1,6 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import useLocalStorageState from 'use-local-storage-state'
 import {
   useEditor,
   EditorContent,
@@ -74,6 +73,7 @@ const Tiptap: FC = () => {
     setSelectedDate,
     currentDoc,
     setCurrentDoc,
+    allDocs,
   } = useSyncState()
   const debouncedValue = useDebounce<any>(snapshot, 1000)
 
@@ -300,6 +300,7 @@ const Tiptap: FC = () => {
   useEffect(() => {
     // if (!user) {
     // console.log('UNAUTHENTICATED USER')
+    
     getLogs().then((data: any) => {
       const dataInView = data?.find(
         ({ doc }: { doc: any }) => doc.date === selectedDate,
@@ -314,7 +315,7 @@ const Tiptap: FC = () => {
         })
         return
       }
-
+      
       const createTodaysView = async () => {
         await addLog({
           date: selectedDate,
@@ -328,28 +329,32 @@ const Tiptap: FC = () => {
           },
         })
         !editor?.isDestroyed && editor?.commands.setContent('')
+        setSelectedDate(new Date().toDateString())
       }
-
+      
       const updateContent = () => {
         !editor?.isDestroyed &&
-          editor?.commands.setContent(dataInView?.doc?.json || '')
+        editor?.commands.setContent(dataInView?.doc?.json || '')
       }
-
+      
       if ((!allData || !allData?.length) && editor && !dataInView) {
+        console.log('running 1')
         setSelectedDate(new Date().toDateString())
         setInitialContent()
       }
-
+      
       if (
         allData?.length &&
         editor &&
         selectedDate === new Date().toDateString() &&
         !dataInView
-      ) {
+        ) {
+        console.log('running 2')
         createTodaysView()
       }
-
+      
       if (editor && dataInView) {
+        console.log('running 3')
         setCurrentDoc(dataInView.doc)
         updateContent()
       }

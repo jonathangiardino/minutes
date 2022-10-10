@@ -2,7 +2,6 @@ import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Combobox, Dialog, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import { VscEye } from 'react-icons/vsc'
-import useLocalStorageState from 'use-local-storage-state'
 import { useSyncState } from '@/lib/contexts/syncContext'
 
 const DateMenu = ({
@@ -25,7 +24,6 @@ const DateMenu = ({
           )
         })
 
-  console.log(filteredItems)
   return (
     <div className="fixed top-4 left-4 max-w-[320px]">
       <Transition.Root
@@ -67,43 +65,14 @@ const DateMenu = ({
                     static
                     className="max-h-96 md:max-h-64 scroll-py-3 overflow-y-auto p-1"
                   >
-                    {filteredItems?.length ? (
-                      filteredItems.map((item: any) => (
-                        <Combobox.Option
-                          key={item.doc.date}
-                          value={item}
-                          className={({ active }) =>
-                            clsx(
-                              'flex cursor-default select-none rounded-lg p-2',
-                              active && 'bg-gray-300 dark:bg-[#45454d]',
-                            )
-                          }
-                        >
-                          <>
-                            <div className="ml-4 flex gap-2 items-center flex-auto">
-                              <p
-                                className={clsx(
-                                  'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
-                                  item.doc.date === selectedDate
-                                    ? 'font-bold opacity-100'
-                                    : 'opacity-75',
-                                )}
-                              >
-                                {item.doc.date === new Date().toDateString()
-                                  ? 'Today'
-                                  : item.doc.date}
-                              </p>
-                              {item.doc.date === selectedDate && (
-                                <VscEye className="stroke-[1px]" />
-                              )}
-                            </div>
-                          </>
-                        </Combobox.Option>
-                      ))
-                    ) : (
+                    {filteredItems?.length &&
+                    !filteredItems?.find(
+                      (item: any) =>
+                        item.doc.date === new Date().toDateString(),
+                    ) ? (
                       <Combobox.Option
                         key={new Date().toDateString()}
-                        value={new Date().toDateString()}
+                        value={{ doc: { date: new Date().toDateString() } }}
                         className={({ active }) =>
                           clsx(
                             'flex cursor-default select-none rounded-lg p-2',
@@ -126,7 +95,68 @@ const DateMenu = ({
                           </div>
                         </>
                       </Combobox.Option>
-                    )}
+                    ) : null}
+                    {filteredItems?.length
+                      ? filteredItems.map((item: any) => (
+                          <Combobox.Option
+                            key={item.doc.date}
+                            value={item}
+                            className={({ active }) =>
+                              clsx(
+                                'flex cursor-default select-none rounded-lg p-2',
+                                active && 'bg-gray-300 dark:bg-[#45454d]',
+                              )
+                            }
+                          >
+                            <>
+                              <div className="ml-4 flex gap-2 items-center flex-auto">
+                                <p
+                                  className={clsx(
+                                    'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
+                                    item.doc.date === selectedDate
+                                      ? 'font-bold opacity-100'
+                                      : 'opacity-75',
+                                  )}
+                                >
+                                  {item.doc.date === new Date().toDateString()
+                                    ? 'Today'
+                                    : item.doc.date}
+                                </p>
+                                {item.doc.date === selectedDate && (
+                                  <VscEye className="stroke-[1px]" />
+                                )}
+                              </div>
+                            </>
+                          </Combobox.Option>
+                        ))
+                      : null}
+                    {filteredItems.length === 0 && query== '' ? (
+                      <Combobox.Option
+                        key={new Date().toDateString()}
+                        value={{ doc: { date: new Date().toDateString() } }}
+                        className={({ active }) =>
+                          clsx(
+                            'flex cursor-default select-none rounded-lg p-2',
+                            active && 'bg-gray-300 dark:bg-[#45454d]',
+                          )
+                        }
+                      >
+                        <>
+                          <div className="ml-4 flex gap-2 items-center flex-auto">
+                            <p
+                              className={clsx(
+                                'text-lg md:text-base font-medium text-[#28282c] dark:text-[#f8fafc]',
+
+                                'font-bold opacity-100',
+                              )}
+                            >
+                              Today
+                            </p>
+                            <VscEye className="stroke-[1px]" />
+                          </div>
+                        </>
+                      </Combobox.Option>
+                    ) : null}
                   </Combobox.Options>
                   {query !== '' && filteredItems.length === 0 && (
                     <div className="pt-1 px-6 text-center text-sm flex flex-col items-center justify-center">

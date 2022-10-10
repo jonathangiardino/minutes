@@ -68,7 +68,7 @@ const DateMenu = ({
                   >
                     {filteredItems.map((item: any) => (
                       <Combobox.Option
-                        key={item.doc.date}
+                        key={item.doc.date + Math.random()}
                         value={item}
                         className={({ active }) =>
                           clsx(

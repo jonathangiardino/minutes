@@ -311,17 +311,17 @@ const Tiptap: FC = () => {
       }
 
       const createTodaysView = async () => {
-        await addLog({
-          date: selectedDate,
-          json: {
-            type: 'doc',
-            content: [
-              {
-                type: 'paragraph',
-              },
-            ],
-          },
-        })
+        // await addLog({
+        //   date: selectedDate,
+        //   json: {
+        //     type: 'doc',
+        //     content: [
+        //       {
+        //         type: 'paragraph',
+        //       },
+        //     ],
+        //   },
+        // })
         !editor?.isDestroyed && editor?.commands.setContent('')
       }
 

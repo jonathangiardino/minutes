@@ -11,12 +11,12 @@ const Home: NextPage = () => {
   const { user } = useUser()
   const { selectedDate, setSelectedDate, setAllDocs, allDocs } = useSyncState()
 
+  console.log(allDocs)
   useEffect(() => {
     // deleteLog(
-    //   "3207fccd-3a14-449b-872f-3c421933976b",
-    //   "1-3275ba82b24642ab3ecf45ed4ab6fd4e",
+    //   "6bfd3c2c-b81f-49d2-890a-430934a2d215",
+    //   "1-2cf308d22108005ff1ed4480884af988",
     //   )
-      console.log(allDocs)
       
     const getLogs = async () => {
       const logs = await getAllLogs()

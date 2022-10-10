@@ -74,7 +74,7 @@ const Tiptap: FC = () => {
     currentDoc,
     setCurrentDoc,
   } = useSyncState()
-  const debouncedValue = useDebounce<any>(snapshot, 200)
+  const debouncedValue = useDebounce<any>(snapshot, 1000)
 
   const editor = useEditor({
     extensions: [
@@ -277,21 +277,24 @@ const Tiptap: FC = () => {
   }
 
   useUpdateEffect(() => {
-    console.log("hello")
     const update = async () => {
-      await updateLog({
-        _id: currentDoc._id,
-        _rev: currentDoc._rev,
-        date: selectedDate,
-        json: snapshot,
-      })
-
       setCurrentDoc({
         _id: currentDoc._id,
         _rev: currentDoc._rev,
         date: selectedDate,
         json: snapshot,
       })
+
+      const response = await updateLog({
+        _id: currentDoc._id,
+        _rev: currentDoc._rev,
+        date: selectedDate,
+        json: snapshot,
+      })
+
+      console.log(response);
+      
+
     }
 
     if (currentDoc._id && currentDoc._rev) update()

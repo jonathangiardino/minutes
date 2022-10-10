@@ -5,13 +5,19 @@ import Header from '@/components/Header'
 import TipTap from '@/components/TipTap'
 import { useUser } from '@/lib/contexts/authContext'
 import { useSyncState } from '@/lib/contexts/syncContext'
-import { getAllLogs } from '@/lib/localdb'
+import { addLog, deleteLog, getAllLogs } from '@/lib/localdb'
 
 const Home: NextPage = () => {
   const { user } = useUser()
-  const { setSelectedDate, setAllDocs, allDocs } = useSyncState()
+  const { selectedDate, setSelectedDate, setAllDocs, allDocs } = useSyncState()
 
   useEffect(() => {
+    // deleteLog(
+    //   "3207fccd-3a14-449b-872f-3c421933976b",
+    //   "1-3275ba82b24642ab3ecf45ed4ab6fd4e",
+    //   )
+      console.log(allDocs)
+      
     const getLogs = async () => {
       const logs = await getAllLogs()
       return logs
@@ -32,8 +38,6 @@ const Home: NextPage = () => {
     })
 
     const updateToDate = async () => {
-      // if (!user) {
-      const localData: any = await getLogs()
       if (allDocs) {
         let updated = allDocs?.find(
           ({ doc }: { doc: any }) => doc.date === new Date().toDateString(),
@@ -41,20 +45,26 @@ const Home: NextPage = () => {
 
         if (!updated) {
           setSelectedDate(new Date().toDateString())
+          await addLog({
+          date: new Date().toDateString(),
+          json: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+              },
+            ],
+          },
+        })
         }
       }
-      // }
-
-      // if (user) {
-      //   syncLogsFromDb()
-      // }
     }
 
     window.addEventListener('focus', updateToDate)
     return () => {
       window.removeEventListener('focus', updateToDate)
     }
-  }, [user])
+  }, [user, selectedDate])
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-start">

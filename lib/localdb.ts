@@ -56,3 +56,11 @@ export const deleteLogs = async () => {
     console.log(err);
   }
 };
+
+export const deleteLog = async (id: string, rev: string) => {
+  try {
+    await db.remove(id, rev);
+  } catch (err) {
+    console.log(err);
+  }
+};

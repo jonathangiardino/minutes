@@ -41,17 +41,6 @@ const Home: NextPage = () => {
 
         if (!updated) {
           setSelectedDate(new Date().toDateString())
-          await addLog({
-            date: new Date().toDateString(),
-            json: {
-              type: 'doc',
-              content: [
-                {
-                  type: 'paragraph',
-                },
-              ],
-            },
-          })
         }
       }
     }

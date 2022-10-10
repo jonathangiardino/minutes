@@ -69,7 +69,12 @@ const Tiptap: FC = () => {
   const [status, setStatus] = useState<string>('IDLE')
   const [snapshot, setSnapshot] = useState<any>({})
   const [openFloatingMenu, setOpenFloatingMenu] = useState<boolean>(false)
-  const { selectedDate,setSelectedDate, currentDoc, setCurrentDoc } = useSyncState()
+  const {
+    selectedDate,
+    setSelectedDate,
+    currentDoc,
+    setCurrentDoc,
+  } = useSyncState()
   const debouncedValue = useDebounce<any>(snapshot, 1000)
 
   const editor = useEditor({
@@ -311,6 +316,17 @@ const Tiptap: FC = () => {
       }
 
       const createTodaysView = async () => {
+        await addLog({
+          date: selectedDate,
+          json: {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+              },
+            ],
+          },
+        })
         !editor?.isDestroyed && editor?.commands.setContent('')
       }
 

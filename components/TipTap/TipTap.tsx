@@ -123,7 +123,7 @@ const Tiptap: FC = () => {
       }),
     ],
     content: '',
-    autofocus: false,
+    autofocus: true,
     onUpdate: ({ editor }) => setSnapshot(editor.getJSON()),
     editorProps: {
       attributes: {

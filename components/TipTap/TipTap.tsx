@@ -34,6 +34,7 @@ import {
 } from 'react-icons/bi'
 import { RiNumber2 } from 'react-icons/ri'
 import { GrBlockQuote } from 'react-icons/gr'
+import { MdHorizontalRule } from 'react-icons/md'
 import { GoSync } from 'react-icons/go'
 import FloatingMenu from '../FloatingMenu'
 import css from 'highlight.js/lib/languages/css'
@@ -92,7 +93,7 @@ const Tiptap: FC = () => {
         },
         orderedList: {
           HTMLAttributes: {
-            class: 'text-inherit list-decimal ',
+            class: 'text-inherit list-decimal list-style-',
           },
         },
       }),
@@ -283,6 +284,7 @@ const Tiptap: FC = () => {
         _rev: currentDoc._rev,
         date: selectedDate,
         json: snapshot,
+        updated_at: new Date()
       })
 
       const response = await updateLog({
@@ -290,6 +292,7 @@ const Tiptap: FC = () => {
         _rev: currentDoc._rev,
         date: selectedDate,
         json: snapshot,
+        updated_at: new Date()
       })
 
       console.log(response);
@@ -313,6 +316,7 @@ const Tiptap: FC = () => {
         await addLog({
           date: selectedDate,
           json: initialContent,
+          updated_at: new Date()
         })
         return
       }
@@ -328,6 +332,7 @@ const Tiptap: FC = () => {
               },
             ],
           },
+          updated_at: new Date()
         })
         !editor?.isDestroyed && editor?.commands.setContent('')
         setSelectedDate(new Date().toDateString())
@@ -385,9 +390,9 @@ const Tiptap: FC = () => {
           <BubbleMenu
             editor={editor}
             tippyOptions={{ delay: 300, duration: 300 }}
-            className="pt-[5px] px-1 pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-lg"
+            className="pt-[7px] md:pt-[5px] px-2 md:px-1 pb-[3px] md:pb-0 shadow-xl bg-[#28282c] dark:bg-[#45454d] text-white rounded-lg"
           >
-            <div className="mx-1 pointer-events-none text-[11px] bg-[#28282c] dark:bg-[#45454d] text-white fixed -bottom-4 right-0 rounded-sm px-[3px]">
+            <div className="mx-1 pointer-events-none text-[12px] bg-[#28282c] dark:bg-[#45454d] text-white fixed -bottom-4 right-0 rounded-sm px-[3px]">
               {editor?.state?.selection?.to &&
                 editor?.state?.selection?.from &&
                 editor?.state?.selection?.to -
@@ -412,7 +417,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiHeading className="text-[18px]" />
+              <BiHeading className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Heading 2"
@@ -432,7 +437,7 @@ const Tiptap: FC = () => {
                 'mx-1 inline-flex items-center',
               )}
             >
-              <BiHeading className="text-[18px]" />
+              <BiHeading className="text-[20px] md:text-[18px]" />
               <RiNumber2 className="text-sm font-semibold -ml-[6px]" />
             </button>
             <button
@@ -452,7 +457,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiBold className="text-[18px]" />
+              <BiBold className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Italic"
@@ -471,7 +476,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiItalic className="text-[18px]" />
+              <BiItalic className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Underline"
@@ -490,7 +495,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiUnderline className="text-[18px]" />
+              <BiUnderline className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Strike-through"
@@ -509,7 +514,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiStrikethrough className="text-[18px]" />
+              <BiStrikethrough className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Bullet list"
@@ -527,7 +532,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiListUl className="text-[18px]" />
+              <BiListUl className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Ordered List"
@@ -545,7 +550,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiListOl className="text-[18px]" />
+              <BiListOl className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Blockquote"
@@ -563,7 +568,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <GrBlockQuote className="text-[18px]" />
+              <GrBlockQuote className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="To do"
@@ -581,7 +586,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiTask className="text-[18px]" />
+              <BiTask className="text-[20px] md:text-[18px]" />
             </button>
             <button
               title="Highlight"
@@ -600,7 +605,7 @@ const Tiptap: FC = () => {
                 'mx-1',
               )}
             >
-              <BiHighlight className="text-[18px]" />
+              <BiHighlight className="text-[20px] md:text-[18px]" />
             </button>
           </BubbleMenu>
         </div>
@@ -745,6 +750,17 @@ const Tiptap: FC = () => {
           </button>
           <span className="opacity-20">|</span>
           <button
+            title="Highlight"
+            onClick={() => editor.chain().focus().toggleHighlight().run()}
+            className={clsx(
+              editor.isActive('highlight') ? 'text-brand font-bold' : '',
+              'mx-1 pr-[6px]',
+            )}
+          >
+            <BiHighlight className="text-xl" />
+          </button>
+          <span className="opacity-20">|</span>
+          <button
             title="Code Block"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={clsx(
@@ -754,16 +770,15 @@ const Tiptap: FC = () => {
           >
             <BiCode className="text-xl" />
           </button>
-          <span className="opacity-20">|</span>
           <button
-            title="Highlight"
-            onClick={() => editor.chain().focus().toggleHighlight().run()}
+            title="Horizontal Rule"
+            onClick={() => editor.chain().focus().setHorizontalRule().run()}
             className={clsx(
-              editor.isActive('highlight') ? 'text-brand font-bold' : '',
-              'mx-1 pr-[6px]',
+              editor.isActive('taskList') ? 'text-brand font-bold' : '',
+              'mx-1',
             )}
           >
-            <BiHighlight className="text-xl" />
+            <MdHorizontalRule className="text-xl" />
           </button>
         </MobileFloatingMenu>
       )}

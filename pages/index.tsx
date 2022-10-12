@@ -9,7 +9,7 @@ import { addLog, deleteLog, getAllLogs } from '@/lib/localdb'
 
 const Home: NextPage = () => {
   const { user } = useUser()
-  const { selectedDate, setSelectedDate, setAllDocs, allDocs } = useSyncState()
+  const { selectedDate, setSelectedDate, setAllDocs, allDocs } = useSyncState()  
 
   useEffect(() => {
     const getLogs = async () => {

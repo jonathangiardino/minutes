@@ -42,7 +42,7 @@ const Dropdown: FC = () => {
             <Avvvatars value={user.email || 'Unauthenticated'} style="shape" />
           </Menu.Button>
         ) : (
-          <Menu.Button className="h-8 w-8 rounded-full bg-gradient-to-r from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand" />
+          <Menu.Button className="h-8 w-8 rounded-full bg-gradient-to-t from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand" />
         )}
         <Transition
           as={Fragment}

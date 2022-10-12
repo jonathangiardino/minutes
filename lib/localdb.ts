@@ -9,6 +9,7 @@ export type Log = {
   _rev?: string;
   user_id?: string;
   created_at?: string;
+  updated_at?: Date;
   unique_id?: string;
 };
 

@@ -18,7 +18,6 @@ import { GrBlockQuote } from "react-icons/gr";
 import { MdHorizontalRule } from "react-icons/md";
 import { FormattingBlock } from "../TipTap/TipTap";
 
-// TEMP
 const items = [
   {
     id: 0,
@@ -93,7 +92,6 @@ const items = [
     color: "bg-brand",
     icon: MdHorizontalRule,
   },
-  // More items...
 ];
 
 const FloatingMenu = ({

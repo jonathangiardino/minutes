@@ -36,7 +36,7 @@ import {
 import { RiNumber2 } from 'react-icons/ri'
 import { GrBlockQuote } from 'react-icons/gr'
 import { MdHorizontalRule } from 'react-icons/md'
-import { GoSync } from 'react-icons/go'
+// import { GoSync } from 'react-icons/go'
 import FloatingMenu from '../FloatingMenu'
 import css from 'highlight.js/lib/languages/css'
 import js from 'highlight.js/lib/languages/javascript'
@@ -110,7 +110,7 @@ const Tiptap: FC = () => {
       Highlight.configure({
         HTMLAttributes: {
           class:
-            'px-[6px] py-[2px] rounded-md bg-[#ffc078] dark:bg-[#db8c32] dark:text-[#f8fafc]',
+            'px-[6px] py-[2px] rounded-md bg-[#ffc078] dark:bg-[#db8c32] bg-opacity-90 dark:bg-opacity-90 dark:text-[#f8fafc]',
         },
       }),
       Underline,
@@ -126,7 +126,6 @@ const Tiptap: FC = () => {
     ],
     content: '',
     autofocus: 'start',
-    onUpdate: ({ editor }) => setSnapshot(editor.getJSON()),
     editorProps: {
       attributes: {
         class: 'p-4 focus:outline-none active:outline-none',
@@ -299,6 +298,8 @@ const Tiptap: FC = () => {
       console.log(response)
     }
 
+    console.log(currentDoc._id, currentDoc._rev)
+
     if (currentDoc._id && currentDoc._rev) update()
   }, [debouncedValue])
 
@@ -369,6 +370,11 @@ const Tiptap: FC = () => {
   }, [editor, selectedDate])
 
   useEffect(() => {
+    const saveSnaphot = () => {
+      setSnapshot(editor?.getJSON())
+      console.log('Updated')
+    }
+
     const focusEditor = (e: any) => {
       e.stopPropagation()
 
@@ -382,10 +388,11 @@ const Tiptap: FC = () => {
         !editor?.isDestroyed && editor?.commands.focus()
       }
     }
-
+    document.addEventListener("keyup", saveSnaphot)
     document.addEventListener('click', (e) => focusEditor(e))
     return () => {
       document.removeEventListener('click', (e) => focusEditor(e))
+      document.removeEventListener("keyup", saveSnaphot)
     }
   }, [editor])
 

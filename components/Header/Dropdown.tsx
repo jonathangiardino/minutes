@@ -53,11 +53,11 @@ const Dropdown: FC = () => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-50 w-64 mt-10 origin-top-right bg-gray-200 dark:bg-[#333338] dark:text-[#f8fafc] rounded-lg shadow-sm ring-1 ring-black ring-opacity-5 focus:outline-brand">
+          <Menu.Items className="absolute right-0 z-50 w-64 mt-12 origin-top-right bg-gray-200 dark:bg-[#333338] dark:text-[#f8fafc] rounded-lg shadow-sm ring-1 ring-black ring-opacity-5 focus:outline-brand">
             {user ? (
               <>
                 <div className="px-4 py-3">
-                  <p className="text-sm ">Signed in as</p>
+                  <p className="text-sm">Signed in as</p>
                   <p className="truncate text-sm  font-semibold">
                     {user?.email}
                   </p>
@@ -72,7 +72,7 @@ const Dropdown: FC = () => {
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1',
+                          'flex items-center gap-2 px-3 py-2 text-md md:text-sm rounded-md mx-1',
                         )}
                       >
                         Account
@@ -87,7 +87,7 @@ const Dropdown: FC = () => {
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'block px-3 py-2 text-sm  rounded-md mx-1',
+                          'block px-3 py-2 text-md md:text-sm  rounded-md mx-1',
                         )}
                       >
                         Support
@@ -102,7 +102,7 @@ const Dropdown: FC = () => {
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'block px-3 py-2 text-sm  rounded-md mx-1',
+                          'block px-3 py-2 text-md md:text-sm  rounded-md mx-1',
                         )}
                       >
                         Feedback
@@ -120,7 +120,7 @@ const Dropdown: FC = () => {
                             active
                               ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                               : '',
-                            'flex items-center gap-2  w-full px-3 py-2 text-left text-sm rounded-md font-bold',
+                            'flex items-center gap-2  w-full px-3 py-2 text-left text-md md:text-sm rounded-md font-bold',
                           )}
                         >
                           <span>Sign out</span>
@@ -143,7 +143,7 @@ const Dropdown: FC = () => {
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'flex items-center gap-2 px-3 py-2 text-sm rounded-md mx-1 font-bold',
+                          'flex items-center gap-2 px-3 py-2 text-md md:text-sm rounded-md mx-1 font-bold',
                         )}
                       >
                         <span>Sign in</span>
@@ -159,7 +159,7 @@ const Dropdown: FC = () => {
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'block px-3 py-2 text-sm  rounded-md mx-1',
+                          'block px-3 py-2 text-md md:text-sm  rounded-md mx-1',
                         )}
                       >
                         Support
@@ -174,7 +174,7 @@ const Dropdown: FC = () => {
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
                             : '',
-                          'block px-3 py-2 text-sm  rounded-md mx-1',
+                          'block px-3 py-2 text-md md:text-sm  rounded-md mx-1',
                         )}
                       >
                         Feedback

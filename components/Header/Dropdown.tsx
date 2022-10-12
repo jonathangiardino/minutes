@@ -82,7 +82,8 @@ const Dropdown: FC = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href="#"
+                        href="mailto:hello@jonathangiardino.com?subject=Minutes%20-%20%5BSupport%5D&body=Name%3A%0D%0ATimezone%3A%0D%0ALogged%20in%3F%3A%0D%0ADescribe%20your%20issue%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A*%20PS%20attach%20screenshots%20if%20possible!%20Thanks%2C%20Jonathan."
+                        target="_blank"
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
@@ -97,7 +98,8 @@ const Dropdown: FC = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href="#"
+                        href="https://hello184477.typeform.com/to/H5WDSswS"
+                        target="_blank"
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
@@ -154,7 +156,8 @@ const Dropdown: FC = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href="#"
+                        href="mailto:hello@jonathangiardino.com?subject=Minutes%20-%20%5BSupport%5D&body=Name%3A%0D%0ATimezone%3A%0D%0ALogged%20in%3F%3A%0D%0ADescribe%20your%20issue%3A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A*%20PS%20attach%20screenshots%20if%20possible!%20Thanks%2C%20Jonathan."
+                        target="_blank"
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'
@@ -169,7 +172,8 @@ const Dropdown: FC = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <a
-                        href="#"
+                        href="https://hello184477.typeform.com/to/H5WDSswS"
+                        target="_blank"
                         className={clsx(
                           active
                             ? 'bg-gray-300 text-gray-900 dark:bg-[#45454d] dark:text-white'

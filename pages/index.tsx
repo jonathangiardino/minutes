@@ -56,6 +56,7 @@ const Home: NextPage = () => {
       <Head>
         <title>:minutes</title>
       </Head>
+      
 
       <Header />
       <main className="flex w-full max-w-[768px] flex-1 mb-24 lg:mb-20">

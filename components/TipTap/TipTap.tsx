@@ -36,7 +36,7 @@ import {
 import { RiNumber2 } from 'react-icons/ri'
 import { GrBlockQuote } from 'react-icons/gr'
 import { MdHorizontalRule } from 'react-icons/md'
-// import { GoSync } from 'react-icons/go'
+import { GoSync } from 'react-icons/go'
 import FloatingMenu from '../FloatingMenu'
 import css from 'highlight.js/lib/languages/css'
 import js from 'highlight.js/lib/languages/javascript'
@@ -76,7 +76,7 @@ const Tiptap: FC = () => {
     currentDoc,
     setCurrentDoc,
   } = useSyncState()
-  const debouncedValue = useDebounce<any>(snapshot, 2500)
+  const debouncedValue = useDebounce<any>(snapshot, 3000)
 
   const editor = useEditor({
     extensions: [
@@ -126,6 +126,10 @@ const Tiptap: FC = () => {
     ],
     content: '',
     autofocus: 'start',
+    onUpdate: ({ editor: newEditor }) => {
+      setSnapshot(newEditor.getJSON())
+      console.log('Updated')
+    },
     editorProps: {
       attributes: {
         class: 'p-4 focus:outline-none active:outline-none',
@@ -277,16 +281,13 @@ const Tiptap: FC = () => {
     }
   }
 
-  useUpdateEffect(() => {
-    const update = async () => {
-      setCurrentDoc({
-        _id: currentDoc._id,
-        _rev: currentDoc._rev,
-        date: selectedDate,
-        json: snapshot,
-        updated_at: new Date(),
-      })
+  console.log(snapshot)
 
+  useUpdateEffect(() => {
+    console.log(currentDoc)
+    setStatus('SYNC')
+
+    const update = async () => {
       const response = await updateLog({
         _id: currentDoc._id,
         _rev: currentDoc._rev,
@@ -296,11 +297,19 @@ const Tiptap: FC = () => {
       })
 
       console.log(response)
+      if (response) {
+        setCurrentDoc({
+          _id: response?.id,
+          _rev: response?.rev,
+          date: selectedDate,
+          json: snapshot,
+          updated_at: new Date(),
+        })
+      }
+      setTimeout(() => setStatus('IDLE'), 600)
     }
 
-    console.log(currentDoc._id, currentDoc._rev)
-
-    if (currentDoc._id && currentDoc._rev) update()
+    update()
   }, [debouncedValue])
 
   useEffect(() => {
@@ -370,11 +379,6 @@ const Tiptap: FC = () => {
   }, [editor, selectedDate])
 
   useEffect(() => {
-    const saveSnaphot = () => {
-      setSnapshot(editor?.getJSON())
-      console.log('Updated')
-    }
-
     const focusEditor = (e: any) => {
       e.stopPropagation()
 
@@ -388,11 +392,10 @@ const Tiptap: FC = () => {
         !editor?.isDestroyed && editor?.commands.focus()
       }
     }
-    document.addEventListener("keyup", saveSnaphot)
+
     document.addEventListener('click', (e) => focusEditor(e))
     return () => {
       document.removeEventListener('click', (e) => focusEditor(e))
-      document.removeEventListener("keyup", saveSnaphot)
     }
   }, [editor])
 
@@ -809,6 +812,17 @@ const Tiptap: FC = () => {
           <GoSync size={24} />
         </button>
       ) : null} */}
+      <div
+        title="Sync"
+        className={clsx(
+          'absolute md:fixed z-50 top-5 md:top-5 right-16 cursor-pointer rounded-full',
+          status === 'SYNC'
+            ? 'animate-spin text-brand opacity-100'
+            : 'text-gray-400 hover:text-gray-500 opacity-10',
+        )}
+      >
+        <GoSync size={22} />
+      </div>
       <Toaster position="bottom-right" />
     </>
   )

@@ -33,7 +33,7 @@ export const addLog = async (log: Log) => {
 
 export const updateLog = async (log: Log) => {
   try {
-    const response = await db.put(log, { force: true });
+    const response = await db.put(log);
     return response;
   } catch (err) {
     console.log(err);

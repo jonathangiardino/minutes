@@ -33,8 +33,6 @@ const Home: NextPage = () => {
 
     const updateToDate = async () => {
       if (allDocs) {
-        console.log("Update on focus");
-        
         let updated = allDocs?.find(
           ({ doc }: { doc: any }) => doc.date === new Date().toDateString(),
         )

@@ -13,12 +13,13 @@ import Typography from '@tiptap/extension-typography'
 import CharacterCount from '@tiptap/extension-character-count'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { TaskList } from '@tiptap/extension-task-list'
-import { TaskItem } from '@tiptap/extension-task-item'
+// import { TaskItem } from '@tiptap/extension-task-item'
 import { Highlight } from '@tiptap/extension-highlight'
 import { Underline } from '@tiptap/extension-underline'
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
-// import { Mention } from "@tiptap/extension-mention";
 import { lowlight } from 'lowlight/lib/core'
+import { CustomTaskItem } from '@/components/TipTap/CustomTaskItem'
+// import { Mention } from "@tiptap/extension-mention";
 import {
   BiStrikethrough,
   BiBold,
@@ -102,7 +103,7 @@ const Tiptap: FC = () => {
           class: 'rounded border border-gray-100 dark:border-none',
         },
       }),
-      TaskItem,
+      CustomTaskItem,
       Placeholder.configure({
         placeholder: "What's on your mind?",
       }),
@@ -124,7 +125,7 @@ const Tiptap: FC = () => {
       }),
     ],
     content: '',
-    autofocus: true,
+    autofocus: 'start',
     onUpdate: ({ editor }) => setSnapshot(editor.getJSON()),
     editorProps: {
       attributes: {
@@ -284,7 +285,7 @@ const Tiptap: FC = () => {
         _rev: currentDoc._rev,
         date: selectedDate,
         json: snapshot,
-        updated_at: new Date()
+        updated_at: new Date(),
       })
 
       const response = await updateLog({
@@ -292,10 +293,10 @@ const Tiptap: FC = () => {
         _rev: currentDoc._rev,
         date: selectedDate,
         json: snapshot,
-        updated_at: new Date()
+        updated_at: new Date(),
       })
 
-      console.log(response);
+      console.log(response)
     }
 
     if (currentDoc._id && currentDoc._rev) update()
@@ -304,7 +305,7 @@ const Tiptap: FC = () => {
   useEffect(() => {
     // if (!user) {
     // console.log('UNAUTHENTICATED USER')
-    
+
     getLogs().then((data: any) => {
       const dataInView = data?.find(
         ({ doc }: { doc: any }) => doc.date === selectedDate,
@@ -316,11 +317,11 @@ const Tiptap: FC = () => {
         await addLog({
           date: selectedDate,
           json: initialContent,
-          updated_at: new Date()
+          updated_at: new Date(),
         })
         return
       }
-      
+
       const createTodaysView = async () => {
         await addLog({
           date: selectedDate,
@@ -332,33 +333,33 @@ const Tiptap: FC = () => {
               },
             ],
           },
-          updated_at: new Date()
+          updated_at: new Date(),
         })
         !editor?.isDestroyed && editor?.commands.setContent('')
         setSelectedDate(new Date().toDateString())
       }
-      
+
       const updateContent = () => {
         !editor?.isDestroyed &&
-        editor?.commands.setContent(dataInView?.doc?.json || '')
+          editor?.commands.setContent(dataInView?.doc?.json || '')
       }
-      
+
       if ((!allData || !allData?.length) && editor && !dataInView) {
         console.log('running 1')
         setSelectedDate(new Date().toDateString())
         setInitialContent()
       }
-      
+
       if (
         allData?.length &&
         editor &&
         selectedDate === new Date().toDateString() &&
         !dataInView
-        ) {
+      ) {
         console.log('running 2')
         createTodaysView()
       }
-      
+
       if (editor && dataInView) {
         console.log('running 3')
         setCurrentDoc(dataInView.doc)
@@ -371,7 +372,12 @@ const Tiptap: FC = () => {
     const focusEditor = (e: any) => {
       e.stopPropagation()
 
-      if (editor && e.target.id === 'outer-editor' && !editor?.isFocused) {
+      if (
+        editor &&
+        e.target.id === 'outer-editor' &&
+        !editor?.isFocused &&
+        e.target.type !== 'checkbox'
+      ) {
         !editor?.isDestroyed && editor?.commands.selectTextblockEnd()
         !editor?.isDestroyed && editor?.commands.focus()
       }

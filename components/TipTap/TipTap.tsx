@@ -281,10 +281,7 @@ const Tiptap: FC = () => {
     }
   }
 
-  console.log(snapshot)
-
   useUpdateEffect(() => {
-    console.log(currentDoc)
     setStatus('SYNC')
 
     const update = async () => {
@@ -351,7 +348,8 @@ const Tiptap: FC = () => {
 
       const updateContent = () => {
         !editor?.isDestroyed &&
-          editor?.commands.setContent(dataInView?.doc?.json || '')
+          dataInView?.doc?.json &&
+          editor?.commands.setContent(dataInView.doc.json)
       }
 
       if ((!allData || !allData?.length) && editor && !dataInView) {

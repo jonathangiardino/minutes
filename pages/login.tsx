@@ -277,12 +277,13 @@ const Login = () => {
                       </div>
                       <div className="absolute bottom-6 max-w-xs">
                         <h2 className="text-sm font-normal tracking-tight text-[#28282c] dark:text-[#f8fafc]">
-                          {/* <span className="text-brand">
+                          <span className="text-brand">
                             &#9432; Why do I need to sign in?
-                          </span> */}
+                          </span>
                           <br />
-                          &#9432; Once signed in, your notes will be synced with
-                          all the devices you log into with the same account.
+                          {/* &#9432; Once signed in, your notes will be synced with
+                          all the devices you log into with the same account. */}
+                         For now, signing in will help me collecting feedback, improve the app and keep you posted on new features. In the future, signing in will be required to sync with multiple devices.
                         </h2>
                       </div>
                     </div>

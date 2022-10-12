@@ -74,7 +74,7 @@ const Tiptap: FC = () => {
     currentDoc,
     setCurrentDoc,
   } = useSyncState()
-  const debouncedValue = useDebounce<any>(snapshot, 1000)
+  const debouncedValue = useDebounce<any>(snapshot, 2500)
 
   const editor = useEditor({
     extensions: [
@@ -293,8 +293,6 @@ const Tiptap: FC = () => {
       })
 
       console.log(response);
-      
-
     }
 
     if (currentDoc._id && currentDoc._rev) update()

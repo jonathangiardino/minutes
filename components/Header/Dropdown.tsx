@@ -39,7 +39,7 @@ const Dropdown: FC = () => {
       <Menu as="div" className="relative flex">
         {user ? (
           <Menu.Button className="rounded-full cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand">
-            <Avvvatars value={user.email || 'Unauthenticated'} style="shape" />
+            <Avvvatars value={"hello"} style="shape" size={34}/>
           </Menu.Button>
         ) : (
           <Menu.Button className="h-8 w-8 rounded-full bg-gradient-to-t from-red-400 to-brand cursor-pointer hover:shadow-2xl hover:opacity-90 transition ease-out duration-300 focus:outline-brand" />

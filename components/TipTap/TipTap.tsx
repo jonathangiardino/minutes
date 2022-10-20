@@ -128,7 +128,7 @@ const Tiptap: FC = () => {
     autofocus: 'start',
     onUpdate: ({ editor: newEditor }) => {
       setSnapshot(newEditor.getJSON())
-      console.log('Updated')
+      // console.log('Updated')
     },
     editorProps: {
       attributes: {

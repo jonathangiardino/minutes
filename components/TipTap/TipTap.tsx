@@ -76,7 +76,7 @@ const Tiptap: FC = () => {
     currentDoc,
     setCurrentDoc,
   } = useSyncState()
-  const debouncedValue = useDebounce<any>(snapshot, 3000)
+  const debouncedValue = useDebounce<any>(snapshot, 1000)
 
   const editor = useEditor({
     extensions: [
